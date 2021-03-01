@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-      Duration(seconds: 5),
+      Duration(seconds: 2),
           () => Navigator.push(
           context, MaterialPageRoute(builder: (context) => IntoductionPage())),
     );
@@ -27,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
       resizeToAvoidBottomPadding: false,
       body: Stack(
         fit: StackFit.expand,
+        alignment: Alignment.center,
         children: <Widget>[
           Column(
             children: <Widget>[
@@ -44,18 +45,18 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                 ),
               ),
-              // Padding(padding: EdgeInsets.only(top: 30.0, left: 30.0,),
-              //   child: Align(alignment: Alignment.centerLeft,
-              //     child: Text(
-              //       "Set extact location to find the right\nrestaurants near you. ",
-              //       style: TextStyle(
-              //         fontSize: 20,
-              //         color: Colors.white,
-              //         fontWeight: FontWeight.w700,
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              /*Padding(padding: EdgeInsets.only(top: 30.0, left: 30.0,),
+                child: Align(alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Set extact location to find the right\nrestaurants near you. ",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),*/
             ],
           )
         ],

@@ -57,46 +57,49 @@ class _IntoductionPage extends State<IntoductionPage> {
           itemBuilder: (BuildContext context, int index) {
             SliderModel si = SliderItem.loadSliderItem()[index];
             return Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
               color: si.color,
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          for (int i = 0; i < totalPages; i++)
-                            if (i == _currentPage)
-                              SlideDots(true)
-                            else
-                              SlideDots(false)
-                        ],
-                      ),
+              child: Stack(
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height,
+                    margin: EdgeInsets.only(bottom: 30),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        for (int i = 0; i < totalPages; i++)
+                          if (i == _currentPage)
+                            SlideDots(true)
+                          else
+                            SlideDots(false)
+                      ],
                     ),
-                    Container(
-                      child: MaterialButton(
-                        minWidth: MediaQuery.of(context).size.width,
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginPage()));
-                        },
-                        child: Text(
-                          'Skip',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                          textAlign: TextAlign.center,
+                  ),
+                  Positioned(
+                      top: 40,
+                      right: -5,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width*0.2,
+                        child: MaterialButton(
+                          minWidth: MediaQuery.of(context).size.width,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginPage()));
+                          },
+                          child: Text(
+                            'Skip',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                    ),
-                  ]),
+                      ))
+                ],
+              ),
             );
           }),
     );
