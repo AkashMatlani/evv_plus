@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:flutter/material.dart';
 
 import 'IntroScreen.dart';
@@ -16,8 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(
       Duration(seconds: 2),
-          () => Navigator.push(
-          context, MaterialPageRoute(builder: (context) => IntoductionPage())),
+          () => Utils.navigateReplaceToScreen(context, IntoductionPage())
     );
     //print("Splash Done!"))
   }

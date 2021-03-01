@@ -1,4 +1,5 @@
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc.dart';
@@ -10,10 +11,7 @@ class LoginPage extends StatefulWidget{
 }
 class _LoginPage extends State<LoginPage> {
 
-  changeThePage(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => ChangePassword()));
-  }
+
 
 
   @override
@@ -72,7 +70,7 @@ class _LoginPage extends State<LoginPage> {
                        () =>
                        {
                          if(snapshot.hasData){
-                           changeThePage(context)
+                           Utils.navigateReplaceToScreen(context, ChangePassword())
                          } else
                            {
                              ToastUtils.showToast(context, "Fill all details", Colors.red)

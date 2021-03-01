@@ -1,3 +1,4 @@
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:evv_plus/changepasswordbloc.dart';
@@ -58,11 +59,18 @@ class _ChangePasswordState extends State<ChangePassword> {
                 height: 20.0,
               ),
               StreamBuilder<bool>(
-                //stream: bloc.submitCheck,
+                stream: bloc.submitCheck,
                 builder: (context, snapshot) => RaisedButton(
                   color: Colors.tealAccent,
                   onPressed: () =>
-                      {Utils.navigateReplaceToScreen(context, LoginPage())},
+                      {
+                        if(snapshot.hasData){
+                          Utils.navigateReplaceToScreen(context, LoginPage())
+                        } else
+                          {
+                            ToastUtils.showToast(context, "Fill all details", Colors.red)
+                          }
+                      },
                   child: Text("Reset"),
                 ),
               ),

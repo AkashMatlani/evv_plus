@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/SliderModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -83,10 +84,7 @@ class _IntoductionPage extends State<IntoductionPage> {
                         child: MaterialButton(
                           minWidth: MediaQuery.of(context).size.width,
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginPage()));
+                            Utils.navigateReplaceToScreen(context, LoginPage());
                           },
                           child: Text(
                             'Skip',
