@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:flutter/material.dart';
 
-import 'IntoductionPage.dart';
+import 'IntroScreen.dart';
+
 
 class SplashScreen extends StatefulWidget {
   @override

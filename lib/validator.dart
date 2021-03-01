@@ -22,4 +22,27 @@ mixin Validators{
       }
   );
 
+  var conformPasswordValidator = StreamTransformer<String,String>.fromHandlers(
+      handleData: (conformPassword,sink){
+        if(conformPassword.length>4){
+          sink.add(conformPassword);
+        }else{
+          sink.addError("Password length should be greater than 4 chars.");
+        }
+      }
+  );
+
+  // var matchPasswordValidator = StreamTransformer<String,String,String>.fromHandlers(
+  //     handleData: (password,sink){
+  //       if(newpassword.length>4){
+  //         sink.add(newpassword);
+  //       }else{
+  //         sink.addError("Password length should be greater than 4 chars.");
+  //       }
+  //     }
+  // );
+
+
+  //!conformpassword.text.toString().equals(password.text.toString())
+
 }

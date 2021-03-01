@@ -1,7 +1,8 @@
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc.dart';
-import 'ChangePassword.dart';
+import 'ChangePwdScreen.dart';
 class LoginPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState()  => _LoginPage();
@@ -67,9 +68,16 @@ class _LoginPage extends State<LoginPage> {
                 stream: bloc.submitCheck,
                 builder: (context, snapshot) => RaisedButton(
                   color: Colors.tealAccent,
-                  onPressed: snapshot.hasData
-                      ? () => changeThePage(context)
-                      : null,
+                  onPressed:
+                       () =>
+                       {
+                         if(snapshot.hasData){
+                           changeThePage(context)
+                         } else
+                           {
+                             ToastUtils.showToast(context, "Fill all details", Colors.red)
+                           }
+                       },
                   child: Text("Submit"),
                 ),
               ),

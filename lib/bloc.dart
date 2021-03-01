@@ -18,7 +18,7 @@ class Bloc extends Object with Validators implements BaseBloc {
       _passwordController.stream.transform(passwordValidator);
 
   Stream<bool> get submitCheck =>
-      Rx.combineLatest2(email, password, (e, p) => true);
+      Rx.combineLatest2(email, password, (e, p) => false);
 
   submit() {
     print("xyx");

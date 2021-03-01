@@ -4,8 +4,8 @@ import 'package:evv_plus/Models/SliderModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'LoginPage.dart';
-import 'SlideDots.dart';
+import 'LoginScreen.dart';
+import '../GeneralUtils/PageIndicator.dart';
 
 class IntoductionPage extends StatefulWidget {
   @override
