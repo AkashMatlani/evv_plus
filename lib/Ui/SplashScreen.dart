@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:flutter/material.dart';
 
 import 'IntoductionPage.dart';
@@ -36,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     "EVV APP",
                     style: TextStyle(
                       fontSize: 45,
-                      color: Colors.blue,
+                      color: HexColor("#000000"),
                       fontWeight: FontWeight.w700,
                     ),
                   ),
