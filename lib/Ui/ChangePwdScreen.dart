@@ -1,6 +1,6 @@
+import 'package:evv_plus/Blocs/change_pwd_bloc.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
-import 'file:///D:/S_Rai/Flutter/Project/evv_plus/lib/Blocs/change_pwd_bloc.dart';
 import 'package:flutter/material.dart';
 
 class ChangePwdScreen extends StatefulWidget {

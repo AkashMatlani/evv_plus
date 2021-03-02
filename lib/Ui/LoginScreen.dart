@@ -1,6 +1,7 @@
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Ui/ForgotPwdScreen.dart';
 import 'package:flutter/material.dart';
-
 import '../Blocs/login_block.dart';
 import 'ChangePwdScreen.dart';
 
@@ -11,15 +12,11 @@ class LoginScreen extends StatefulWidget{
 }
 class _LoginScreen extends State<LoginScreen> {
 
-  changeThePage(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => ChangePwdScreen()));
-  }
 
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Bloc();
+    final bloc = login_block();
 
     return Scaffold(
       appBar: AppBar(
@@ -65,6 +62,23 @@ class _LoginScreen extends State<LoginScreen> {
               SizedBox(
                 height: 20.0,
               ),
+              InkWell(
+                onTap: () => {
+                  Utils.navigateReplaceToScreen(context, ForgotPwdScreen())
+                },
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: Text("Forgot Password?",
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.blue
+                  ))
+                ),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
               StreamBuilder<bool>(
                 stream: bloc.submitCheck,
                 builder: (context, snapshot) => RaisedButton(
@@ -73,7 +87,7 @@ class _LoginScreen extends State<LoginScreen> {
                        () =>
                        {
                          if(snapshot.hasData){
-                           changeThePage(context)
+                          Utils.navigateReplaceToScreen(context, ChangePwdScreen())
                          } else
                            {
                              ToastUtils.showToast(context, "Fill all details", Colors.red)

@@ -51,7 +51,7 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
                 height: 20.0,
               ),
               StreamBuilder<bool>(
-                stream: bloc.submitCheck,
+                //stream: bloc.submitCheck,
                 builder: (context, snapshot) => RaisedButton(
                   color: Colors.tealAccent,
                   onPressed:
