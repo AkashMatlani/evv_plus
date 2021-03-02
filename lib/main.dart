@@ -1,10 +1,6 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
-
-import 'Ui/IntroScreen.dart';
 import 'Ui/SplashScreen.dart';
-import 'constant.dart';
 
 void main() {
   runApp(MyApp());

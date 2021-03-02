@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 import 'LoginScreen.dart';
 import '../GeneralUtils/PageIndicator.dart';
 
-class IntoductionPage extends StatefulWidget {
+class IntroScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _IntoductionPage();
+  State<StatefulWidget> createState() => _IntroScreen();
 }
 
-class _IntoductionPage extends State<IntoductionPage> {
+class _IntroScreen extends State<IntroScreen> {
   int _currentPage = 0;
   final PageController _pageController = PageController(initialPage: 0);
 
@@ -86,7 +86,7 @@ class _IntoductionPage extends State<IntoductionPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LoginPage()));
+                                    builder: (context) => LoginScreen()));
                           },
                           child: Text(
                             'Skip',

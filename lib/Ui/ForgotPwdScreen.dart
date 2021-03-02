@@ -1,30 +1,31 @@
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:flutter/material.dart';
 
 import '../Blocs/login_block.dart';
+import '../Blocs/forgot_pwd_bloc.dart';
 import 'ChangePwdScreen.dart';
-
-class LoginScreen extends StatefulWidget{
+class ForgotPwdScreen extends StatefulWidget{
   @override
-  State<StatefulWidget> createState()  => _LoginScreen();
+  State<StatefulWidget> createState()  => _ForgotPwdScreen();
 
 }
-class _LoginScreen extends State<LoginScreen> {
+class _ForgotPwdScreen extends State<ForgotPwdScreen> {
 
   changeThePage(BuildContext context) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => ChangePwdScreen()));
+        .push(MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Bloc();
+    final bloc = forgot_pwd_bloc();
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Login Page"),
+        title: Text("Forgot Password"),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -49,22 +50,6 @@ class _LoginScreen extends State<LoginScreen> {
               SizedBox(
                 height: 20.0,
               ),
-              StreamBuilder<String>(
-                stream: bloc.password,
-                builder: (context, snapshot) => TextField(
-                  onChanged: bloc.passwordChanged,
-                  keyboardType: TextInputType.text,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "Enter password",
-                      labelText: "Password",
-                      errorText: snapshot.error),
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
               StreamBuilder<bool>(
                 stream: bloc.submitCheck,
                 builder: (context, snapshot) => RaisedButton(
@@ -76,7 +61,7 @@ class _LoginScreen extends State<LoginScreen> {
                            changeThePage(context)
                          } else
                            {
-                             ToastUtils.showToast(context, "Fill all details", Colors.red)
+                             ToastUtils.showToast(context, "Please enter valid email id", Colors.red)
                            }
                        },
                   child: Text("Submit"),

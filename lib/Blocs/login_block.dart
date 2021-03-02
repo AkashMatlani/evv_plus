@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'validator.dart';
+import '../validator.dart';
 import 'package:rxdart/rxdart.dart';
 
 class Bloc extends Object with Validators implements BaseBloc {

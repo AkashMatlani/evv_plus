@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'validator.dart';
+import '../validator.dart';
 import 'package:rxdart/rxdart.dart';
 
-class changepasswordbloc extends Object with Validators implements BaseBloc {
+class change_pwd_bloc extends Object with Validators implements BaseBloc {
+
   final _passwordController = BehaviorSubject<String>();
   final _conformpasswordController = BehaviorSubject<String>();
 

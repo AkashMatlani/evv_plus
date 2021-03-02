@@ -1,17 +1,17 @@
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
-import 'package:evv_plus/changepasswordbloc.dart';
+import 'file:///D:/S_Rai/Flutter/Project/evv_plus/lib/Blocs/change_pwd_bloc.dart';
 import 'package:flutter/material.dart';
 
-class ChangePassword extends StatefulWidget {
+class ChangePwdScreen extends StatefulWidget {
   @override
-  _ChangePasswordState createState() => _ChangePasswordState();
+  _ChangePwdScreenState createState() => _ChangePwdScreenState();
 }
 
-class _ChangePasswordState extends State<ChangePassword> {
+class _ChangePwdScreenState extends State<ChangePwdScreen> {
   @override
   Widget build(BuildContext context) {
-    final bloc = changepasswordbloc();
+    final bloc = change_pwd_bloc();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -62,7 +62,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 builder: (context, snapshot) => RaisedButton(
                   color: Colors.tealAccent,
                   onPressed: () =>
-                      {Utils.navigateReplaceToScreen(context, LoginPage())},
+                      {Utils.navigateReplaceToScreen(context, LoginScreen())},
                   child: Text("Reset"),
                 ),
               ),
