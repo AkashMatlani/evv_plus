@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:evv_plus/GeneralUtils/Utils.dart';
+
 mixin Validators{
 
   var emailValidator = StreamTransformer<String,String>.fromHandlers(
       handleData: (email,sink){
-        if(email.contains("@")){
+        if(Utils.isValidEmail(email)){
           sink.add(email);
         }else{
           sink.addError("Email is not valid");
@@ -14,35 +16,24 @@ mixin Validators{
 
   var passwordValidator = StreamTransformer<String,String>.fromHandlers(
       handleData: (password,sink){
-        if(password.length>4){
+        if(Utils.isValidPassword(password)){
           sink.add(password);
         }else{
-          sink.addError("Password length should be greater than 4 chars.");
+          sink.addError("Enter at least one letter, one number and one special character.");
         }
       }
   );
 
   var conformPasswordValidator = StreamTransformer<String,String>.fromHandlers(
       handleData: (conformPassword,sink){
-        if(conformPassword.length>4){
+        if(Utils.isValidPassword(conformPassword)){
           sink.add(conformPassword);
         }else{
-          sink.addError("Password length should be greater than 4 chars.");
+          sink.addError("Enter at least one letter, one number and one special character.");
         }
       }
   );
 
-  // var matchPasswordValidator = StreamTransformer<String,String,String>.fromHandlers(
-  //     handleData: (password,sink){
-  //       if(newpassword.length>4){
-  //         sink.add(newpassword);
-  //       }else{
-  //         sink.addError("Password length should be greater than 4 chars.");
-  //       }
-  //     }
-  // );
-
-
-  //!conformpassword.text.toString().equals(password.text.toString())
+ 
 
 }

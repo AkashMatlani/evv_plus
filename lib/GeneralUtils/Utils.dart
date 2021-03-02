@@ -39,4 +39,12 @@ class Utils {
         .hasMatch(email);
     return result;
   }
+  static bool isValidPassword(String password) {
+    bool result = RegExp(
+        r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$")
+        .hasMatch(password);
+    return result;
+  }
 }
+
+
