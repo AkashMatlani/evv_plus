@@ -41,7 +41,7 @@ class Utils {
   }
   static bool isValidPassword(String password) {
     bool result = RegExp(
-        r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$")
+        r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{5,}$")
         .hasMatch(password);
     return result;
   }
