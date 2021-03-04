@@ -1,105 +1,164 @@
+import 'dart:async';
+
+import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
+import 'package:evv_plus/GeneralUtils/Constant.dart';
+import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
+import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/AuthViewModel.dart';
 import 'package:evv_plus/Ui/ForgotPwdScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../Blocs/login_block.dart';
+import 'package:flutter_svg/svg.dart';
 import 'ChangePwdScreen.dart';
 
-class LoginScreen extends StatefulWidget{
+class LoginScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState()  => _LoginScreen();
-
+  State<StatefulWidget> createState() => _LoginScreen();
 }
+
 class _LoginScreen extends State<LoginScreen> {
 
+  var _emailController = TextEditingController();
+  var _passwordController = TextEditingController();
 
+  var _authViewModel = AuthViewModel();
 
   @override
   Widget build(BuildContext context) {
-    final bloc = login_block();
-
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Login Page"),
-      ),
       body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              StreamBuilder<String>(
-                stream: bloc.email,
-                builder: (context, snapshot) => TextField(
-                  onChanged: bloc.emailChanged,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "Enter email",
-                      labelText: "Email",
-                      errorText: snapshot.error),
-                ),
+        child: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * 0.4,
+              width: MediaQuery.of(context).size.width,
+              child: Stack(
+                fit: StackFit.expand,
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Image.asset(MyImage.loginBgImage, fit: BoxFit.fill),
+                  Positioned(
+                      top: MediaQuery.of(context).size.height * 0.15,
+                      left: MediaQuery.of(context).size.width*0.15,
+                      child: SvgPicture.asset(MyImage.appLogoV)
+                  )
+                ],
               ),
-              SizedBox(
-                height: 20.0,
+            ),
+            SizedBox(height: 30),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.7,
+              padding: EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: Text(LabelStr.lblSignIn,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: MyFont.sfPro,
+                            fontSize: 20)),
+                    width: MediaQuery.of(context).size.width,
+                  ),
+                  SizedBox(height: 30),
+                  Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 55,
+                      child: textFieldFor(
+                          LabelStr.lblEmailId, _emailController,
+                          autocorrect: false,
+                          textCapitalization: TextCapitalization.none,
+                          perfixIcon: Container(
+                            padding: EdgeInsets.all(13),
+                            child: SvgPicture.asset(MyImage.ic_email),
+                          ),
+                          keyboardType: TextInputType.emailAddress)),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 55,
+                      child: textFieldFor(
+                          LabelStr.lblPassword, _passwordController,
+                          autocorrect: false,
+                          obscure: true,
+                          textCapitalization: TextCapitalization.none,
+                          perfixIcon: Container(
+                            padding: EdgeInsets.all(13),
+                            child: SvgPicture.asset(MyImage.ic_password),
+                          ),
+                          keyboardType: TextInputType.emailAddress)),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                          HexColor("#1785e9"),
+                          HexColor("#83cff2")
+                        ]),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: FlatButton(
+                      child: Text(LabelStr.lblLogIn,
+                          style: AppTheme.normalTextStyle().copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700)),
+                      onPressed: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        checkConnection().then((isConnected) {
+                          if (isConnected) {
+                            userLogIn();
+                          } else {
+                            ToastUtils.showToast(context,
+                                LabelStr.connectionError, Colors.red);
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  InkWell(
+                    onTap: () => {
+                      Utils.navigateReplaceToScreen(context, ForgotPwdScreen())
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                        alignment: Alignment.center,
+                        child: Text(LabelStr.lblForgotPwd,
+                            style: AppTheme.normalTextStyle()
+                                .copyWith(color: Colors.black26).copyWith(decoration: TextDecoration.underline))),
+                  ),
+                ],
               ),
-              StreamBuilder<String>(
-                stream: bloc.password,
-                builder: (context, snapshot) => TextField(
-                  onChanged: bloc.passwordChanged,
-                  keyboardType: TextInputType.text,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "Enter password",
-                      labelText: "Password",
-                      errorText: snapshot.error),
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              InkWell(
-                onTap: () => {
-                  Utils.navigateReplaceToScreen(context, ForgotPwdScreen())
-                },
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  child: Text("Forgot Password?",
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.blue
-                  ))
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              StreamBuilder<bool>(
-                stream: bloc.submitCheck,
-                builder: (context, snapshot) => RaisedButton(
-                  color: Colors.tealAccent,
-                  onPressed:
-                       () =>
-                       {
-                         if(snapshot.hasData){
-                          Utils.navigateReplaceToScreen(context, ChangePwdScreen())
-                         } else
-                           {
-                             ToastUtils.showToast(context, "Fill all details", Colors.red)
-                           }
-                       },
-                  child: Text("Submit"),
-                ),
-              ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
+  }
+
+  userLogIn() {
+    var _email = _emailController.text.trim();
+    var _password = _passwordController.text.trim();
+    
+    _authViewModel.logInResult(_email, _password, (isValid, message) {
+      if(isValid){
+        ToastUtils.showToast(context, message, Colors.green);
+        Timer(
+            Duration(seconds: 2),
+                () => Utils.navigateToScreen(context, ChangePwdScreen()));
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
   }
 }

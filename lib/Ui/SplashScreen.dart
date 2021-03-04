@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
+import 'package:evv_plus/GeneralUtils/Constant.dart';
+import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:flutter/material.dart';
-
-import 'IntroScreen.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -16,11 +15,12 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(
       Duration(seconds: 2),
-          () => Navigator.push(
-          context, MaterialPageRoute(builder: (context) => IntroScreen())),
+      () => Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginScreen())),
     );
     //print("Splash Done!"))
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,35 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
         fit: StackFit.expand,
         alignment: Alignment.center,
         children: <Widget>[
-          Column(
-            children: <Widget>[
-              SizedBox(height: 200),
-              Padding(padding: EdgeInsets.only(left: 30.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "EVV APP",
-                    style: TextStyle(
-                      fontSize: 45,
-                      color: HexColor("#000000"),
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-              /*Padding(padding: EdgeInsets.only(top: 30.0, left: 30.0,),
-                child: Align(alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Set extact location to find the right\nrestaurants near you. ",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),*/
-            ],
+          Image.asset(MyImage.splashBgImage, fit: BoxFit.fill),
+          Positioned(
+              top: MediaQuery.of(context).size.height * 0.4,
+              left: MediaQuery.of(context).size.width*0.2,
+              child: SvgPicture.asset(MyImage.appLogoH)
           )
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.

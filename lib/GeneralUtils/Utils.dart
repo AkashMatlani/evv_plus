@@ -47,4 +47,6 @@ class Utils {
   }
 }
 
+typedef ResponseCallback(bool success, dynamic response);
+
 

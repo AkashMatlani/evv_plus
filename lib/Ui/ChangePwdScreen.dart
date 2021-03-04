@@ -1,7 +1,16 @@
-import 'package:evv_plus/Blocs/change_pwd_bloc.dart';
+import 'dart:async';
+
+import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
+import 'package:evv_plus/GeneralUtils/Constant.dart';
+import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
+import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/AuthViewModel.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
 
 class ChangePwdScreen extends StatefulWidget {
   @override
@@ -9,67 +18,133 @@ class ChangePwdScreen extends StatefulWidget {
 }
 
 class _ChangePwdScreenState extends State<ChangePwdScreen> {
+
+  var _newPwdController = TextEditingController();
+  var _confirmPwdController = TextEditingController();
+
+  var authViewModel = AuthViewModel();
+
   @override
   Widget build(BuildContext context) {
-    final bloc = change_pwd_bloc();
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Change Password"),
-      ),
       body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              StreamBuilder<String>(
-                stream: bloc.password,
-                builder: (context, snapshot) => TextField(
-                  onChanged: bloc.passwordChanged,
-                  keyboardType: TextInputType.text,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "Password",
-                      labelText: "Password",
-                      errorText: snapshot.error),
-                ),
+        child: Column(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height * 0.4,
+              width: MediaQuery.of(context).size.width,
+              child: Stack(
+                fit: StackFit.expand,
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Image.asset(MyImage.loginBgImage, fit: BoxFit.fill),
+                  Positioned(
+                      top: MediaQuery.of(context).size.height * 0.15,
+                      left: MediaQuery.of(context).size.width*0.15,
+                      child: SvgPicture.asset(MyImage.appLogoV)
+                  )
+                ],
               ),
-              SizedBox(
-                height: 20.0,
+            ),
+            SizedBox(height: 30),
+            Container(
+                height: MediaQuery.of(context).size.height * 0.7,
+                padding: EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Text(LabelStr.lblNewPwd,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: MyFont.sfPro,
+                            fontSize: 20)),
+                    width: MediaQuery.of(context).size.width,
+                  ),
+                  SizedBox(height: 30),
+                  Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 55,
+                      child: textFieldFor(
+                          LabelStr.lblNewPwd, _newPwdController,
+                          autocorrect: false,
+                          obscure: true,
+                          textCapitalization: TextCapitalization.none,
+                          perfixIcon: Container(
+                            padding: EdgeInsets.all(13),
+                            child: SvgPicture.asset(MyImage.ic_password),
+                          ),
+                          keyboardType: TextInputType.text)),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 55,
+                      child: textFieldFor(
+                          LabelStr.lblConfirmPwd, _confirmPwdController,
+                          autocorrect: false,
+                          obscure: true,
+                          textCapitalization: TextCapitalization.none,
+                          perfixIcon: Container(
+                            padding: EdgeInsets.all(13),
+                            child: SvgPicture.asset(MyImage.ic_password),
+                          ),
+                          keyboardType: TextInputType.text)),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                          HexColor("#1785e9"),
+                          HexColor("#83cff2")
+                        ]),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: FlatButton(
+                      child: Text(LabelStr.lblUpdatePwd,
+                          style: AppTheme.normalTextStyle().copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700)),
+                      onPressed: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        checkConnection().then((isConnected) {
+                          if (isConnected) {
+                            updatePassword();
+                          } else {
+                            ToastUtils.showToast(context,
+                                LabelStr.connectionError, Colors.red);
+                          }
+                        });
+                      },
+                    ),
+                  )
+                ],
               ),
-              StreamBuilder<String>(
-                stream: bloc.conformpassword,
-                builder: (context, snapshot) => TextField(
-                   onChanged: bloc.conformpasswordChanged,
-                  keyboardType: TextInputType.text,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "Conform password",
-                      labelText: "Conform Password",
-                      errorText: snapshot.error),
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              StreamBuilder<bool>(
-                //stream: bloc.submitCheck,
-                builder: (context, snapshot) => RaisedButton(
-                  color: Colors.tealAccent,
-                  onPressed: () =>
-                      {Utils.navigateReplaceToScreen(context, LoginScreen())},
-                  child: Text("Reset"),
-                ),
-              ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
+  }
+
+  updatePassword() {
+    var newPwd = _newPwdController.text.trim();
+    var confirmPwd = _confirmPwdController.text.trim();
+
+    authViewModel.updatePwdResult(newPwd, confirmPwd, (isValid, message) {
+      if (isValid) {
+        ToastUtils.showToast(context, message, Colors.green);
+        Timer(
+            Duration(seconds: 2),
+                () => Utils.navigateReplaceToScreen(context, LoginScreen()));
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
   }
 }
