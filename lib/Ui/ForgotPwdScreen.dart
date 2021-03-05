@@ -55,11 +55,7 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
                 children: <Widget>[
                   Container(
                     child: Text(LabelStr.lblResetPwd,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: MyFont.sfPro,
-                            fontSize: 20)),
+                        style: AppTheme.boldSFTextStyle().copyWith(fontSize: 28)),
                     width: MediaQuery.of(context).size.width,
                   ),
                   SizedBox(height: 30),
@@ -89,9 +85,7 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: FlatButton(
                       child: Text(LabelStr.lblReset,
-                          style: AppTheme.normalTextStyle().copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700)),
+                          style: AppTheme.boldSFTextStyle().copyWith(color: Colors.white)),
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         checkConnection().then((isConnected) {
@@ -130,13 +124,18 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
     CupertinoAlertDialog alert = CupertinoAlertDialog(
       content: Container(
         padding: EdgeInsets.only(top: 5, bottom: 5),
-        child: Text(LabelStr.checkMailLink, style: AppTheme.normalTextStyle()),
+        child: Text(LabelStr.checkMailLink, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 18)),
       ),
       actions: [
         CupertinoDialogAction(
-          child: Text(LabelStr.lblOk, style: AppTheme.headerTextStyle().copyWith(color: Colors.blue)),
+          child: Text(LabelStr.lblOk, style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.blue, fontSize: 18)),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop("Discard");
+            Timer(
+              Duration(milliseconds: 200),
+                  () => Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => LoginScreen())),
+            );
           },
         ),
       ],

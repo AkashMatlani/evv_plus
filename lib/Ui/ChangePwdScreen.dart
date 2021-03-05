@@ -8,6 +8,7 @@ import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
+import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -56,11 +57,7 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
                 children: [
                   Container(
                     child: Text(LabelStr.lblNewPwd,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: MyFont.sfPro,
-                            fontSize: 20)),
+                        style: AppTheme.boldSFTextStyle().copyWith(fontSize: 28)),
                     width: MediaQuery.of(context).size.width,
                   ),
                   SizedBox(height: 30),
@@ -107,9 +104,7 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: FlatButton(
                       child: Text(LabelStr.lblUpdatePwd,
-                          style: AppTheme.normalTextStyle().copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700)),
+                          style: AppTheme.boldSFTextStyle().copyWith(color: Colors.white)),
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         checkConnection().then((isConnected) {
@@ -141,7 +136,7 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
         ToastUtils.showToast(context, message, Colors.green);
         Timer(
             Duration(seconds: 2),
-                () => Utils.navigateReplaceToScreen(context, LoginScreen()));
+                () => Utils.navigateReplaceToScreen(context, ScheduleScreen()));
       } else {
         ToastUtils.showToast(context, message, Colors.red);
       }

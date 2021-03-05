@@ -63,9 +63,19 @@ flutter:
     - assets/icons/
 
   fonts:
-    - family: SFPro
+    - family: SFPro_medium
       fonts:
-        - asset: fonts/SFPro.ttf
+        - asset: fonts/SFProDisplay-Medium.ttf
+    - family: SFPro_regular
+      fonts:
+        - asset: fonts/SFProDisplay-Regular.ttf
+    - family: SFPro_semibold
+      fonts:
+        - asset: fonts/SFProDisplay-Semibold.ttf
+    - family: SFPro_bold
+      fonts:
+        - asset: fonts/SFProDisplay-Bold.ttf
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

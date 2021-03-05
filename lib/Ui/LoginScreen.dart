@@ -57,11 +57,7 @@ class _LoginScreen extends State<LoginScreen> {
                 children: <Widget>[
                   Container(
                     child: Text(LabelStr.lblSignIn,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: MyFont.sfPro,
-                            fontSize: 20)),
+                        style: AppTheme.boldSFTextStyle().copyWith(fontSize: 28)),
                     width: MediaQuery.of(context).size.width,
                   ),
                   SizedBox(height: 30),
@@ -107,9 +103,7 @@ class _LoginScreen extends State<LoginScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: FlatButton(
                       child: Text(LabelStr.lblLogIn,
-                          style: AppTheme.normalTextStyle().copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700)),
+                          style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         checkConnection().then((isConnected) {
@@ -134,8 +128,7 @@ class _LoginScreen extends State<LoginScreen> {
                       padding: EdgeInsets.all(5),
                         alignment: Alignment.center,
                         child: Text(LabelStr.lblForgotPwd,
-                            style: AppTheme.normalTextStyle()
-                                .copyWith(color: Colors.black26).copyWith(decoration: TextDecoration.underline))),
+                            style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.black26).copyWith(decoration: TextDecoration.underline))),
                   ),
                 ],
               ),
