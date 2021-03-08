@@ -1,8 +1,7 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
-import 'package:evv_plus/Ui/ChangePwdScreen.dart';
-import 'package:evv_plus/Ui/ForgotPwdScreen.dart';
-import 'package:evv_plus/Ui/LoginScreen.dart';
+import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/Ui/PastDueScheduleScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +41,29 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     var tabHeight = MediaQuery.of(context).size.height * 0.1;
 
     return Scaffold(
+      appBar: AppBar(
+        title: Container(
+          alignment: Alignment.center,
+          child: Text(LabelStr.lblSchedule, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
+        ),
+        backgroundColor: Colors.white10,
+        elevation: 0.0,
+        actions: [
+          IconButton(
+            icon: SvgPicture.asset(MyImage.ic_notification),
+            onPressed: () {
+              ToastUtils.showToast(context, "Notification clicked", Colors.blueAccent);
+            },
+          ),
+
+        ],
+        leading: IconButton(
+          icon: SvgPicture.asset(MyImage.ic_drawer),
+          onPressed: () {
+            ToastUtils.showToast(context, "Drawer Clicked", Colors.blueAccent);
+          },
+        ),
+      ),
       body: SafeArea(
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -68,12 +90,17 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                         )
                     ),
                     Positioned(
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(5),
-                        child: SvgPicture.asset(MyImage.ic_search),
+                      child: InkWell(
+                        onTap: (){
+                          ToastUtils.showToast(context, "Search Clicked", Colors.blueAccent);
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(5),
+                          child: SvgPicture.asset(MyImage.ic_search),
+                        ),
                       ),
                       right: 5,
                       top: 10,

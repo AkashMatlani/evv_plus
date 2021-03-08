@@ -7,7 +7,6 @@ import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
-import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

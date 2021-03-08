@@ -10,6 +10,30 @@ class LabelStr {
   static const lblConfirmPwd = "Confirm Password";
   static const lblUpdatePwd = "Update Password";
   static const lblOk = "Ok";
+  static const lblPlaneForm = "Care Plan Form";
+  static const lblDownloadPdf = "Download PDF";
+  static const lblCarePlan = "Care Plan";
+  static const lblSchedule = "Schedule";
+  static const lblCustomVisit = "Custom Visit";
+  static const lblVisitDetails = "Visit Details";
+  static const lblCarePlanComments = "Care Plan Comments";
+  static const lblDailyLivingTasks = "Daily Living Tasks";
+  static const lblComments = "Comments";
+  static const lblPatientSign = "Get Patient Sign";
+  static const lblPatientVoice = "Patient Voice Sign";
+  static const lblSignReason = "Sign Reason";
+  static const lblVisitVerification = "Visit Verification";
+  static const lblVisitHistory = "Visit History";
+  static const lblCheckIn = "Check In";
+  static const lblCheckout = "Check Out";
+  static const lblAge = "Age:";
+  static const lbNurse = "Nurse:";
+  static const lbPatientAddress = "Patient Address:";
+  static const lbStartVisit = "Start Visit";
+  static const lblAskStartVisit = "Would you like to start visit?";
+  static const lblYes = "Yes";
+  static const lblNo = "No";
+
 
   static const enterUserEmail = "Please enter email";
   static const enterValidEmail = "Please enter valid email";

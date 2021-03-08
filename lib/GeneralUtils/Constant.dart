@@ -60,6 +60,7 @@ class MyImage {
   static const loginBgImage = "assets/bg_image/login_bg.png";
   static const noImagePlaceholder = "assets/bg_image/no_image_placeholder.png";
   static const profilePlaceholder = "assets/bg_image/user_placeholder.svg";
+  static const user_placeholder = "assets/icons/user_placeholder.svg";
 
   static const appLogoH = "assets/icons/app_logo_horizontal.svg";
   static const appLogoV = "assets/icons/app_logo_vertical.svg";
@@ -70,6 +71,15 @@ class MyImage {
   static const ic_filter = "assets/icons/ic_filter.svg";
   static const ic_fill_circle = "assets/icons/ic_blue_circle.svg";
   static const ic_search = "assets/icons/ic_search.svg";
+  static const ic_forword_blue = "assets/icons/ic_forword_blue.svg";
+  static const ic_directory = "assets/icons/ic_directory.svg";
+  static const ic_share = "assets/icons/ic_share.svg";
+  static const ic_pdf_thumb = "assets/icons/ic_pdf_thumbnail.svg";
+  static const ic_download = "assets/icons/ic_download.svg";
+  static const ic_voice_chat = "assets/icons/ic_voice_chat.svg";
+  static const ic_medical = "assets/icons/ic_medical.svg";
+  static const ic_document = "assets/icons/ic_document.svg";
+  static const ic_call_icons = "assets/icons/ic_call_icons.svg";
 }
 
 class MyColor {
