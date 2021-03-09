@@ -33,8 +33,13 @@ class LabelStr {
   static const lblAskStartVisit = "Would you like to start visit?";
   static const lblYes = "Yes";
   static const lblNo = "No";
-
-
+  static const lblHome = "Home";
+  static const lblTask = "Task";
+  static const lblIcident = "Icident";
+  static const lblNotification = "Notification";
+  static const lblProfile = "Profile";
+  static const lblAboutUs = "About Us";
+  static const lblMyProfile = "My Profile";
   static const enterUserEmail = "Please enter email";
   static const enterValidEmail = "Please enter valid email";
   static const enterUserPwd = "Please enter password";
@@ -42,8 +47,13 @@ class LabelStr {
   static const enterConfirmPwd = "Please enter confirm password";
   static const pwdNotMatchError = "New password and confirm password should be same";
   static const enterValidPwd = "Password must contain at least 1 characters, digits, special characters";
-
-
+  static const lblAddressLineOne = "Address line 1";
+  static const lblAddressLineTwo = "Address line 2";
+  static const lblCity = "City";
+  static const lblZip= "Zip 123";
+  static const lblPhone= "Phone";
+  static const lblUpdate= "Update";
+  static const lblSubmit= "Submit";
   static const checkMailLink = "Please check your email box and click on the link";
   static const connectionError = "Please check you internet connectivity, Try again";
   static const serverError = "Server not responding, Try again";

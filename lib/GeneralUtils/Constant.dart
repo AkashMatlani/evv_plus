@@ -46,6 +46,13 @@ class AppTheme {
         fontSize: 16,
         color: MyColor.normalTextColor());
   }
+
+  static TextStyle sfProLightTextStyle() {
+    return TextStyle(
+        fontFamily: MyFont.SFPro_light,
+        fontSize: 18,
+        color:Colors.black);
+  }
 }
 
 class MyFont {
@@ -53,6 +60,7 @@ class MyFont {
   static const SFPro_regular = "SFPro_regular";
   static const SFPro_semibold = "SFPro_semibold";
   static const SFPro_bold = "SFPro_bold";
+  static const SFPro_light = "SFPro_light";
 }
 
 class MyImage {
@@ -80,6 +88,16 @@ class MyImage {
   static const ic_medical = "assets/icons/ic_medical.svg";
   static const ic_document = "assets/icons/ic_document.svg";
   static const ic_call_icons = "assets/icons/ic_call_icons.svg";
+
+  static const home_icon = "assets/icons/home.svg";
+  static const task_icon = "assets/icons/task.svg";
+  static const icident_icon = "assets/icons/icident.svg";
+  static const notification_icon = "assets/icons/notification.svg";
+  static const profile_icon = "assets/icons/profile.svg";
+  static const about_us_icon = "assets/icons/about_us.svg";
+  static const mic_icon = "assets/icons/mic.svg";
+  static const equalizer_icon = "assets/icons/equalizer.svg";
+  static const play_icon = "assets/icons/play.svg";
 }
 
 class MyColor {

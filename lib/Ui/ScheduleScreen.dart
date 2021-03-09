@@ -2,11 +2,13 @@ import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/Ui/NavigationDrawerScreen.dart';
 import 'package:evv_plus/Ui/PastDueScheduleScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../GeneralUtils/Utils.dart';
 import 'CompletedScheduleScreen.dart';
 import 'UpcommingScheduleScreen.dart';
 
@@ -60,7 +62,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         leading: IconButton(
           icon: SvgPicture.asset(MyImage.ic_drawer),
           onPressed: () {
-            ToastUtils.showToast(context, "Drawer Clicked", Colors.blueAccent);
+            //ToastUtils.showToast(context, "Drawer Clicked", Colors.blueAccent);
+            Utils.navigateToScreen(context, NavigationDrawerScreen());
           },
         ),
       ),
