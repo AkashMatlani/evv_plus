@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class CompletedNoteScreen extends StatefulWidget {
   @override
@@ -18,6 +19,8 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
   var _clientNameController = TextEditingController();
   var _clinicianNameController = TextEditingController();
   var _signatureDateController = TextEditingController();
+
+  DateTime _selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +62,14 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                   _signatureDateController,
                   suffixIcon: InkWell(
                     onTap: (){
-                      ToastUtils.showToast(context, "Calender click", Colors.blue);
+                      _selectDate(context, _signatureDateController);
                     },
                     child: Container(
                       padding: EdgeInsets.all(12),
                       child: SvgPicture.asset(MyImage.ic_calender),
                     ),
-                  )
+                  ),
+                readOnly: true
               ),
               Container(
                 height: MediaQuery.of(context).size.height*0.56,
@@ -108,7 +112,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                       child: FlatButton(
                         child: Text(LabelStr.lblSaveExit,
-                            style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                            style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: HexColor("#2b91eb"))),
                         onPressed: () {
                           FocusScope.of(context).requestFocus(FocusNode());
                           checkConnection().then((isConnected) {
@@ -131,5 +135,20 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
         ),
       ),
     );
+  }
+
+  _selectDate(BuildContext context, TextEditingController controller) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate, // Refer step 1
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (picked != null && picked != _selectedDate)
+      setState(() {
+        _selectedDate = picked;
+        String formattedDate = DateFormat('dd/MM/yyyy').format(picked);
+        controller.text = formattedDate;
+      });
   }
 }

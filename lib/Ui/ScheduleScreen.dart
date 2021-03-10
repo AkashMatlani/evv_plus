@@ -62,7 +62,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         leading: IconButton(
           icon: SvgPicture.asset(MyImage.ic_drawer),
           onPressed: () {
-            //ToastUtils.showToast(context, "Drawer Clicked", Colors.blueAccent);
             Utils.navigateToScreen(context, NavigationDrawerScreen());
           },
         ),

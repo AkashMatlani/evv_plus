@@ -1,5 +1,5 @@
 
-import 'package:evv_plus/Ui/SplashScreen.dart';
+import 'package:evv_plus/Ui/NavigationDrawerScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(),
+      home: NavigationDrawerScreen(),
     );
   }
 }

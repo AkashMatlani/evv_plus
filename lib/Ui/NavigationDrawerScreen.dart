@@ -19,6 +19,7 @@ class NavigationDrawerScreen extends StatefulWidget {
 }
 
 class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
+
   final List<String> _listViewData = [
     LabelStr.lblHome,
     LabelStr.lblTask,
@@ -42,8 +43,7 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
 
     if (index == 0) {
       Utils.navigateToScreen(context, ClientPatientSignatureScreen());
-    }
-    else if (index == 1) {
+    } else if (index == 1) {
       Utils.navigateToScreen(context, UnableToSignInScreen());
     } else if (index == 3) {
       Utils.navigateToScreen(context, NotificationScreen());
