@@ -59,5 +59,22 @@ class LabelStr {
   static const serverError = "Server not responding, Try again";
   static const emptyFieldError = "Please fill required details";
 
+  static const lblComment = "Comment";
+  static const lblPatient = "Patient";
+  static const lblPatientOrPlan = "Patient Name/Care Plan: ";
+  static const lblNurseName = "Nurse Name: ";
+  static const lblCancel = "Cancel";
+  static const lblSearchPatientOrPlan = "Search patient name / Care plan";
+  static const lblDailyLivingTask = "Daily Living Task";
+  static const lblCompletedNote = "Completed Note";
+  static const lblClientName = "Client Name";
+  static const lblClinicianName = "Clinician Name";
+  static const lblSignatureDate = "Signature Date";
+  static const lblComplete = "Complete";
+  static const lblSaveExit = "Save & Exit";
+  static const lblDateNote = "The information below displayed will be saved with signature";
+  static const lblCollectSign = "Collect Client Signature";
+  static const lblCancelVerification = "Cancel Task Verification";
+
 
 }

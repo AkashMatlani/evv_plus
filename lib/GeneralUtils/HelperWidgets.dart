@@ -12,6 +12,7 @@ Widget textFieldFor(String hint,
       bool obscure = false,
       maxLength: 200,
       Widget perfixIcon,
+      Widget suffixIcon,
       bool enabled = true,
       bool readOnly = false,
       VoidCallback onEditingComplete,
@@ -34,6 +35,7 @@ Widget textFieldFor(String hint,
         contentPadding: textFieldPadding(),
         prefixIcon: perfixIcon,
         hintText: hint,
+        suffixIcon: suffixIcon,
         fillColor: Colors.white,
         hintStyle: AppTheme.textFieldHintTextStyle(),
         border: OutlineInputBorder(
@@ -53,7 +55,7 @@ Widget textFieldFor(String hint,
   );
 }
 
-Widget multilineTextFieldFor(String hint, TextEditingController controller,
+Widget multilineTextFieldFor(String hint, TextEditingController controller, double height,
     {TextInputType keyboardType = TextInputType.text,
       bool autocorrect = true,
       TextCapitalization textCapitalization = TextCapitalization.sentences,
@@ -67,12 +69,12 @@ Widget multilineTextFieldFor(String hint, TextEditingController controller,
       Function onSubmit,
       Function onChange}) {
   return SizedBox(
-    height: 100,
+    height: height,
     child: TextField(
       autocorrect: autocorrect,
       enabled: enabled,
       readOnly: readOnly,
-      maxLines: 4,
+      maxLines: 5,
       textCapitalization: textCapitalization,
       onEditingComplete: onEditingComplete,
       obscureText: obscure,
@@ -85,7 +87,7 @@ Widget multilineTextFieldFor(String hint, TextEditingController controller,
         prefixIcon: perfixIcon,
         hintText: hint,
         fillColor: Colors.white,
-        hintStyle: AppTheme.textFieldHintTextStyle().copyWith(fontWeight: FontWeight.w600),
+        hintStyle: AppTheme.textFieldHintTextStyle(),
         border: OutlineInputBorder(
           borderSide: BorderSide(width: 1, color: MyColor.textFieldBorderColor()),
         ),
@@ -118,5 +120,5 @@ Widget appBar(String text, IconButton iconButton, {Color color}) {
 }
 
 EdgeInsets textFieldPadding() {
-  return EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 10.0);
+  return EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 10.0);
 }

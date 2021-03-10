@@ -177,7 +177,6 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
                     : Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(35.0))),
         child: ListTile(
-          minLeadingWidth: 10,
           leading:
               widget._selectedIndex != null && widget._selectedIndex == index
                   ? SvgPicture.asset(
