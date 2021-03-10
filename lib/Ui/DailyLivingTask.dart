@@ -15,12 +15,12 @@ class DailyLivingTask extends StatefulWidget {
 class _DailyLivingTaskState extends State<DailyLivingTask> {
 
   var _commentController = TextEditingController();
-  int _groupValue = -1;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          toolbarHeight: 100,
           title: Container(
             alignment: Alignment.center,
             margin: EdgeInsets.only(right: 30),

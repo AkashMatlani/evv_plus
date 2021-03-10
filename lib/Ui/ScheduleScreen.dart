@@ -79,6 +79,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 100,
         title: Container(
           alignment: Alignment.center,
           child: Text(LabelStr.lblSchedule, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),

@@ -26,6 +26,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            toolbarHeight: 100,
             title: Container(
               alignment: Alignment.center,
               margin: EdgeInsets.only(right: 30),

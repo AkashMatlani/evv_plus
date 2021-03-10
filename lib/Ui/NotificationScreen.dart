@@ -14,7 +14,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 120,
+          toolbarHeight: 100,
           elevation: 0,
           iconTheme: IconThemeData(
             color: Colors.black, //change your color here

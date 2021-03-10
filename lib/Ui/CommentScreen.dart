@@ -38,6 +38,7 @@ class _CommentScreenState extends State<CommentScreen> with SingleTickerProvider
     var tabHeight = MediaQuery.of(context).size.height * 0.1;
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 100,
         title: Container(
           alignment: Alignment.center,
           margin: EdgeInsets.only(right: 30),
