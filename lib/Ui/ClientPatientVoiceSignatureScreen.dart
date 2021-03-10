@@ -23,17 +23,17 @@ class _ClientPatientVoiceSignatureScreenState
           ),
           centerTitle: true,
           title: Text(
-            "Client Signature",
-            style: AppTheme.sfProLightTextStyle()
-                .copyWith(fontSize: 24, color: Colors.black),
+            LabelStr.lblclientSignature,
+            style: AppTheme.boldSFTextStyle()
+                .copyWith(fontSize: 26, color: Colors.black),
           ),
           actions: <Widget>[
             Container(
               padding: EdgeInsets.only(right: 10),
               child: Center(
-                child: Text("Done",
-                    style: AppTheme.sfProLightTextStyle().copyWith(
-                      fontSize: 16,
+                child: Text(LabelStr.lblDone,
+                    style: AppTheme.boldSFTextStyle().copyWith(
+                      fontSize: 20,
                       color: HexColor("#1a87e9"),
                     )),
               ),
@@ -70,15 +70,19 @@ class _ClientPatientVoiceSignatureScreenState
                     SizedBox(
                       height: 30,
                     ),
-                    Text("Recording",style: AppTheme.regularSFTextStyle().copyWith(
-                      fontSize: 16,
-                      color: HexColor("#000000"),)),
+                    Text(LabelStr.lblRecording,
+                        style: AppTheme.regularSFTextStyle().copyWith(
+                          fontSize: 20,
+                          color: HexColor("#000000"),
+                        )),
                     SizedBox(
                       height: 10,
                     ),
-                    Text("00:10:00",style: AppTheme.regularSFTextStyle().copyWith(
-                      fontSize: 22,
-                      color: HexColor("#3d3d3d"),)),
+                    Text("00:10:00",
+                        style: AppTheme.boldSFTextStyle().copyWith(
+                          fontSize: 26,
+                          color: HexColor("#3d3d3d"),
+                        )),
                     SizedBox(
                       height: 10,
                     ),
@@ -86,7 +90,7 @@ class _ClientPatientVoiceSignatureScreenState
                       "This will take 10 second voice recording and will be\n saved once click on done",
                       textAlign: TextAlign.center,
                       style: AppTheme.regularSFTextStyle().copyWith(
-                        fontSize: 14,
+                        fontSize: 16,
                         color: HexColor("#000000"),
                       ),
                     ),
@@ -98,7 +102,7 @@ class _ClientPatientVoiceSignatureScreenState
                       child: Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
-                            margin: EdgeInsets.all(5),
+                            margin: EdgeInsets.all(20),
                             width: MediaQuery.of(context).size.width,
                             height: 50,
                             decoration: BoxDecoration(

@@ -1,5 +1,6 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
+import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -20,9 +21,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
           centerTitle: true,
           title: Text(
-            "Notification",
+            LabelStr.lblNotification,
             style: AppTheme.boldSFTextStyle()
-                .copyWith(fontSize: 24, color: Colors.black),
+                .copyWith(fontSize: 26, color: Colors.black),
           ),
           backgroundColor: Colors.white,
           // ...
@@ -31,7 +32,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           children: [
             Divider(
               height: 2,
-              thickness: 1,
+              thickness: 0.5,
               color: Color(0xff979797),
             ),
             Expanded(

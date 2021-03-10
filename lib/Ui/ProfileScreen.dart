@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               child: Column(
                 children: [
-                  Container(
+                /*  Container(
                     height: MediaQuery.of(context).size.height * 0.43,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
@@ -84,7 +86,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(height: 10),
                       ],
                     ),
+                  ),*/
+                 /* Container(
+                    height: 200.0,
+                    decoration: new BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.vertical(
+                          bottom: Radius.elliptical(
+                              MediaQuery.of(context).size.width, 38.0)),
+                    ),
+                  ),*/
+
+                  CustomPaint(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.43,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 50),
+                          Row(
+                            children: [
+                              Container(
+                                child:
+                                Icon(Icons.arrow_back, color: Colors.white),
+                                margin: EdgeInsets.only(left: 10),
+                              ),
+                              Expanded(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.only(right: 20),
+                                    child: Text(LabelStr.lblMyProfile,
+                                        style: AppTheme.boldSFTextStyle().copyWith(
+                                            fontSize: 24, color: Colors.white)),
+                                  ))
+                            ],
+                          ),
+                          SizedBox(height: 15),
+                          Container(
+                              alignment: Alignment.center,
+                              child: SvgPicture.asset(MyImage.user_placeholder,
+                                  height: 120, width: 120)),
+                          SizedBox(height: 5),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            alignment: Alignment.center,
+                            child: Text("Katie Williamson",
+                                style: AppTheme.boldSFTextStyle()
+                                    .copyWith(fontSize: 24, color: Colors.white)),
+                          ),
+                          SizedBox(height: 5),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            alignment: Alignment.center,
+                            child: Text("Columbis, ohio",
+                                style: AppTheme.regularSFTextStyle()
+                                    .copyWith(fontSize: 14, color: Colors.white)),
+                          ),
+                          SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
+                    painter: HeaderCurvedContainer(),
+
                   ),
+
+                  //CurvedShape(),
                   SizedBox(
                     height: 20,
                   ),
@@ -98,7 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "ssn".toUpperCase(),
+                              LabelStr.lblSsn.toUpperCase(),
                               style: AppTheme.semiBoldSFTextStyle()
                                   .copyWith(fontSize: 14),
                             ),
@@ -118,7 +183,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "DOB".toUpperCase(),
+                              LabelStr.lblDob.toUpperCase(),
                               style: AppTheme.semiBoldSFTextStyle()
                                   .copyWith(fontSize: 14),
                             ),
@@ -140,7 +205,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Gender".toUpperCase(),
+                              LabelStr.lblGender.toUpperCase(),
                               style: AppTheme.semiBoldSFTextStyle()
                                   .copyWith(fontSize: 14),
                             ),
@@ -169,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "Email".toUpperCase(),
+                            LabelStr.lblEmail.toUpperCase(),
                             style: AppTheme.semiBoldSFTextStyle()
                                 .copyWith(fontSize: 14),
                           ),
@@ -188,7 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "Phone".toUpperCase(),
+                            LabelStr.lblPhone.toUpperCase(),
                             style: AppTheme.semiBoldSFTextStyle()
                                 .copyWith(fontSize: 14),
                           ),
@@ -262,17 +327,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           textCapitalization: TextCapitalization.none,
                           keyboardType: TextInputType.phone)),
                   Container(
-                    margin: EdgeInsets.all(5),
+                    margin: EdgeInsets.all(8),
                     width: MediaQuery.of(context).size.width,
                     height: 50,
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
                             colors: [HexColor("#1785e9"), HexColor("#83cff2")]),
                         borderRadius: BorderRadius.all(Radius.circular(5))),
-                    child: FlatButton(
+                    child: TextButton(
                       child: Text(LabelStr.lblUpdate,
                           style: AppTheme.boldSFTextStyle()
-                              .copyWith(fontSize: 18, color: Colors.white)),
+                              .copyWith(fontSize: 20, color: Colors.white)),
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         checkConnection().then((isConnected) {});
@@ -296,4 +361,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
     path.lineTo(size.width, 0); //vertical line
     return path;
   }
+
+
+}
+// CustomPainter class to for the header curved-container
+class HeaderCurvedContainer extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..color =  Color(0xff1785e9);
+    Paint paint1 = Paint()..color =  Color(0xff83cff2);
+    Path path = new Path();
+    path.lineTo(0, size.height * 0.85);
+    path.quadraticBezierTo(size.width / 2, size.height, size.width,
+        size.height * 0.85);
+    path.lineTo(size.width, 0);
+    canvas.drawPath(path, paint1);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

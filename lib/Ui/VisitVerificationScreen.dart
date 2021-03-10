@@ -76,6 +76,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                               ),
                               Divider(
                                 height: 1,
+                                thickness: 1,
                                 color: HexColor("#e9e9e9"),
                               ),
                               Container(
@@ -94,7 +95,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                   child: Text(LabelStr.lblGetCaretakerSignature,
                                       style: AppTheme.boldSFTextStyle()
                                           .copyWith(
-                                              fontSize: 18,
+                                              fontSize: 20,
                                               color: Colors.white)),
                                   onPressed: () {
                                     FocusScope.of(context)
@@ -134,6 +135,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                               ),
                               Divider(
                                 height: 1,
+                                thickness: 1,
                                 color: HexColor("#e9e9e9"),
                               ),
                               TextFormField(
@@ -162,7 +164,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                   child: Text(LabelStr.lblGetCaretakerSignature,
                                       style: AppTheme.boldSFTextStyle()
                                           .copyWith(
-                                              fontSize: 18,
+                                              fontSize: 20,
                                               color: Colors.white)),
                                   onPressed: () {
                                     FocusScope.of(context)

@@ -54,6 +54,7 @@ class LabelStr {
   static const lblPhone= "Phone";
   static const lblUpdate= "Update";
   static const lblSubmit= "Submit";
+  static const lblCancel= "Cancel";
   static const lblGetPatientSign= "Get Patient Sign";
   static const lblGetCaretakerSignature= "Get Caretaker Signature";
   static const lblGetReasonOther= "Reason : Other";
@@ -61,12 +62,26 @@ class LabelStr {
   static const connectionError = "Please check you internet connectivity, Try again";
   static const serverError = "Server not responding, Try again";
   static const emptyFieldError = "Please fill required details";
+  static const lblclientSignature = "Client Signature";
+  static const lblDone = "Done";
+  static const lblSignHere = "Sign Here";
+  static const lblRecording = "Recording";
+  static const lblUnableToSignReason = "Unable to Sign Reason";
+  static const lblSelectReason = "Please Select a Reason";
+  static const lblPhysicalImpairment = "Physical Impairment";
+  static const lblMentalImpairment = "Mental Impairment";
+  static const lblOther = "Other";
+  static const lblSsn= "ssn";
+  static const lblDob= "DOB";
+  static const lblGender= "Gender";
+  static const lblEmail= "Email";
+
+
 
   static const lblComment = "Comment";
   static const lblPatient = "Patient";
   static const lblPatientOrPlan = "Patient Name/Care Plan: ";
   static const lblNurseName = "Nurse Name: ";
-  static const lblCancel = "Cancel";
   static const lblSearchPatientOrPlan = "Search patient name / Care plan";
   static const lblDailyLivingTask = "Daily Living Task";
   static const lblCompletedNote = "Completed Note";

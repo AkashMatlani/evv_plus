@@ -123,13 +123,16 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
                 height: 30,
               ),
               _createFooterItem(
-                 svgPicture: MyImage.logout_icon, text: 'Logout', onTap: () => {})
+                  svgPicture: MyImage.logout_icon,
+                  text: 'Logout',
+                  onTap: () => {})
             ],
           ),
         ),
       ),
     );
   }
+
 /* SvgPicture.asset(MyImage.logout_icon, height: 120, width: 120),*/
   Widget _createFooterItem(
       {String svgPicture, String text, GestureTapCallback onTap}) {
@@ -155,19 +158,6 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
   }
 
   Widget _createDrawerItem() {
-    // return ListTile(
-    //   title: Row(
-    //     children: <Widget>[
-    //       SvgPicture.asset(image,height: 30,width: 40,),
-    //       Padding(
-    //         padding: EdgeInsets.only(left: 20.0),
-    //         child: Text(text,style: AppTheme.sfProLightTextStyle()),
-    //       )
-    //     ],
-    //   ),
-    //   onTap: onTap,
-    // );
-
     return ListView.builder(
       shrinkWrap: true,
       itemCount: _listViewData.length,

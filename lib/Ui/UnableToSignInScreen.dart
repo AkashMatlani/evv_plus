@@ -3,7 +3,7 @@ import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:flutter/material.dart';
 
-enum SingingCharacter { Physical, mental,other }
+enum SingingCharacter { Physical, mental, other }
 
 class UnableToSignInScreen extends StatefulWidget {
   @override
@@ -25,7 +25,7 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
           ),
           centerTitle: true,
           title: Text(
-            "Unable to Sign Reason",
+            LabelStr.lblUnableToSignReason,
             style: AppTheme.sfProLightTextStyle()
                 .copyWith(fontSize: 24, color: Colors.black),
           ),
@@ -42,9 +42,12 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                   ),
                   child: IntrinsicHeight(
                       child: Column(children: <Widget>[
-                        Divider(height: 1),
+                    Divider(
+                      height: 1,
+                      thickness: 2,
+                    ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(20,30,20,0),
+                      padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
                       color: Colors.white,
                       child: Container(
                         decoration: BoxDecoration(
@@ -60,7 +63,7 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                             Container(
                                 padding: EdgeInsets.fromLTRB(15, 20, 0, 0),
                                 child: Text(
-                                  'Please Select a Reason',
+                                  LabelStr.lblSelectReason,
                                   style: AppTheme.boldSFTextStyle().copyWith(
                                       fontSize: 16, color: HexColor("#3d3d3d")),
                                 )),
@@ -69,16 +72,20 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                             ),
                             Divider(
                               height: 1,
+                              thickness: 2,
                               color: HexColor("#e9e9e9"),
                             ),
-
                             Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 ListTile(
-                                  title:  Text('Physical Impairment',style: AppTheme.mediumSFTextStyle()
-                                .copyWith(
-                                fontSize: 14,
-                                color: HexColor("#3d3d3d"))),
+                                  horizontalTitleGap: 0,
+                                  title: Text(LabelStr.lblPhysicalImpairment,
+                                      style: AppTheme.mediumSFTextStyle()
+                                          .copyWith(
+                                              fontSize: 14,
+                                              color: HexColor("#3d3d3d"))),
                                   leading: Radio(
                                     value: SingingCharacter.Physical,
                                     groupValue: _character,
@@ -90,10 +97,12 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                   ),
                                 ),
                                 ListTile(
-                                  title:  Text('Mental Impairment',style: AppTheme.mediumSFTextStyle()
-                                      .copyWith(
-                                      fontSize: 14,
-                                      color: HexColor("#3d3d3d"))),
+                                  horizontalTitleGap: 0,
+                                  title: Text(LabelStr.lblMentalImpairment,
+                                      style: AppTheme.mediumSFTextStyle()
+                                          .copyWith(
+                                              fontSize: 14,
+                                              color: HexColor("#3d3d3d"))),
                                   leading: Radio(
                                     value: SingingCharacter.mental,
                                     groupValue: _character,
@@ -105,11 +114,12 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                   ),
                                 ),
                                 ListTile(
-                                  title:  Text('Other',
-                                    style: AppTheme.mediumSFTextStyle()
-                                        .copyWith(
-                                      fontSize: 14,
-                                      color: HexColor("#3d3d3d"))),
+                                  horizontalTitleGap: 0,
+                                  title: Text(LabelStr.lblOther,
+                                      style: AppTheme.mediumSFTextStyle()
+                                          .copyWith(
+                                              fontSize: 14,
+                                              color: HexColor("#3d3d3d"))),
                                   leading: Radio(
                                     value: SingingCharacter.other,
                                     groupValue: _character,
@@ -119,7 +129,6 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                       });
                                     },
                                   ),
-                                  minLeadingWidth : 2,
                                 ),
                               ],
                             ),
@@ -127,32 +136,77 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                         ),
                       ),
                     ),
+                    
                     Expanded(
+                      child:Container(
+                        padding: EdgeInsets.all(20),
                       child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            margin: EdgeInsets.all(5),
-                            width: MediaQuery.of(context).size.width,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                                  HexColor("#1785e9"),
-                                  HexColor("#83cff2")
-                                ]),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5))),
-                            child: TextButton(
-                              child: Text(LabelStr.lblSubmit,
-                                  style: AppTheme.boldSFTextStyle().copyWith(
-                                      fontSize: 18, color: Colors.white)),
-                              onPressed: () {
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                                checkConnection().then((isConnected) {});
-                              },
-                            ),
-                          )),
-                    ),
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      margin: EdgeInsets.all(5),
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                          gradient: LinearGradient(colors: [
+                                            HexColor("#1785e9"),
+                                            HexColor("#83cff2")
+                                          ]),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5))),
+                                      child: TextButton(
+                                        child: Text(LabelStr.lblSubmit,
+                                            style: AppTheme.boldSFTextStyle()
+                                                .copyWith(
+                                                    fontSize: 18,
+                                                    color: Colors.white)),
+                                        onPressed: () {
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
+                                          checkConnection()
+                                              .then((isConnected) {});
+                                        },
+                                      ),
+                                    )),
+                              ),
+                              Expanded(
+                                child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      margin: EdgeInsets.all(5),
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                          gradient: LinearGradient(colors: [
+                                            HexColor("#c1def8"),
+                                            HexColor("#c1def8")
+                                          ]),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5))),
+                                      child: TextButton(
+                                        child: Text(LabelStr.lblCancel,
+                                            style: AppTheme.boldSFTextStyle()
+                                                .copyWith(
+                                                    fontSize: 18,
+                                                    color: HexColor("#2b91eb"))),
+                                        onPressed: () {
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
+                                          checkConnection()
+                                              .then((isConnected) {});
+                                        },
+                                      ),
+                                    )),
+                              ),
+                            ]),
+                      ),
+                    ))
                   ]))));
         }));
   }
