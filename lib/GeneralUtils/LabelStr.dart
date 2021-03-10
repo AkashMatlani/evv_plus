@@ -59,6 +59,7 @@ class LabelStr {
   static const serverError = "Server not responding, Try again";
   static const emptyFieldError = "Please fill required details";
 
+  static const lblLogout = "Logout";
   static const lblComment = "Comment";
   static const lblPatient = "Patient";
   static const lblPatientOrPlan = "Patient Name/Care Plan: ";

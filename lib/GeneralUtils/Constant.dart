@@ -89,12 +89,13 @@ class MyImage {
   static const ic_document = "assets/icons/ic_document.svg";
   static const ic_call_icons = "assets/icons/ic_call_icons.svg";
 
-  static const home_icon = "assets/icons/home.svg";
-  static const task_icon = "assets/icons/task.svg";
-  static const icident_icon = "assets/icons/icident.svg";
-  static const notification_icon = "assets/icons/notification.svg";
-  static const profile_icon = "assets/icons/profile.svg";
-  static const about_us_icon = "assets/icons/about_us.svg";
+  static const home_icon = "assets/icons/ic_menu_home.svg";
+  static const task_icon = "assets/icons/ic_menu_task.svg";
+  static const icident_icon = "assets/icons/ic_menu_icident.svg";
+  static const notification_icon = "assets/icons/ic_menu_notification.svg";
+  static const profile_icon = "assets/icons/ic_menu_profile.svg";
+  static const about_us_icon = "assets/icons/ic_menu_aboutUs.svg";
+  static const logout_icon = "assets/icons/ic_menu_logout.svg";
   static const mic_icon = "assets/icons/mic.svg";
   static const equalizer_icon = "assets/icons/equalizer.svg";
   static const play_icon = "assets/icons/play.svg";

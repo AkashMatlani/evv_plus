@@ -67,6 +67,7 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
                           LabelStr.lblNewPwd, _newPwdController,
                           autocorrect: false,
                           obscure: true,
+                          textInputAction: TextInputAction.next,
                           textCapitalization: TextCapitalization.none,
                           perfixIcon: Container(
                             padding: EdgeInsets.all(13),
@@ -83,6 +84,7 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
                           LabelStr.lblConfirmPwd, _confirmPwdController,
                           autocorrect: false,
                           obscure: true,
+                          textInputAction: TextInputAction.done,
                           textCapitalization: TextCapitalization.none,
                           perfixIcon: Container(
                             padding: EdgeInsets.all(13),

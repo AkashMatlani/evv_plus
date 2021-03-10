@@ -62,6 +62,7 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
                       child: textFieldFor(
                           LabelStr.lblEmailId, _emailController,
                           autocorrect: false,
+                          textInputAction: TextInputAction.done,
                           textCapitalization: TextCapitalization.none,
                           perfixIcon: Container(
                             padding: EdgeInsets.all(13),
