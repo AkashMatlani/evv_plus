@@ -3,15 +3,20 @@ import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:flutter/material.dart';
 
+enum SingingCharacter { Physical, mental,other }
+
 class UnableToSignInScreen extends StatefulWidget {
   @override
-  _unableToSignInScreenState createState() => _unableToSignInScreenState();
+  _UnableToSignInScreenState createState() => _UnableToSignInScreenState();
 }
 
-class _unableToSignInScreenState extends State<UnableToSignInScreen> {
+class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
+  SingingCharacter _character = SingingCharacter.Physical;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           toolbarHeight: 120,
           elevation: 0,
@@ -37,11 +42,11 @@ class _unableToSignInScreenState extends State<UnableToSignInScreen> {
                   ),
                   child: IntrinsicHeight(
                       child: Column(children: <Widget>[
+                        Divider(height: 1),
                     Container(
+                      padding: EdgeInsets.fromLTRB(20,30,20,0),
                       color: Colors.white,
                       child: Container(
-                        height: 300,
-                        width: 400,
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: HexColor("#e9e9e9"),
@@ -49,11 +54,75 @@ class _unableToSignInScreenState extends State<UnableToSignInScreen> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Shani Bhavsar'),
-                            Align(alignment:Alignment.center,child: Text("Sign Here")),
+                            Container(
+                                padding: EdgeInsets.fromLTRB(15, 20, 0, 0),
+                                child: Text(
+                                  'Please Select a Reason',
+                                  style: AppTheme.boldSFTextStyle().copyWith(
+                                      fontSize: 16, color: HexColor("#3d3d3d")),
+                                )),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Divider(
+                              height: 1,
+                              color: HexColor("#e9e9e9"),
+                            ),
+
+                            Column(
+                              children: <Widget>[
+                                ListTile(
+                                  title:  Text('Physical Impairment',style: AppTheme.mediumSFTextStyle()
+                                .copyWith(
+                                fontSize: 14,
+                                color: HexColor("#3d3d3d"))),
+                                  leading: Radio(
+                                    value: SingingCharacter.Physical,
+                                    groupValue: _character,
+                                    onChanged: (SingingCharacter value) {
+                                      setState(() {
+                                        _character = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                ListTile(
+                                  title:  Text('Mental Impairment',style: AppTheme.mediumSFTextStyle()
+                                      .copyWith(
+                                      fontSize: 14,
+                                      color: HexColor("#3d3d3d"))),
+                                  leading: Radio(
+                                    value: SingingCharacter.mental,
+                                    groupValue: _character,
+                                    onChanged: (SingingCharacter value) {
+                                      setState(() {
+                                        _character = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                ListTile(
+                                  title:  Text('Other',
+                                    style: AppTheme.mediumSFTextStyle()
+                                        .copyWith(
+                                      fontSize: 14,
+                                      color: HexColor("#3d3d3d"))),
+                                  leading: Radio(
+                                    value: SingingCharacter.other,
+                                    groupValue: _character,
+                                    onChanged: (SingingCharacter value) {
+                                      setState(() {
+                                        _character = value;
+                                      });
+                                    },
+                                  ),
+                                  minLeadingWidth : 2,
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -72,7 +141,7 @@ class _unableToSignInScreenState extends State<UnableToSignInScreen> {
                                 ]),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5))),
-                            child: FlatButton(
+                            child: TextButton(
                               child: Text(LabelStr.lblSubmit,
                                   style: AppTheme.boldSFTextStyle().copyWith(
                                       fontSize: 18, color: Colors.white)),

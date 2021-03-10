@@ -96,6 +96,7 @@ class MyImage {
   static const profile_icon = "assets/icons/profile.svg";
   static const about_us_icon = "assets/icons/about_us.svg";
   static const mic_icon = "assets/icons/mic.svg";
+  static const logout_icon = "assets/icons/logout.svg";
   static const equalizer_icon = "assets/icons/equalizer.svg";
   static const play_icon = "assets/icons/play.svg";
 }

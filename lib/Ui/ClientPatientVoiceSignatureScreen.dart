@@ -4,14 +4,14 @@ import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ClientPatientSignatureScreen extends StatefulWidget {
+class ClientPatientVoiceSignatureScreen extends StatefulWidget {
   @override
-  _ClientPatientSignatureScreenState createState() =>
-      _ClientPatientSignatureScreenState();
+  _ClientPatientVoiceSignatureScreenState createState() =>
+      _ClientPatientVoiceSignatureScreenState();
 }
 
-class _ClientPatientSignatureScreenState
-    extends State<ClientPatientSignatureScreen> {
+class _ClientPatientVoiceSignatureScreenState
+    extends State<ClientPatientVoiceSignatureScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

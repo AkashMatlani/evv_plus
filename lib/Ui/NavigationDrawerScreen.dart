@@ -1,3 +1,4 @@
+import 'package:evv_plus/Ui/ClientPatientSignScreen.dart';
 import 'package:evv_plus/Ui/NotificationScreen.dart';
 import 'package:evv_plus/Ui/ProfileScreen.dart';
 import 'package:evv_plus/Ui/UnableToSignInScreen.dart';
@@ -9,7 +10,8 @@ import '../GeneralUtils/ColorExtension.dart';
 import '../GeneralUtils/Constant.dart';
 import '../GeneralUtils/LabelStr.dart';
 import '../GeneralUtils/Utils.dart';
-import 'ClientPatientSignatureScreen.dart';
+import 'ClientPatientVoiceSignatureScreen.dart';
+import 'VisitVerificationScreen.dart';
 
 class NavigationDrawerScreen extends StatefulWidget {
   int _selectedIndex = 0;
@@ -41,14 +43,17 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
     setState(() => widget._selectedIndex = index);
 
     if (index == 0) {
-      Utils.navigateToScreen(context, ClientPatientSignatureScreen());
-    }
-    else if (index == 1) {
+      Utils.navigateToScreen(context, ClientPatientVoiceSignatureScreen());
+    } else if (index == 1) {
+      Utils.navigateToScreen(context, ClientPatientSignScreen());
+    } else if (index == 2) {
       Utils.navigateToScreen(context, UnableToSignInScreen());
     } else if (index == 3) {
       Utils.navigateToScreen(context, NotificationScreen());
     } else if (index == 4) {
       Utils.navigateToScreen(context, ProfileScreen());
+    } else if (index == 5) {
+      Utils.navigateToScreen(context, VisitVerificationScreen());
     }
   }
 
@@ -118,27 +123,27 @@ class _NavigationDrawerScreenState extends State<NavigationDrawerScreen> {
                 height: 30,
               ),
               _createFooterItem(
-                  icon: Icons.event, text: 'Logout', onTap: () => {})
+                 svgPicture: MyImage.logout_icon, text: 'Logout', onTap: () => {})
             ],
           ),
         ),
       ),
     );
   }
-
+/* SvgPicture.asset(MyImage.logout_icon, height: 120, width: 120),*/
   Widget _createFooterItem(
-      {IconData icon, String text, GestureTapCallback onTap}) {
+      {String svgPicture, String text, GestureTapCallback onTap}) {
     return Container(
       padding: EdgeInsets.all(40),
       child: ListTile(
         title: Row(
           children: <Widget>[
-            Icon(icon),
+            SvgPicture.asset(svgPicture),
             Padding(
               padding: EdgeInsets.only(left: 18.0),
               child: Text(
                 text,
-                style: AppTheme.regularSFTextStyle()
+                style: AppTheme.sfProLightTextStyle()
                     .copyWith(fontSize: 18, color: HexColor("#000000")),
               ),
             )

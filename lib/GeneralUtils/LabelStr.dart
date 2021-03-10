@@ -54,6 +54,9 @@ class LabelStr {
   static const lblPhone= "Phone";
   static const lblUpdate= "Update";
   static const lblSubmit= "Submit";
+  static const lblGetPatientSign= "Get Patient Sign";
+  static const lblGetCaretakerSignature= "Get Caretaker Signature";
+  static const lblGetReasonOther= "Reason : Other";
   static const checkMailLink = "Please check your email box and click on the link";
   static const connectionError = "Please check you internet connectivity, Try again";
   static const serverError = "Server not responding, Try again";
