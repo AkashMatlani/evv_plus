@@ -31,11 +31,12 @@ dependencies:
   flutter_bloc: ^6.1.2
   rxdart: ^0.25.0
   intl: ^0.16.0
-  flutter_svg: ^0.19.3
+  flutter_svg: ^0.19.1
   simple_animations: ^2.2.1
   shared_preferences: ^0.5.7+3
   flutter_spinkit: "^4.1.2"
   connectivity: '>=0.4.9 <2.0.0'
+  flutter_calendar_carousel: ^1.5.3
 
 
 dev_dependencies:

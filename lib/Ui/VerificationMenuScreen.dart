@@ -45,11 +45,44 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
           },
         ),
       ),
-      body: ListView.builder(
-        itemCount: menuNameList.length,
-        itemBuilder: (context, position) {
-          return listRowItems(context, position);
-        },
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: menuNameList.length,
+              itemBuilder: (context, position) {
+                return listRowItems(context, position);
+              },
+            ),
+          ),
+          SizedBox(height: 20),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  HexColor("#1785e9"),
+                  HexColor("#83cff2")
+                ]),
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            child: FlatButton(
+              child: Text(LabelStr.lblSubmit,
+                  style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+              onPressed: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+                checkConnection().then((isConnected) {
+                  if (isConnected) {
+                    _showDialog(context);
+                  } else {
+                    ToastUtils.showToast(context,
+                        LabelStr.connectionError, Colors.red);
+                  }
+                });
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -115,5 +148,49 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
         ),
       ),
     );
+  }
+
+  _showDialog(BuildContext context){
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(20.0)), //this right here
+            child: Container(
+                height: MediaQuery.of(context).size.height*0.23,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 10),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      alignment: Alignment.center,
+                      child: SvgPicture.asset(MyImage.ic_thumbUp),
+                    ),
+                    SizedBox(height: 10),
+                    Text("Success", style: AppTheme.mediumSFTextStyle().copyWith(color: HexColor("#3d3d3d"), fontSize: 20)),
+                    Text("Complete EVV", style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                    SizedBox(height: 20),
+                    Container(
+                      height: 1,
+                      width: MediaQuery.of(context).size.width,
+                      color: HexColor("#f5f5f5"),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: FlatButton(
+                          height: 51,
+                          child: Text(LabelStr.lblOk, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20)),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          }),
+                    )
+                  ],
+                )
+            ),
+          );
+        });
   }
 }
