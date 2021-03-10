@@ -18,7 +18,7 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          toolbarHeight: 120,
+          toolbarHeight: 100,
           elevation: 0,
           iconTheme: IconThemeData(
             color: Colors.black, //change your color here

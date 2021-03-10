@@ -16,6 +16,7 @@ class _CarePlanPdfScreenState extends State<CarePlanPdfScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 100,
         title: Container(
           alignment: Alignment.center,
           child: Text(LabelStr.lblCarePlan, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),

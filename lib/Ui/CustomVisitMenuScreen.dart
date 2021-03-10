@@ -27,6 +27,7 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 100,
         title: Container(
           alignment: Alignment.center,
           margin: EdgeInsets.only(right: 20),
