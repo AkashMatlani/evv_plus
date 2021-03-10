@@ -31,7 +31,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         body: Column(
           children: [
             Divider(
-              height: 2,
+              height: 4,
               thickness: 0.5,
               color: Color(0xff979797),
             ),

@@ -76,8 +76,6 @@ class LabelStr {
   static const lblGender= "Gender";
   static const lblEmail= "Email";
 
-
-
   static const lblLogout = "Logout";
   static const lblComment = "Comment";
   static const lblPatient = "Patient";
@@ -94,6 +92,5 @@ class LabelStr {
   static const lblDateNote = "The information below displayed will be saved with signature";
   static const lblCollectSign = "Collect Client Signature";
   static const lblCancelVerification = "Cancel Task Verification";
-
 
 }

@@ -22,7 +22,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var boxWidth = MediaQuery.of(context).size.width * 0.6 / 2;
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
