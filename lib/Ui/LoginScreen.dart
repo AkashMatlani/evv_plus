@@ -68,6 +68,7 @@ class _LoginScreen extends State<LoginScreen> {
                       child: textFieldFor(
                           LabelStr.lblEmailId, _emailController,
                           autocorrect: false,
+                          textInputAction: TextInputAction.next,
                           textCapitalization: TextCapitalization.none,
                           perfixIcon: Container(
                             padding: EdgeInsets.all(13),
@@ -84,12 +85,13 @@ class _LoginScreen extends State<LoginScreen> {
                           LabelStr.lblPassword, _passwordController,
                           autocorrect: false,
                           obscure: true,
+                          textInputAction: TextInputAction.done,
                           textCapitalization: TextCapitalization.none,
                           perfixIcon: Container(
                             padding: EdgeInsets.all(13),
                             child: SvgPicture.asset(MyImage.ic_password),
                           ),
-                          keyboardType: TextInputType.emailAddress)),
+                          keyboardType: TextInputType.text)),
                   SizedBox(
                     height: 20.0,
                   ),

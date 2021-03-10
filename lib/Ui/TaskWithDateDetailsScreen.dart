@@ -6,6 +6,7 @@ import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 class TaskWithDateDetailsScreen extends StatefulWidget {
   @override
@@ -20,6 +21,9 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
   var _checkInTimeController = TextEditingController();
   var _checkOutDateController = TextEditingController();
   var _checkOutTimeController = TextEditingController();
+
+  DateTime _selectedDate = DateTime.now();
+  TimeOfDay _selectedTime = TimeOfDay(hour: 00, minute: 00);
 
   @override
   Widget build(BuildContext context) {
@@ -74,13 +78,14 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                               _checkInDateController,
                               suffixIcon: InkWell(
                                 onTap: (){
-                                  ToastUtils.showToast(context, "Date click", Colors.blue);
+                                  _selectDate(context, _checkInDateController);
                                 },
                                 child: Container(
                                   padding: EdgeInsets.only(top: 15, bottom: 15, left: 5, right: 5),
                                   child: SvgPicture.asset(MyImage.ic_calender),
                                 ),
-                              )
+                              ),
+                            readOnly: true
                           ),
                         ),
                         SizedBox(width: MediaQuery.of(context).size.width*0.02),
@@ -91,13 +96,14 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                               _checkInTimeController,
                               suffixIcon: InkWell(
                                 onTap: (){
-                                  ToastUtils.showToast(context, "Time click", Colors.blue);
+                                  _selectTime(context, _checkInTimeController);
                                 },
                                 child: Container(
                                   padding: EdgeInsets.only(top: 15, bottom: 15, left: 5, right: 5),
                                   child: SvgPicture.asset(MyImage.ic_clock),
                                 ),
-                              )
+                              ),
+                              readOnly: true
                           ),
                         )
                       ],
@@ -128,13 +134,14 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                               _checkOutDateController,
                               suffixIcon: InkWell(
                                 onTap: (){
-                                  ToastUtils.showToast(context, "Date click", Colors.blue);
+                                  _selectDate(context, _checkOutDateController);
                                 },
                                 child: Container(
                                   padding: EdgeInsets.only(top: 15, bottom: 15, left: 5, right: 5),
                                   child: SvgPicture.asset(MyImage.ic_calender),
                                 ),
-                              )
+                              ),
+                              readOnly: true
                           ),
                         ),
                         SizedBox(width: MediaQuery.of(context).size.width*0.02),
@@ -145,13 +152,14 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                               _checkOutTimeController,
                               suffixIcon: InkWell(
                                 onTap: (){
-                                  ToastUtils.showToast(context, "Time click", Colors.blue);
+                                  _selectTime(context, _checkOutTimeController);
                                 },
                                 child: Container(
                                   padding: EdgeInsets.only(top: 15, bottom: 15, left: 5, right: 5),
                                   child: SvgPicture.asset(MyImage.ic_clock)
                                 ),
-                              )
+                              ),
+                              readOnly: true
                           ),
                         )
                       ],
@@ -221,5 +229,39 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
         ),
       ),
     );
+  }
+
+  _selectDate(BuildContext context, TextEditingController controller) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate, // Refer step 1
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (picked != null && picked != _selectedDate)
+      setState(() {
+        _selectedDate = picked;
+        String formattedDate = DateFormat('dd/MM/yyyy').format(picked);
+        controller.text = formattedDate;
+      });
+  }
+
+  _selectTime(BuildContext context, TextEditingController controller) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime,
+    );
+    if (picked != null && picked != _selectedTime)
+      setState(() {
+        _selectedTime = picked;
+        controller.text = _formatTimeOfDay(_selectedTime);
+      });
+  }
+
+  _formatTimeOfDay(TimeOfDay tod) {
+    final now = new DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+    final format = DateFormat.jm();  //"6:00 AM"
+    return format.format(dt);
   }
 }

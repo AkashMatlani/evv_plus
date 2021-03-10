@@ -78,6 +78,7 @@ class LabelStr {
 
 
 
+  static const lblLogout = "Logout";
   static const lblComment = "Comment";
   static const lblPatient = "Patient";
   static const lblPatientOrPlan = "Patient Name/Care Plan: ";
