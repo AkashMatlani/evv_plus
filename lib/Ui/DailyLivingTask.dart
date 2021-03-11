@@ -106,7 +106,7 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
                         HexColor("#83cff2")
                       ]),
                       borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: FlatButton(
+                  child: TextButton(
                     child: Text(LabelStr.lblSubmit,
                         style: AppTheme.mediumSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
                     onPressed: () {

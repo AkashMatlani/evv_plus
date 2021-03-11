@@ -1,6 +1,7 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -15,25 +16,34 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 100,
-          elevation: 0,
+          elevation: 0.0,
           iconTheme: IconThemeData(
             color: Colors.black, //change your color here
           ),
           centerTitle: true,
-          title: Text(
-            LabelStr.lblNotification,
-            style: AppTheme.boldSFTextStyle()
-                .copyWith(fontSize: 26, color: Colors.black),
+          title: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(right: 30),
+            child: Text(
+              LabelStr.lblNotification,
+              style: AppTheme.boldSFTextStyle()
+                  .copyWith(fontSize: 26, color: Colors.black),
+            ),
           ),
           backgroundColor: Colors.white,
-          // ...
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () {
+                ToastUtils.showToast(context, "Back press", Colors.blueAccent);
+              },
+            ),
         ),
         body: Column(
           children: [
-            Divider(
-              height: 4,
-              thickness: 0.5,
-              color: Color(0xff979797),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 1,
+              color: HexColor("#efefef"),
             ),
             Expanded(
               child: Container(

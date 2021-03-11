@@ -179,65 +179,68 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                       ],
                     ),
                   ),
-                 /* SizedBox(height: MediaQuery.of(context).size.height*0.2),*/
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
-                                HexColor("#1785e9"),
-                                HexColor("#83cff2")
-                              ]),
-                              borderRadius: BorderRadius.all(Radius.circular(5))),
-                          child: FlatButton(
-                            child: Text(LabelStr.lblCollectSign,
-                                style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
-                            onPressed: () {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              checkConnection().then((isConnected) {
-                                if (isConnected) {
-                                  /*ToastUtils.showToast(context,
-                                      "Client sign collection clicked", Colors.green);*/
-                                  Utils.navigateToScreen(context, VerificationMenuScreen());
-                                } else {
-                                  ToastUtils.showToast(context,
-                                      LabelStr.connectionError, Colors.red);
-                                }
-                              });
-                            },
+                 // SizedBox(height: 10),
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(colors: [
+                                  HexColor("#1785e9"),
+                                  HexColor("#83cff2")
+                                ]),
+                                borderRadius: BorderRadius.all(Radius.circular(5))),
+                            child: TextButton(
+                              child: Text(LabelStr.lblCollectSign,
+                                  style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                              onPressed: () {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                checkConnection().then((isConnected) {
+                                  if (isConnected) {
+                                    /*ToastUtils.showToast(context,
+                                        "Client sign collection clicked", Colors.green);*/
+                                    Utils.navigateToScreen(context, VerificationMenuScreen());
+                                  } else {
+                                    ToastUtils.showToast(context,
+                                        LabelStr.connectionError, Colors.red);
+                                  }
+                                });
+                              },
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 15),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(5)),
-                              color: HexColor("#c1def8")),
-                          child: FlatButton(
-                            child: Text(LabelStr.lblCancelVerification,
-                                style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: HexColor("#2b91eb"))),
-                            onPressed: () {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              checkConnection().then((isConnected) {
-                                if (isConnected) {
-                               /*   ToastUtils.showToast(context,
-                                      "Client sign collection clicked", Colors.green);*/
-                                  Utils.navigateReplaceToScreen(context, ScheduleScreen());
-                                } else {
-                                  ToastUtils.showToast(context,
-                                      LabelStr.connectionError, Colors.red);
-                                }
-                              });
-                            },
-                          ),
-                        )
-                      ],
+                          SizedBox(height: 15),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                                color: HexColor("#c1def8")),
+                            child: TextButton(
+                              child: Text(LabelStr.lblCancelVerification,
+                                  style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: HexColor("#2b91eb"))),
+                              onPressed: () {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                checkConnection().then((isConnected) {
+                                  if (isConnected) {
+                                 /*   ToastUtils.showToast(context,
+                                        "Client sign collection clicked", Colors.green);*/
+                                    Utils.navigateReplaceToScreen(context, ScheduleScreen());
+                                  } else {
+                                    ToastUtils.showToast(context,
+                                        LabelStr.connectionError, Colors.red);
+                                  }
+                                });
+                              },
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(height: 20)

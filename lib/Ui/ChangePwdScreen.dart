@@ -103,7 +103,7 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
                           HexColor("#83cff2")
                         ]),
                         borderRadius: BorderRadius.all(Radius.circular(5))),
-                    child: FlatButton(
+                    child: TextButton(
                       child: Text(LabelStr.lblUpdatePwd,
                           style: AppTheme.boldSFTextStyle().copyWith(color: Colors.white)),
                       onPressed: () {

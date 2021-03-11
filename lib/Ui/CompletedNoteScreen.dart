@@ -87,7 +87,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                             HexColor("#83cff2")
                           ]),
                           borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: FlatButton(
+                      child: TextButton(
                         child: Text(LabelStr.lblComplete,
                             style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
                         onPressed: () {
@@ -111,7 +111,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                       decoration: BoxDecoration(
                           color: HexColor("#c1def8"),
                           borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: FlatButton(
+                      child: TextButton(
                         child: Text(LabelStr.lblSaveExit,
                             style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: HexColor("#2b91eb"))),
                         onPressed: () {

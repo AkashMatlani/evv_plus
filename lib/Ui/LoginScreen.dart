@@ -104,7 +104,7 @@ class _LoginScreen extends State<LoginScreen> {
                           HexColor("#83cff2")
                         ]),
                         borderRadius: BorderRadius.all(Radius.circular(5))),
-                    child: FlatButton(
+                    child: TextButton(
                       child: Text(LabelStr.lblLogIn,
                           style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
                       onPressed: () {

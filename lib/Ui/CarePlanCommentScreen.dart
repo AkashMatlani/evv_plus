@@ -89,7 +89,7 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
                           HexColor("#83cff2")
                         ]),
                         borderRadius: BorderRadius.all(Radius.circular(5))),
-                    child: FlatButton(
+                    child: TextButton(
                       child: Text(LabelStr.lblSubmit,
                           style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
                       onPressed: () {
@@ -113,7 +113,7 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                     color: HexColor("#c1def8")),
-                    child: FlatButton(
+                    child: TextButton(
                       child: Text(LabelStr.lblCancel,
                           style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: HexColor("#2b91eb"))),
                       onPressed: () {

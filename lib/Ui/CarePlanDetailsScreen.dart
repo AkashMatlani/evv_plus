@@ -171,7 +171,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                 HexColor("#83cff2")
                               ]),
                               borderRadius: BorderRadius.all(Radius.circular(5))),
-                          child: FlatButton(
+                          child: TextButton(
                             child: Text(LabelStr.lbStartVisit,
                                 style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
                             onPressed: () {
@@ -257,11 +257,10 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                       child: Row(
                         children: [
                           Container(
+                            height: 51,
                             alignment: Alignment.center,
                             width: MediaQuery.of(context).size.width*0.4,
-                            child: FlatButton(
-                                minWidth: MediaQuery.of(context).size.width*0.4,
-                              height: 51,
+                            child: TextButton(
                                 child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20)),
                                 onPressed: () {
                                   Navigator.of(context).pop();
@@ -274,11 +273,10 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                             color: HexColor("#f5f5f5"),
                           ),
                           Container(
+                            height: 51,
                             alignment: Alignment.center,
                             width: MediaQuery.of(context).size.width*0.4,
-                            child: FlatButton(
-                              minWidth: MediaQuery.of(context).size.width*0.4,
-                              height: 51,
+                            child: TextButton(
                                 child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
                                 onPressed: () {
                                   //Navigator.of(context).pop();

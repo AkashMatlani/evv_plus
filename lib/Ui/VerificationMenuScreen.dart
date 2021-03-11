@@ -78,7 +78,7 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
                 gradient: LinearGradient(
                     colors: [HexColor("#1785e9"), HexColor("#83cff2")]),
                 borderRadius: BorderRadius.all(Radius.circular(5))),
-            child: FlatButton(
+            child: TextButton(
               child: Text(LabelStr.lblSubmit,
                   style: AppTheme.boldSFTextStyle()
                       .copyWith(fontSize: 18, color: Colors.white)),
@@ -202,8 +202,7 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      child: FlatButton(
-                          height: 51,
+                      child: TextButton(
                           child: Text(LabelStr.lblOk,
                               style: AppTheme.mediumSFTextStyle()
                                   .copyWith(fontSize: 20)),

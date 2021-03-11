@@ -1,6 +1,7 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Ui/VisitVerificationScreen.dart';
 import 'package:flutter/material.dart';
@@ -23,18 +24,26 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           toolbarHeight: 100,
-          elevation: 0,
+          elevation: 0.0,
           iconTheme: IconThemeData(
             color: Colors.black, //change your color here
           ),
           centerTitle: true,
-          title: Text(
-            LabelStr.lblUnableToSignReason,
-            style: AppTheme.sfProLightTextStyle()
-                .copyWith(fontSize: 24, color: Colors.black),
+          title: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(right: 30),
+            child: Text(
+              LabelStr.lblUnableToSignReason,
+              style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22),
+            ),
           ),
-          backgroundColor: Colors.white,
-          // ...
+          backgroundColor: Colors.white10,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              ToastUtils.showToast(context, "Back press", Colors.blueAccent);
+            },
+          ),
         ),
         body: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
@@ -46,10 +55,11 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                   ),
                   child: IntrinsicHeight(
                       child: Column(children: <Widget>[
-                    Divider(
-                      height: 1,
-                      thickness: 2,
-                    ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 1,
+                          color: HexColor("#efefef"),
+                        ),
                     Container(
                       padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
                       color: Colors.white,
@@ -74,10 +84,10 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                             SizedBox(
                               height: 20,
                             ),
-                            Divider(
+                            Container(
+                              width: MediaQuery.of(context).size.width,
                               height: 1,
-                              thickness: 2,
-                              color: HexColor("#e9e9e9"),
+                              color: HexColor("#efefef"),
                             ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,

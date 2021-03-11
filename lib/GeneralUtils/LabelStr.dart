@@ -75,6 +75,7 @@ class LabelStr {
   static const lblDob= "DOB";
   static const lblGender= "Gender";
   static const lblEmail= "Email";
+  static const lblAppName= "EVV Plus";
 
   static const lblLogout = "Logout";
   static const lblComment = "Comment";

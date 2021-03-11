@@ -1,10 +1,10 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'VerificationMenuScreen.dart';
 
 class ClientPatientSignScreen extends StatefulWidget {
@@ -19,31 +19,39 @@ class _ClientPatientSignatureScreenState
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 120,
-          elevation: 0,
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-          centerTitle: true,
-          title: Text(
-            LabelStr.lblclientSignature,
-            style: AppTheme.boldSFTextStyle()
-                .copyWith(fontSize: 26, color: Colors.black),
-          ),
-          actions: <Widget>[
-            Container(
-              padding: EdgeInsets.only(right: 10),
-              child: Center(
-                child: Text(LabelStr.lblDone,
-                    style: AppTheme.boldSFTextStyle().copyWith(
-                      fontSize: 20,
-                      color: HexColor("#1a87e9"),
-                    )),
+            toolbarHeight: 100,
+            elevation: 0.0,
+            iconTheme: IconThemeData(
+              color: Colors.black, //change your color here
+            ),
+            centerTitle: true,
+            title: Container(
+              child: Text(
+                LabelStr.lblclientSignature,
+                style: AppTheme.boldSFTextStyle().copyWith(fontSize: 24),
               ),
-            )
-          ],
-          backgroundColor: Colors.white,
-        ),
+            ),
+            actions: <Widget>[
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(right: 10),
+                padding: EdgeInsets.only(right: 10),
+                child: Center(
+                  child: Text(LabelStr.lblDone,
+                      style: AppTheme.boldSFTextStyle().copyWith(
+                        fontSize: 20,
+                        color: HexColor("#1a87e9"),
+                      )),
+                ),
+              )
+            ],
+            backgroundColor: Colors.white,
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  ToastUtils.showToast(
+                      context, "Back press", Colors.blueAccent);
+                })),
         body: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
           return SingleChildScrollView(
@@ -54,7 +62,11 @@ class _ClientPatientSignatureScreenState
                   ),
                   child: IntrinsicHeight(
                       child: Column(children: <Widget>[
-                    Divider(height: 1),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 1,
+                      color: HexColor("#efefef"),
+                    ),
                     Container(
                       padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
                       color: Colors.white,
@@ -115,7 +127,7 @@ class _ClientPatientSignatureScreenState
                                 ]),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5))),
-                            child: FlatButton(
+                            child: TextButton(
                               child: Text(LabelStr.lblSubmit,
                                   style: AppTheme.boldSFTextStyle().copyWith(
                                       fontSize: 18, color: Colors.white)),
@@ -123,7 +135,8 @@ class _ClientPatientSignatureScreenState
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
                                 checkConnection().then((isConnected) {
-                                  Utils.navigateToScreen(context, VerificationMenuScreen());
+                                  Utils.navigateToScreen(
+                                      context, VerificationMenuScreen());
                                 });
                               },
                             ),

@@ -83,7 +83,7 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
                           HexColor("#83cff2")
                         ]),
                         borderRadius: BorderRadius.all(Radius.circular(5))),
-                    child: FlatButton(
+                    child: TextButton(
                       child: Text(LabelStr.lblReset,
                           style: AppTheme.boldSFTextStyle().copyWith(color: Colors.white)),
                       onPressed: () {
@@ -180,15 +180,16 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
                       width: MediaQuery.of(context).size.width,
                       color: HexColor("#f5f5f5"),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: FlatButton(
-                        height: 51,
-                          child: Text(LabelStr.lblOk, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20)),
-                          onPressed: () {
-                           // Navigator.of(context).pop();
-                            Utils.navigateReplaceToScreen(context, LoginScreen());
-                          }),
+                    Expanded(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TextButton(
+                            child: Text(LabelStr.lblOk, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20)),
+                            onPressed: () {
+                             // Navigator.of(context).pop();
+                              Utils.navigateReplaceToScreen(context, LoginScreen());
+                            }),
+                      ),
                     )
                   ],
                 )
