@@ -1,9 +1,9 @@
-import 'dart:math';
 
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
 import '../GeneralUtils/ColorExtension.dart';
 import '../GeneralUtils/Constant.dart';
 import '../GeneralUtils/LabelStr.dart';
@@ -20,6 +20,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   var _zipController = TextEditingController();
   var _phoneController = TextEditingController();
 
+  final Widget svg = new SvgPicture.asset(MyImage.profileHeaderBgImage);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,128 +31,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               child: Column(
                 children: [
-                /*  Container(
-                    height: MediaQuery.of(context).size.height * 0.43,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.zero,
-                            topLeft: Radius.zero,
-                            bottomLeft: Radius.circular(40),
-                            bottomRight: Radius.circular(40)),
-                        gradient: LinearGradient(colors: [
-                          HexColor("#1785e9"),
-                          HexColor("#83cff2")
-                        ])),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 50),
-                        Row(
-                          children: [
-                            Container(
-                              child:
-                                  Icon(Icons.arrow_back, color: Colors.white),
-                              margin: EdgeInsets.only(left: 10),
-                            ),
-                            Expanded(
-                                child: Container(
-                              alignment: Alignment.center,
-                              margin: EdgeInsets.only(right: 20),
-                              child: Text(LabelStr.lblMyProfile,
-                                  style: AppTheme.boldSFTextStyle().copyWith(
-                                      fontSize: 24, color: Colors.white)),
-                            ))
-                          ],
-                        ),
-                        SizedBox(height: 15),
-                        Container(
-                            alignment: Alignment.center,
-                            child: SvgPicture.asset(MyImage.user_placeholder,
-                                height: 120, width: 120)),
-                        SizedBox(height: 5),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          alignment: Alignment.center,
-                          child: Text("Katie Williamson",
-                              style: AppTheme.boldSFTextStyle()
-                                  .copyWith(fontSize: 24, color: Colors.white)),
-                        ),
-                        SizedBox(height: 5),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          alignment: Alignment.center,
-                          child: Text("Columbis, ohio",
-                              style: AppTheme.regularSFTextStyle()
-                                  .copyWith(fontSize: 14, color: Colors.white)),
-                        ),
-                        SizedBox(height: 10),
-                      ],
-                    ),
-                  ),*/
-                 /* Container(
-                    height: 200.0,
-                    decoration: new BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.vertical(
-                          bottom: Radius.elliptical(
-                              MediaQuery.of(context).size.width, 38.0)),
-                    ),
-                  ),*/
-
-                  CustomPaint(
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.43,
-                      child: Column(
-                        children: [
-                          SizedBox(height: 50),
-                          Row(
+                  Stack(
+                    children: [
+                      SvgPicture.asset(MyImage.profileHeaderBgImage, fit: BoxFit.fill),
+                      Container(
+                          height: MediaQuery.of(context).size.height * 0.43,
+                          child: Column(
                             children: [
-                              Container(
-                                child:
-                                Icon(Icons.arrow_back, color: Colors.white),
-                                margin: EdgeInsets.only(left: 10),
+                              SizedBox(height: 50),
+                              Row(
+                                children: [
+                                  Container(
+                                    child:
+                                    Icon(Icons.arrow_back, color: Colors.white),
+                                    margin: EdgeInsets.only(left: 10),
+                                  ),
+                                  Expanded(
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        margin: EdgeInsets.only(right: 20),
+                                        child: Text(LabelStr.lblMyProfile,
+                                            style: AppTheme.boldSFTextStyle().copyWith(
+                                                fontSize: 24, color: Colors.white)),
+                                      ))
+                                ],
                               ),
-                              Expanded(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    margin: EdgeInsets.only(right: 20),
-                                    child: Text(LabelStr.lblMyProfile,
-                                        style: AppTheme.boldSFTextStyle().copyWith(
-                                            fontSize: 24, color: Colors.white)),
-                                  ))
+                              SizedBox(height: 15),
+                              Container(
+                                  alignment: Alignment.center,
+                                  child: SvgPicture.asset(MyImage.user_placeholder,
+                                      height: 120, width: 120)),
+                              SizedBox(height: 5),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                alignment: Alignment.center,
+                                child: Text("Katie Williamson",
+                                    style: AppTheme.boldSFTextStyle()
+                                        .copyWith(fontSize: 24, color: Colors.white)),
+                              ),
+                              SizedBox(height: 5),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                alignment: Alignment.center,
+                                child: Text("Columbis, ohio",
+                                    style: AppTheme.regularSFTextStyle()
+                                        .copyWith(fontSize: 14, color: Colors.white)),
+                              ),
+                              SizedBox(height: 10),
                             ],
-                          ),
-                          SizedBox(height: 15),
-                          Container(
-                              alignment: Alignment.center,
-                              child: SvgPicture.asset(MyImage.user_placeholder,
-                                  height: 120, width: 120)),
-                          SizedBox(height: 5),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            alignment: Alignment.center,
-                            child: Text("Katie Williamson",
-                                style: AppTheme.boldSFTextStyle()
-                                    .copyWith(fontSize: 24, color: Colors.white)),
-                          ),
-                          SizedBox(height: 5),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            alignment: Alignment.center,
-                            child: Text("Columbis, ohio",
-                                style: AppTheme.regularSFTextStyle()
-                                    .copyWith(fontSize: 14, color: Colors.white)),
-                          ),
-                          SizedBox(height: 10),
-                        ],
-                      ),
-                    ),
-                    painter: HeaderCurvedContainer(),
-
-                  ),
-
-                  //CurvedShape(),
-                  SizedBox(
-                    height: 20,
+                          )
+                      )
+                    ],
                   ),
                   IntrinsicHeight(
                     child: Row(
@@ -269,11 +200,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(30, 10, 30, 0),
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                     child: Divider(color: Color(0xff979797)),
                   ),
                   Container(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                       width: MediaQuery.of(context).size.width,
                       height: 65,
                       child: textFieldFor(
@@ -282,7 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           textCapitalization: TextCapitalization.none,
                           keyboardType: TextInputType.streetAddress)),
                   Container(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
                       width: MediaQuery.of(context).size.width,
                       height: 65,
                       child: textFieldFor(
@@ -299,7 +230,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Container(
                           width: MediaQuery.of(context).size.width * 0.50,
-                          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                          padding: EdgeInsets.fromLTRB(20, 5, 0, 0),
                           height: 65,
                           child: textFieldFor(
                             LabelStr.lblCity,
@@ -310,7 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Container(
                           width: MediaQuery.of(context).size.width * 0.50,
                           height: 65,
-                          padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                          padding: EdgeInsets.fromLTRB(10, 5, 20, 0),
                           child: textFieldFor(LabelStr.lblZip, _zipController,
                               autocorrect: false,
                               textCapitalization: TextCapitalization.none,
@@ -318,7 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   Container(
-                      padding: EdgeInsets.fromLTRB(10, 5, 10, 0),
+                      padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
                       width: MediaQuery.of(context).size.width,
                       height: 65,
                       child: textFieldFor(LabelStr.lblPhone, _phoneController,
@@ -326,7 +257,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           textCapitalization: TextCapitalization.none,
                           keyboardType: TextInputType.phone)),
                   Container(
-                    margin: EdgeInsets.all(8),
+                    margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
                     width: MediaQuery.of(context).size.width,
                     height: 50,
                     decoration: BoxDecoration(
@@ -335,8 +266,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: TextButton(
                       child: Text(LabelStr.lblUpdate,
-                          style: AppTheme.boldSFTextStyle()
-                              .copyWith(fontSize: 20, color: Colors.white)),
+                          style: AppTheme.mediumSFTextStyle()
+                              .copyWith(fontSize: 18, color: Colors.white)),
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         checkConnection().then((isConnected) {});

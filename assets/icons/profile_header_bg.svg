@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="428px" height="331px" viewBox="0 0 428 331" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Rectangle</title>
+    <defs>
+        <linearGradient x1="0%" y1="20.0953686%" x2="156.57269%" y2="119.723462%" id="linearGradient-1">
+            <stop stop-color="#1785E9" offset="0%"></stop>
+            <stop stop-color="#83CFF2" offset="100%"></stop>
+            <stop stop-color="#83CFF2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="My-Profile" fill="url(#linearGradient-1)" fill-rule="nonzero">
+            <path d="M0,0 L428,0 L428,293.749196 C356.666667,318.583065 285.333333,331 214,331 C142.666667,331 71.3333333,318.583065 0,293.749196 L0,0 Z" id="Rectangle"></path>
+        </g>
+    </g>
+</svg>

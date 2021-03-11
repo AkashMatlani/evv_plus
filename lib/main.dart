@@ -1,5 +1,6 @@
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/Ui/DailyLivingTask.dart';
+import 'package:evv_plus/Ui/ProfileScreen.dart';
 import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:evv_plus/Ui/SplashScreen.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(),
+      home: ProfileScreen(),
     );
   }
 }

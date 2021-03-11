@@ -159,7 +159,7 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
                 borderRadius:
                 BorderRadius.circular(20.0)), //this right here
             child: Container(
-              height: MediaQuery.of(context).size.height*0.25,
+                height: MediaQuery.of(context).size.height*0.25,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
