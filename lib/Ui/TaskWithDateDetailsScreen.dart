@@ -3,6 +3,10 @@ import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Ui/ScheduleScreen.dart';
+import 'package:evv_plus/Ui/VerificationMenuScreen.dart';
+import 'package:evv_plus/Ui/VisitVerificationScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -175,61 +179,66 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height*0.2),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [
-                              HexColor("#1785e9"),
-                              HexColor("#83cff2")
-                            ]),
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
-                        child: FlatButton(
-                          child: Text(LabelStr.lblCollectSign,
-                              style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
-                          onPressed: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                            checkConnection().then((isConnected) {
-                              if (isConnected) {
-                                ToastUtils.showToast(context,
-                                    "Client sign collection clicked", Colors.green);
-                              } else {
-                                ToastUtils.showToast(context,
-                                    LabelStr.connectionError, Colors.red);
-                              }
-                            });
-                          },
+                 /* SizedBox(height: MediaQuery.of(context).size.height*0.2),*/
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(colors: [
+                                HexColor("#1785e9"),
+                                HexColor("#83cff2")
+                              ]),
+                              borderRadius: BorderRadius.all(Radius.circular(5))),
+                          child: FlatButton(
+                            child: Text(LabelStr.lblCollectSign,
+                                style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                            onPressed: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              checkConnection().then((isConnected) {
+                                if (isConnected) {
+                                  /*ToastUtils.showToast(context,
+                                      "Client sign collection clicked", Colors.green);*/
+                                  Utils.navigateToScreen(context, VerificationMenuScreen());
+                                } else {
+                                  ToastUtils.showToast(context,
+                                      LabelStr.connectionError, Colors.red);
+                                }
+                              });
+                            },
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 15),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            color: HexColor("#c1def8")),
-                        child: FlatButton(
-                          child: Text(LabelStr.lblCancelVerification,
-                              style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: HexColor("#2b91eb"))),
-                          onPressed: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                            checkConnection().then((isConnected) {
-                              if (isConnected) {
-                                ToastUtils.showToast(context,
-                                    "Client sign collection clicked", Colors.green);
-                              } else {
-                                ToastUtils.showToast(context,
-                                    LabelStr.connectionError, Colors.red);
-                              }
-                            });
-                          },
-                        ),
-                      )
-                    ],
+                        SizedBox(height: 15),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                              color: HexColor("#c1def8")),
+                          child: FlatButton(
+                            child: Text(LabelStr.lblCancelVerification,
+                                style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: HexColor("#2b91eb"))),
+                            onPressed: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              checkConnection().then((isConnected) {
+                                if (isConnected) {
+                               /*   ToastUtils.showToast(context,
+                                      "Client sign collection clicked", Colors.green);*/
+                                  Utils.navigateReplaceToScreen(context, ScheduleScreen());
+                                } else {
+                                  ToastUtils.showToast(context,
+                                      LabelStr.connectionError, Colors.red);
+                                }
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                   SizedBox(height: 20)
                 ],

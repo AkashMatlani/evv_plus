@@ -1,8 +1,11 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'VerificationMenuScreen.dart';
 
 class ClientPatientSignScreen extends StatefulWidget {
   @override
@@ -119,7 +122,9 @@ class _ClientPatientSignatureScreenState
                               onPressed: () {
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
-                                checkConnection().then((isConnected) {});
+                                checkConnection().then((isConnected) {
+                                  Utils.navigateToScreen(context, VerificationMenuScreen());
+                                });
                               },
                             ),
                           )),

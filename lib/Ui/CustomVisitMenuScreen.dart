@@ -1,6 +1,13 @@
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Ui/CarePlanCommentScreen.dart';
+import 'package:evv_plus/Ui/CarePlanPdfScreen.dart';
+import 'package:evv_plus/Ui/CommentScreen.dart';
+import 'package:evv_plus/Ui/CompletedNoteScreen.dart';
+import 'package:evv_plus/Ui/DailyLivingTask.dart';
+import 'package:evv_plus/Ui/VisitHistoryListScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,14 +20,19 @@ class CustomVisitMenuScreen extends StatefulWidget {
 }
 
 class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
-
   List<String> menuList;
 
   @override
   void initState() {
     super.initState();
     menuList = List<String>();
-    menuList = [LabelStr.lblCarePlan, LabelStr.lblVisitDetails, LabelStr.lblCarePlanComments, LabelStr.lblDailyLivingTasks, LabelStr.lblComments];
+    menuList = [
+      LabelStr.lblCarePlan,
+      LabelStr.lblVisitDetails,
+      LabelStr.lblCarePlanComments,
+      LabelStr.lblDailyLivingTasks,
+      LabelStr.lblComments
+    ];
   }
 
   @override
@@ -31,7 +43,8 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
         title: Container(
           alignment: Alignment.center,
           margin: EdgeInsets.only(right: 20),
-          child: Text(LabelStr.lblCustomVisit, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
+          child: Text(LabelStr.lblCustomVisit,
+              style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
         ),
         backgroundColor: Colors.white10,
         elevation: 0.0,
@@ -60,50 +73,51 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width*0.45,
+                  width: MediaQuery.of(context).size.width * 0.45,
                   height: 45,
                   decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        HexColor("#1785e9"),
-                        HexColor("#83cff2")
-                      ]),
+                      gradient: LinearGradient(
+                          colors: [HexColor("#1785e9"), HexColor("#83cff2")]),
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   child: FlatButton(
                     child: Text(LabelStr.lblComplete,
-                        style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                        style: AppTheme.boldSFTextStyle()
+                            .copyWith(fontSize: 18, color: Colors.white)),
                     onPressed: () {
                       FocusScope.of(context).requestFocus(FocusNode());
                       checkConnection().then((isConnected) {
                         if (isConnected) {
-                          ToastUtils.showToast(context,
-                              "Click on complete", Colors.blue);
+                          /*ToastUtils.showToast(
+                              context, "Click on complete", Colors.blue);*/
+                          Utils.navigateToScreen(context, CompletedNoteScreen());
                         } else {
-                          ToastUtils.showToast(context,
-                              LabelStr.connectionError, Colors.red);
+                          ToastUtils.showToast(
+                              context, LabelStr.connectionError, Colors.red);
                         }
                       });
                     },
                   ),
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width*0.03),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.03),
                 Container(
-                  width: MediaQuery.of(context).size.width*0.45,
+                  width: MediaQuery.of(context).size.width * 0.45,
                   height: 45,
                   decoration: BoxDecoration(
                       color: HexColor("#c1def8"),
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   child: FlatButton(
                     child: Text(LabelStr.lblSaveExit,
-                        style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: HexColor("#2b91eb"))),
+                        style: AppTheme.boldSFTextStyle().copyWith(
+                            fontSize: 18, color: HexColor("#2b91eb"))),
                     onPressed: () {
                       FocusScope.of(context).requestFocus(FocusNode());
                       checkConnection().then((isConnected) {
                         if (isConnected) {
-                          ToastUtils.showToast(context,
-                              "Click on save", Colors.blue);
+                          ToastUtils.showToast(
+                              context, "Click on save", Colors.blue);
                         } else {
-                          ToastUtils.showToast(context,
-                              LabelStr.connectionError, Colors.red);
+                          ToastUtils.showToast(
+                              context, LabelStr.connectionError, Colors.red);
                         }
                       });
                     },
@@ -120,8 +134,19 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
 
   listRowItems(BuildContext context, int position) {
     return InkWell(
-      onTap: (){
-        ToastUtils.showToast(context, menuList[position], Colors.blueAccent);
+      onTap: () {
+        //ToastUtils.showToast(context, menuList[position], Colors.blueAccent);
+        if (position == 0) {
+          Utils.navigateToScreen(context, CarePlanPdfScreen());
+        } else if (position == 1) {
+          Utils.navigateToScreen(context, VisitHistoryListScreen());
+        } else if (position == 2) {
+          Utils.navigateToScreen(context, CarePlanCommentScreen());
+        } else if (position == 3) {
+          Utils.navigateToScreen(context, DailyLivingTask());
+        } else if (position == 4) {
+          Utils.navigateToScreen(context, CommentScreen());
+        }
       },
       child: Card(
         elevation: 2,
@@ -131,8 +156,7 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
             side: BorderSide(
               color: HexColor("#E9E9E9"),
               width: 0.5,
-            )
-        ),
+            )),
         child: Container(
           height: 80,
           child: Row(
@@ -147,8 +171,7 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
                       topLeft: Radius.circular(5),
                       bottomLeft: Radius.circular(5),
                       topRight: Radius.zero,
-                      bottomRight: Radius.zero
-                  ),
+                      bottomRight: Radius.zero),
                   color: HexColor("#c7e4fd"),
                 ),
                 child: Container(
@@ -160,17 +183,18 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
               ),
               SizedBox(width: 10),
               Expanded(
-                  child: Text(menuList[position], style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 18))
-              ),
+                  child: Text(menuList[position],
+                      style:
+                          AppTheme.mediumSFTextStyle().copyWith(fontSize: 18))),
               SizedBox(width: 10),
               Card(
                 margin: EdgeInsets.only(right: 10),
                 elevation: 2,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)
-                ),
+                    borderRadius: BorderRadius.circular(15)),
                 child: Container(
-                  padding: EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+                  padding:
+                      EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
                   child: SvgPicture.asset(MyImage.ic_forword_blue),
                 ),
               )

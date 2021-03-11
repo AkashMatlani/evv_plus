@@ -1,7 +1,11 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Ui/VisitVerificationScreen.dart';
 import 'package:flutter/material.dart';
+
+import 'VerificationMenuScreen.dart';
 
 enum SingingCharacter { Physical, mental, other }
 
@@ -136,10 +140,9 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                         ),
                       ),
                     ),
-                    
                     Expanded(
-                      child:Container(
-                        padding: EdgeInsets.all(20),
+                        child: Container(
+                      padding: EdgeInsets.all(20),
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: Row(
@@ -149,29 +152,38 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                               Expanded(
                                 child: Align(
                                     alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      margin: EdgeInsets.all(5),
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                          gradient: LinearGradient(colors: [
-                                            HexColor("#1785e9"),
-                                            HexColor("#83cff2")
-                                          ]),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(5))),
-                                      child: TextButton(
-                                        child: Text(LabelStr.lblSubmit,
-                                            style: AppTheme.boldSFTextStyle()
-                                                .copyWith(
-                                                    fontSize: 18,
-                                                    color: Colors.white)),
-                                        onPressed: () {
-                                          FocusScope.of(context)
-                                              .requestFocus(FocusNode());
-                                          checkConnection()
-                                              .then((isConnected) {});
-                                        },
+                                    child: InkWell(
+                                      onTap: () {
+                                        Utils.navigateToScreen(
+                                            context, VisitVerificationScreen());
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.all(5),
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            gradient: LinearGradient(colors: [
+                                              HexColor("#1785e9"),
+                                              HexColor("#83cff2")
+                                            ]),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(5))),
+                                        child: TextButton(
+                                          child: Text(LabelStr.lblSubmit,
+                                              style: AppTheme.boldSFTextStyle()
+                                                  .copyWith(
+                                                      fontSize: 18,
+                                                      color: Colors.white)),
+                                          onPressed: () {
+                                            FocusScope.of(context)
+                                                .requestFocus(FocusNode());
+                                            checkConnection()
+                                                .then((isConnected) {
+                                              Utils.navigateToScreen(context, VisitVerificationScreen());
+                                            });
+                                          },
+                                        ),
                                       ),
                                     )),
                               ),
@@ -194,12 +206,15 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                             style: AppTheme.boldSFTextStyle()
                                                 .copyWith(
                                                     fontSize: 18,
-                                                    color: HexColor("#2b91eb"))),
+                                                    color:
+                                                        HexColor("#2b91eb"))),
                                         onPressed: () {
                                           FocusScope.of(context)
                                               .requestFocus(FocusNode());
                                           checkConnection()
-                                              .then((isConnected) {});
+                                              .then((isConnected) {
+                                            Utils.navigateToScreen(context, VerificationMenuScreen());
+                                          });
                                         },
                                       ),
                                     )),

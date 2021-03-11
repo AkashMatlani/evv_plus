@@ -2,6 +2,8 @@ import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Ui/VerificationMenuScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -79,29 +81,37 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                 thickness: 1,
                                 color: HexColor("#e9e9e9"),
                               ),
-                              Container(
-                                margin: EdgeInsets.only(
-                                    top: 30, right: 20, left: 20, bottom: 20),
-                                width: MediaQuery.of(context).size.width,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(colors: [
-                                      HexColor("#1785e9"),
-                                      HexColor("#83cff2")
-                                    ]),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5))),
-                                child: TextButton(
-                                  child: Text(LabelStr.lblGetCaretakerSignature,
-                                      style: AppTheme.boldSFTextStyle()
-                                          .copyWith(
-                                              fontSize: 20,
-                                              color: Colors.white)),
-                                  onPressed: () {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    checkConnection().then((isConnected) {});
-                                  },
+                              InkWell(
+                                onTap: (){
+                                  Utils.navigateToScreen(context, VerificationMenuScreen());
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                      top: 30, right: 20, left: 20, bottom: 20),
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(colors: [
+                                        HexColor("#1785e9"),
+                                        HexColor("#83cff2")
+                                      ]),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5))),
+                                  child: TextButton(
+                                    child: Text(LabelStr.lblGetCaretakerSignature,
+                                        style: AppTheme.boldSFTextStyle()
+                                            .copyWith(
+                                                fontSize: 20,
+                                                color: Colors.white)),
+                                    onPressed: () {
+                                      FocusScope.of(context)
+                                          .requestFocus(FocusNode());
+                                      checkConnection().then((isConnected) {
+
+                                        Utils.navigateToScreen(context, VerificationMenuScreen());
+                                      });
+                                    },
+                                  ),
                                 ),
                               )
                             ],
@@ -148,29 +158,36 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                   hintText: 'Broken arm',
                                 ),
                               ),
-                              Container(
-                                margin: EdgeInsets.only(
-                                    top: 30, right: 20, left: 20, bottom: 20),
-                                width: MediaQuery.of(context).size.width,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(colors: [
-                                      HexColor("#1785e9"),
-                                      HexColor("#83cff2")
-                                    ]),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5))),
-                                child: TextButton(
-                                  child: Text(LabelStr.lblGetCaretakerSignature,
-                                      style: AppTheme.boldSFTextStyle()
-                                          .copyWith(
-                                              fontSize: 20,
-                                              color: Colors.white)),
-                                  onPressed: () {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    checkConnection().then((isConnected) {});
-                                  },
+                              InkWell(
+                                onTap: (){
+                                  Utils.navigateToScreen(context, VerificationMenuScreen());
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                      top: 30, right: 20, left: 20, bottom: 20),
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(colors: [
+                                        HexColor("#1785e9"),
+                                        HexColor("#83cff2")
+                                      ]),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(5))),
+                                  child: TextButton(
+                                    child: Text(LabelStr.lblGetCaretakerSignature,
+                                        style: AppTheme.boldSFTextStyle()
+                                            .copyWith(
+                                                fontSize: 20,
+                                                color: Colors.white)),
+                                    onPressed: () {
+                                      FocusScope.of(context)
+                                          .requestFocus(FocusNode());
+                                      checkConnection().then((isConnected) {
+                                        Utils.navigateToScreen(context, VerificationMenuScreen());
+                                      });
+                                    },
+                                  ),
                                 ),
                               )
                             ],

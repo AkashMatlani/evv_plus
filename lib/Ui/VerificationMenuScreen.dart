@@ -1,6 +1,11 @@
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Ui/ClientPatientSignScreen.dart';
+import 'package:evv_plus/Ui/ClientPatientVoiceSignatureScreen.dart';
+import 'package:evv_plus/Ui/ScheduleScreen.dart';
+import 'package:evv_plus/Ui/UnableToSignInScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,7 +18,6 @@ class VerificationMenuScreen extends StatefulWidget {
 }
 
 class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
-
   List<String> menuNameList;
   List<String> menuIconList;
 
@@ -21,10 +25,18 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
   void initState() {
     super.initState();
     menuNameList = List<String>();
-    menuNameList = [LabelStr.lblPatientSign, LabelStr.lblPatientVoice, LabelStr.lblSignReason];
+    menuNameList = [
+      LabelStr.lblPatientSign,
+      LabelStr.lblPatientVoice,
+      LabelStr.lblSignReason
+    ];
 
     menuIconList = List<String>();
-    menuIconList = [MyImage.ic_medical, MyImage.ic_voice_chat, MyImage.ic_document];
+    menuIconList = [
+      MyImage.ic_medical,
+      MyImage.ic_voice_chat,
+      MyImage.ic_document
+    ];
   }
 
   @override
@@ -35,7 +47,8 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
         title: Container(
           alignment: Alignment.center,
           margin: EdgeInsets.only(right: 20),
-          child: Text(LabelStr.lblVisitVerification, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
+          child: Text(LabelStr.lblVisitVerification,
+              style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
         ),
         backgroundColor: Colors.white10,
         elevation: 0.0,
@@ -62,22 +75,21 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
             height: 50,
             margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
             decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-                  HexColor("#1785e9"),
-                  HexColor("#83cff2")
-                ]),
+                gradient: LinearGradient(
+                    colors: [HexColor("#1785e9"), HexColor("#83cff2")]),
                 borderRadius: BorderRadius.all(Radius.circular(5))),
             child: FlatButton(
               child: Text(LabelStr.lblSubmit,
-                  style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                  style: AppTheme.boldSFTextStyle()
+                      .copyWith(fontSize: 18, color: Colors.white)),
               onPressed: () {
                 FocusScope.of(context).requestFocus(FocusNode());
                 checkConnection().then((isConnected) {
                   if (isConnected) {
                     _showDialog(context);
                   } else {
-                    ToastUtils.showToast(context,
-                        LabelStr.connectionError, Colors.red);
+                    ToastUtils.showToast(
+                        context, LabelStr.connectionError, Colors.red);
                   }
                 });
               },
@@ -90,8 +102,15 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
 
   listRowItems(BuildContext context, int position) {
     return InkWell(
-      onTap: (){
-        ToastUtils.showToast(context, menuNameList[position], Colors.blueAccent);
+      onTap: () {
+        // ToastUtils.showToast(context, menuNameList[position], Colors.blueAccent);
+        if (position == 0) {
+          Utils.navigateToScreen(context, ClientPatientSignScreen());
+        } else if (position == 1) {
+          Utils.navigateToScreen(context, ClientPatientVoiceSignatureScreen());
+        } else if (position == 2) {
+          Utils.navigateToScreen(context, UnableToSignInScreen());
+        }
       },
       child: Card(
         elevation: 2,
@@ -101,8 +120,7 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
             side: BorderSide(
               color: HexColor("#E9E9E9"),
               width: 0.5,
-            )
-        ),
+            )),
         child: Container(
           height: 80,
           child: Row(
@@ -117,8 +135,7 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
                       topLeft: Radius.circular(5),
                       bottomLeft: Radius.circular(5),
                       topRight: Radius.zero,
-                      bottomRight: Radius.zero
-                  ),
+                      bottomRight: Radius.zero),
                   color: HexColor("#c7e4fd"),
                 ),
                 child: Container(
@@ -130,17 +147,18 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
               ),
               SizedBox(width: 10),
               Expanded(
-                  child: Text(menuNameList[position], style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 18))
-              ),
+                  child: Text(menuNameList[position],
+                      style:
+                          AppTheme.mediumSFTextStyle().copyWith(fontSize: 18))),
               SizedBox(width: 10),
               Card(
                 margin: EdgeInsets.only(right: 10),
                 elevation: 2,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15)
-                ),
+                    borderRadius: BorderRadius.circular(15)),
                 child: Container(
-                  padding: EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+                  padding:
+                      EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
                   child: SvgPicture.asset(MyImage.ic_forword_blue),
                 ),
               )
@@ -151,16 +169,15 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
     );
   }
 
-  _showDialog(BuildContext context){
+  _showDialog(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return Dialog(
             shape: RoundedRectangleBorder(
-                borderRadius:
-                BorderRadius.circular(20.0)), //this right here
+                borderRadius: BorderRadius.circular(20.0)), //this right here
             child: Container(
-                height: MediaQuery.of(context).size.height*0.23,
+                height: MediaQuery.of(context).size.height * 0.30,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -171,8 +188,12 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
                       child: SvgPicture.asset(MyImage.ic_thumbUp),
                     ),
                     SizedBox(height: 10),
-                    Text("Success", style: AppTheme.mediumSFTextStyle().copyWith(color: HexColor("#3d3d3d"), fontSize: 20)),
-                    Text("Complete EVV", style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                    Text("Success",
+                        style: AppTheme.mediumSFTextStyle().copyWith(
+                            color: HexColor("#3d3d3d"), fontSize: 20)),
+                    Text("Complete EVV",
+                        style: AppTheme.regularSFTextStyle()
+                            .copyWith(color: HexColor("#3d3d3d"))),
                     SizedBox(height: 20),
                     Container(
                       height: 1,
@@ -183,14 +204,16 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
                       width: MediaQuery.of(context).size.width,
                       child: FlatButton(
                           height: 51,
-                          child: Text(LabelStr.lblOk, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20)),
+                          child: Text(LabelStr.lblOk,
+                              style: AppTheme.mediumSFTextStyle()
+                                  .copyWith(fontSize: 20)),
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            //Navigator.of(context).pop();
+                            Utils.navigateReplaceToScreen(context, ScheduleScreen());
                           }),
                     )
                   ],
-                )
-            ),
+                )),
           );
         });
   }

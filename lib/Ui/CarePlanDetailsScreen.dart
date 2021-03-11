@@ -20,6 +20,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
   Widget build(BuildContext context) {
     var boxWidth = MediaQuery.of(context).size.width*0.6/2;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
@@ -156,7 +157,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(width: 1, color: Colors.black12)
                           ),
-                          height: 210,
+                          height: 180,
                           alignment: Alignment.center,
                           child: Text("Map view"),
                         ),
@@ -186,6 +187,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                             },
                           ),
                         ),
+                        SizedBox(height: 10),
                       ],
                     ),
                   )

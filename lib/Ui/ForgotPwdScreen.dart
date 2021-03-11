@@ -4,7 +4,9 @@ import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
+import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -157,7 +159,7 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
                 borderRadius:
                 BorderRadius.circular(20.0)), //this right here
             child: Container(
-              height: MediaQuery.of(context).size.height*0.18,
+              height: MediaQuery.of(context).size.height*0.25,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -184,7 +186,8 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
                         height: 51,
                           child: Text(LabelStr.lblOk, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20)),
                           onPressed: () {
-                            Navigator.of(context).pop();
+                           // Navigator.of(context).pop();
+                            Utils.navigateReplaceToScreen(context, LoginScreen());
                           }),
                     )
                   ],

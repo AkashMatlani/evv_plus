@@ -1,6 +1,8 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Ui/VerificationMenuScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -119,7 +121,10 @@ class _ClientPatientVoiceSignatureScreenState
                               onPressed: () {
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
-                                checkConnection().then((isConnected) {});
+                                checkConnection().then((isConnected) {
+
+                                  Utils.navigateToScreen(context, VerificationMenuScreen());
+                                });
                               },
                             ),
                           )),
