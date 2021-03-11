@@ -40,10 +40,13 @@ class _CarePlanPdfScreenState extends State<CarePlanPdfScreen> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.all(10),
-        padding: EdgeInsets.all(10),
         child: Column(
           children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 1,
+              color: HexColor("#efefef"),
+            ),
             SizedBox(height: 50),
             Container(
               width: MediaQuery.of(context).size.width,

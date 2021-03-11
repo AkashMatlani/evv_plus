@@ -61,6 +61,12 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
       ),
       body: Column(
         children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 1,
+            color: HexColor("#efefef"),
+          ),
+          SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
               itemCount: menuNameList.length,

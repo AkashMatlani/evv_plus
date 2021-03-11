@@ -31,11 +31,23 @@ class _VisitHistoryListScreenState extends State<VisitHistoryListScreen> {
           },
         ),
       ),
-      body: ListView.builder(
-        itemCount: 3,
-        itemBuilder: (context, position) {
-          return listRowItems(context, position);
-        },
+      body: Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 1,
+            color: HexColor("#efefef"),
+          ),
+          SizedBox(height: 10),
+          Expanded(
+            child: ListView.builder(
+              itemCount: 3,
+              itemBuilder: (context, position) {
+                return listRowItems(context, position);
+              },
+            ),
+          )
+        ],
       ),
     );
   }

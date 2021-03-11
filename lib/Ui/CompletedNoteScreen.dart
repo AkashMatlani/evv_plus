@@ -43,39 +43,51 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
         ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.only(left: 25, right: 25),
           child: Column(
             children: [
-              SizedBox(height: 15),
               Container(
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(5),
-                alignment: Alignment.center,
-                child: Text("Care Plan 1: 09/12/2020", style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#2ab554"))),
+                height: 1,
+                color: HexColor("#efefef"),
               ),
-              SizedBox(height: 15),
-              textFieldFor(LabelStr.lblClientName, _clientNameController),
-              SizedBox(height: 15),
-              textFieldFor(LabelStr.lblClinicianName, _clinicianNameController),
-              SizedBox(height: 15),
-              textFieldFor(
-                  LabelStr.lblSignatureDate,
-                  _signatureDateController,
-                  suffixIcon: InkWell(
-                    onTap: (){
-                      _selectDate(context, _signatureDateController);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(12),
-                      child: SvgPicture.asset(MyImage.ic_calender),
+              SizedBox(height: 10),
+              Container(
+                height: MediaQuery.of(context).size.height*0.7,
+                margin: EdgeInsets.only(left: 25, right: 25),
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.all(5),
+                      alignment: Alignment.center,
+                      child: Text("Care Plan 1: 09/12/2020", style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#2ab554"))),
                     ),
-                  ),
-                readOnly: true
+                    SizedBox(height: 15),
+                    textFieldFor(LabelStr.lblClientName, _clientNameController),
+                    SizedBox(height: 15),
+                    textFieldFor(LabelStr.lblClinicianName, _clinicianNameController),
+                    SizedBox(height: 15),
+                    textFieldFor(
+                        LabelStr.lblSignatureDate,
+                        _signatureDateController,
+                        suffixIcon: InkWell(
+                          onTap: (){
+                            _selectDate(context, _signatureDateController);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(12),
+                            child: SvgPicture.asset(MyImage.ic_calender),
+                          ),
+                        ),
+                        readOnly: true
+                    )
+                  ],
+                ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height*0.56,
-                alignment: Alignment.bottomLeft,
-                margin: EdgeInsets.only(bottom: 20, top: 20),
+                height: MediaQuery.of(context).size.height*0.1,
+                margin: EdgeInsets.only(left: 25, right: 25),
+                alignment: Alignment.center,
                 child: Row(
                   children: [
                     Container(

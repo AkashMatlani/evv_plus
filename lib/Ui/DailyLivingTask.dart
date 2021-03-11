@@ -36,12 +36,26 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
           )
       ),
       body: Container(
-        padding: EdgeInsets.all(10),
-        child: ListView.builder(
-          itemCount: 5,
-          itemBuilder: (context, position) {
-            return _listViewItems(context, position);
-          },
+        child: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 1,
+              color: HexColor("#efefef"),
+            ),
+            SizedBox(height: 10),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: ListView.builder(
+                  itemCount: 5,
+                  itemBuilder: (context, position) {
+                    return _listViewItems(context, position);
+                  },
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

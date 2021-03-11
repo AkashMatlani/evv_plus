@@ -60,6 +60,12 @@ class _CommentScreenState extends State<CommentScreen> with SingleTickerProvider
           child: Column(
             children: <Widget>[
               Container(
+                width: MediaQuery.of(context).size.width,
+                height: 1,
+                color: HexColor("#efefef"),
+              ),
+              SizedBox(height: 10),
+              Container(
                 alignment: Alignment.center,
                 width: 220,
                 child: TabBar(

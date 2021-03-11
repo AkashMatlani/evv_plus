@@ -20,12 +20,11 @@ class CustomVisitMenuScreen extends StatefulWidget {
 }
 
 class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
-  List<String> menuList;
+  List<String> menuList = [];
 
   @override
   void initState() {
     super.initState();
-    menuList = List<String>();
     menuList = [
       LabelStr.lblCarePlan,
       LabelStr.lblVisitDetails,
@@ -57,6 +56,12 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
       ),
       body: Column(
         children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 1,
+            color: HexColor("#efefef"),
+          ),
+          SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
               itemCount: menuList.length,
