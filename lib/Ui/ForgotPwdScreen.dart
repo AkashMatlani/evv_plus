@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
@@ -7,10 +9,10 @@ import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
+import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 
 class ForgotPwdScreen extends StatefulWidget{
   @override
@@ -21,9 +23,18 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
 
   var _emailController = TextEditingController();
   var _authViewModel = AuthViewModel();
-
+   MediaQueryData _mediaQueryData;
+   double screenWidth;
+   double screenHeight;
+   double blockSizeHorizontal;
+   double blockSizeVertical;
   @override
   Widget build(BuildContext context) {
+    _mediaQueryData = MediaQuery.of(context);
+    screenWidth = _mediaQueryData.size.width;
+    screenHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = screenWidth / 100;
+    blockSizeVertical = screenHeight / 100;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -113,6 +124,7 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
 
     _authViewModel.forgotPwdResult(emailId, (isValid, message) {
       if (isValid) {
+        //_showDialog(context);
         _showDialog(context);
       } else {
         ToastUtils.showToast(context, message, Colors.red);
@@ -120,7 +132,7 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
     });
   }
 
-  /*_showDialog(BuildContext context) {
+  _showDialog(BuildContext context) {
     CupertinoAlertDialog alert = CupertinoAlertDialog(
       content: Container(
         padding: EdgeInsets.only(top: 5, bottom: 5),
@@ -128,11 +140,11 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
       ),
       actions: [
         CupertinoDialogAction(
-          child: Text(LabelStr.lblOk, style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.blue, fontSize: 18)),
+          child: Text(LabelStr.lblOk, style: AppTheme.boldSFTextStyle().copyWith(color: Colors.blue, fontSize: 18)),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop("Discard");
             Timer(
-              Duration(milliseconds: 200),
+              Duration(milliseconds: 500),
                   () => Navigator.pushReplacement(
                   context, MaterialPageRoute(builder: (context) => LoginScreen())),
             );
@@ -145,12 +157,15 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return alert;
+        return Theme(
+            data: ThemeData(
+            dialogBackgroundColor: Colors.white,
+            dialogTheme: DialogTheme(backgroundColor: Colors.black)),child: alert);
       },
     );
-  }*/
+  }
 
-  _showDialog(BuildContext context){
+  /*_showDialog(BuildContext context){
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -159,22 +174,21 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
                 borderRadius:
                 BorderRadius.circular(20.0)), //this right here
             child: Container(
-                height: MediaQuery.of(context).size.height*0.25,
+                height: blockSizeVertical * 18,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 10),
-                    Flexible(
-                        child: Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Text(
-                            LabelStr.checkMailLink,
-                            style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.black, fontSize: 17),
-                            textAlign: TextAlign.center,
-                          ),
-                        )
+                    Padding(
+                      padding: EdgeInsets.only(left: blockSizeVertical*1,right: blockSizeVertical*1,top: blockSizeVertical*1),
+                      child: Text(
+                          LabelStr.checkMailLink,
+                          style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.black, fontSize: blockSizeVertical*2.5),
+                          textAlign: TextAlign.center,
+                          maxLines:2,
+                        ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 20),
                     Container(
                       height: 1,
                       width: MediaQuery.of(context).size.width,
@@ -196,5 +210,8 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
             ),
           );
         });
-  }
+  }*/
+
+
+
 }

@@ -3,6 +3,9 @@ import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Ui/CustomVisitMenuScreen.dart';
+import 'package:evv_plus/Ui/TaskWithDateDetailsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -106,8 +109,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                           FocusScope.of(context).requestFocus(FocusNode());
                           checkConnection().then((isConnected) {
                             if (isConnected) {
-                              ToastUtils.showToast(context,
-                                  "Click on complete", Colors.blue);
+                              Utils.navigateToScreen(context, TaskWithDateDetailsScreen());
                             } else {
                               ToastUtils.showToast(context,
                                   LabelStr.connectionError, Colors.red);
@@ -130,8 +132,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                           FocusScope.of(context).requestFocus(FocusNode());
                           checkConnection().then((isConnected) {
                             if (isConnected) {
-                              ToastUtils.showToast(context,
-                                  "Click on save", Colors.blue);
+                              Utils.navigateToScreen(context, CustomVisitMenuScreen());
                             } else {
                               ToastUtils.showToast(context,
                                   LabelStr.connectionError, Colors.red);

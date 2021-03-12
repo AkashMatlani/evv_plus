@@ -92,8 +92,6 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
                       FocusScope.of(context).requestFocus(FocusNode());
                       checkConnection().then((isConnected) {
                         if (isConnected) {
-                          /*ToastUtils.showToast(
-                              context, "Click on complete", Colors.blue);*/
                           Utils.navigateToScreen(context, CompletedNoteScreen());
                         } else {
                           ToastUtils.showToast(
@@ -140,13 +138,12 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
   listRowItems(BuildContext context, int position) {
     return InkWell(
       onTap: () {
-        //ToastUtils.showToast(context, menuList[position], Colors.blueAccent);
         if (position == 0) {
           Utils.navigateToScreen(context, CarePlanPdfScreen());
         } else if (position == 1) {
           Utils.navigateToScreen(context, VisitHistoryListScreen());
         } else if (position == 2) {
-          Utils.navigateToScreen(context, CarePlanCommentScreen());
+          Utils.navigateToScreen(context, CommentScreen());
         } else if (position == 3) {
           Utils.navigateToScreen(context, DailyLivingTask());
         } else if (position == 4) {

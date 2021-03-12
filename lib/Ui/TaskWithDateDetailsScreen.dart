@@ -206,8 +206,6 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                               FocusScope.of(context).requestFocus(FocusNode());
                               checkConnection().then((isConnected) {
                                 if (isConnected) {
-                                  /*ToastUtils.showToast(context,
-                                        "Client sign collection clicked", Colors.green);*/
                                   Utils.navigateToScreen(context, VerificationMenuScreen());
                                 } else {
                                   ToastUtils.showToast(context,
@@ -231,8 +229,6 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                               FocusScope.of(context).requestFocus(FocusNode());
                               checkConnection().then((isConnected) {
                                 if (isConnected) {
-                                  /*   ToastUtils.showToast(context,
-                                        "Client sign collection clicked", Colors.green);*/
                                   Utils.navigateReplaceToScreen(context, ScheduleScreen());
                                 } else {
                                   ToastUtils.showToast(context,
@@ -241,7 +237,8 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                               });
                             },
                           ),
-                        )
+                        ),
+                        SizedBox(height: 20),
                       ],
                     ),
                   ),

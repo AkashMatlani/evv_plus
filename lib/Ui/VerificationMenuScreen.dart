@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
@@ -175,7 +177,7 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
     );
   }
 
-  _showDialog(BuildContext context) {
+ /* _showDialog(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -221,5 +223,51 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
                 )),
           );
         });
+  }*/
+
+
+  _showDialog(BuildContext context) {
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
+      content: Container(
+        child: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              child: SvgPicture.asset(MyImage.ic_thumbUp),
+            ),
+            SizedBox(height: 10),
+            Text(LabelStr.lblSuccess,
+                style: AppTheme.mediumSFTextStyle().copyWith(
+                    color: HexColor("#3d3d3d"), fontSize: 20)),
+            Text(LabelStr.lblCompleteEvv,
+                style: AppTheme.regularSFTextStyle()
+                    .copyWith(color: HexColor("#3d3d3d"))),
+          ],
+        ),
+      ),
+      actions: [
+        CupertinoDialogAction(
+          child: Text(LabelStr.lblOk, style: AppTheme.boldSFTextStyle().copyWith(color: Colors.blue, fontSize: 18)),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop("Discard");
+            Timer(
+                Duration(milliseconds: 500),
+                    () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  ScheduleScreen())));
+          },
+        ),
+      ],
+    );
+
+    return showCupertinoDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Theme(
+            data: ThemeData(
+                dialogBackgroundColor: Colors.white,
+                dialogTheme: DialogTheme(backgroundColor: Colors.black)),child: alert);
+      },
+    );
   }
 }

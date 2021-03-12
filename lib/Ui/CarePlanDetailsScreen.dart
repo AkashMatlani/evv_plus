@@ -190,7 +190,8 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                         SizedBox(height: 10),
                       ],
                     ),
-                  )
+                  ),
+                  SizedBox(height: 10),
                 ],
               ),
             ),
@@ -279,7 +280,6 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                             child: TextButton(
                                 child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
                                 onPressed: () {
-                                  //Navigator.of(context).pop();
                                   Timer(
                                     Duration(milliseconds: 200),
                                         () => Navigator.pushReplacement(
