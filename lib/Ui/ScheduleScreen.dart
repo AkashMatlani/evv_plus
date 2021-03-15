@@ -2,6 +2,7 @@ import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/Ui/ChangePwdScreen.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:evv_plus/Ui/PastDueScheduleScreen.dart';
 import 'package:evv_plus/Ui/TaskWithDateDetailsScreen.dart';
@@ -32,6 +33,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     LabelStr.lblIcident,
     LabelStr.lblNotification,
     LabelStr.lblProfile,
+    LabelStr.lblChangePwd,
     LabelStr.lblAboutUs,
   ];
 
@@ -41,6 +43,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     MyImage.icident_icon,
     MyImage.notification_icon,
     MyImage.profile_icon,
+    MyImage.ic_password,
     MyImage.about_us_icon
   ];
 
@@ -54,6 +57,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       Utils.navigateToScreen(context, NotificationScreen());
     } else if (index == 4) {
       Utils.navigateToScreen(context, ProfileScreen());
+    } else if (index == 5) {
+      Utils.navigateToScreen(context, ChangePwdScreen());
     }
   }
 
@@ -313,7 +318,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         _onSelected(position);
       },
       child: Container(
-        margin: EdgeInsets.only(left: 20, top: 5, bottom: 5, right: MediaQuery.of(context).size.width*0.35),
+        margin: EdgeInsets.only(left: 20, top: 5, bottom: 5, right: MediaQuery.of(context).size.width*0.28),
         padding: EdgeInsets.only(left: 15, right: 10, top: 10, bottom: 10),
         decoration: _selectedIndex == position ? BoxDecoration(
             borderRadius: BorderRadius.circular(25),

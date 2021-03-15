@@ -1,6 +1,5 @@
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/Ui/SplashScreen.dart';
-import 'package:evv_plus/Ui/TaskWithDateDetailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

@@ -255,7 +255,8 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                         });
                       },
                     ),
-                  )
+                  ),
+                  SizedBox(height: 10)
                 ],
               ),
             ),
