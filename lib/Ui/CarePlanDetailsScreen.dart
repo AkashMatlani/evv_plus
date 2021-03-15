@@ -8,6 +8,7 @@ import 'package:evv_plus/Ui/CustomVisitMenuScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CarePlanDetailsScreen extends StatefulWidget {
   @override
@@ -15,6 +16,12 @@ class CarePlanDetailsScreen extends StatefulWidget {
 }
 
 class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
+
+  Completer<GoogleMapController> _controller = Completer();
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(23.012429, 72.510775),
+    zoom: 14.4746,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +169,13 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                           ),
                           height: 180,
                           alignment: Alignment.center,
-                          child: Text("Map view"),
+                          child: GoogleMap(
+                              mapType: MapType.normal,
+                              initialCameraPosition: _kGooglePlex,
+                              onMapCreated: (GoogleMapController controller) {
+                                _controller.complete(controller);
+                              }
+                          ),
                         ),
                         SizedBox(height: 20),
                         Container(

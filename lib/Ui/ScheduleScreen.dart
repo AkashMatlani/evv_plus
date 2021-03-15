@@ -326,12 +326,11 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         ) : BoxDecoration(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(menuIconsList[position], color: _selectedIndex == position ? Colors.white : Colors.black45),
             SizedBox(width: 15),
             Container(
-              alignment: Alignment.centerLeft,
               child: Text(_menuNameList[position], style: AppTheme.sfProLightTextStyle().copyWith(color: _selectedIndex == position ? Colors.white : Colors.black45)),
             )
           ],

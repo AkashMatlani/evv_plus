@@ -50,7 +50,7 @@ class AppTheme {
   static TextStyle sfProLightTextStyle() {
     return TextStyle(
         fontFamily: MyFont.SFPro_light,
-        fontSize: 18,
+        fontSize: 16,
         color:Colors.black);
   }
 }
