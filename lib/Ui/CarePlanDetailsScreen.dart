@@ -8,6 +8,8 @@ import 'package:evv_plus/Ui/CustomVisitMenuScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class CarePlanDetailsScreen extends StatefulWidget {
   @override
@@ -15,7 +17,11 @@ class CarePlanDetailsScreen extends StatefulWidget {
 }
 
 class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
+  var _checkInTimeController = TextEditingController();
+  var _checkOutDateController = TextEditingController();
 
+  var p="1234567890";
+  TimeOfDay _selectedTime = TimeOfDay(hour: 00, minute: 00);
   @override
   Widget build(BuildContext context) {
     var boxWidth = MediaQuery.of(context).size.width*0.6/2;
@@ -210,7 +216,9 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                   children: [
                     SvgPicture.asset(MyImage.user_placeholder, height: 120, width: 120),
                     InkWell(
-                      onTap:() {},
+                      onTap:() {
+                       // UrlLauncher.launch('tel:+${p.toString()}');
+                      },
                       child: Expanded(
                         child: SvgPicture.asset(MyImage.ic_call_icons, height: 130, width: 130)
                       ),
@@ -301,5 +309,24 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
             ),
           );
         });
+  }
+
+  _selectTime(BuildContext context, TextEditingController controller) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime,
+    );
+    if (picked != null && picked != _selectedTime)
+      setState(() {
+        _selectedTime = picked;
+        controller.text = _formatTimeOfDay(_selectedTime);
+      });
+  }
+
+  _formatTimeOfDay(TimeOfDay tod) {
+    final now = new DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+    final format = DateFormat.jm(); //"6:00 AM"
+    return format.format(dt);
   }
 }
