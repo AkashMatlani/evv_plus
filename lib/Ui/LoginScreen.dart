@@ -1,16 +1,20 @@
+
 import 'dart:async';
 
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
 import 'package:evv_plus/Ui/ForgotPwdScreen.dart';
+import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ChangePwdScreen.dart';
 
@@ -111,7 +115,7 @@ class _LoginScreen extends State<LoginScreen> {
                         FocusScope.of(context).requestFocus(FocusNode());
                         checkConnection().then((isConnected) {
                           if (isConnected) {
-                            userLogIn();
+                            nurseLogIn(context);
                           } else {
                             ToastUtils.showToast(context,
                                 LabelStr.connectionError, Colors.red);
@@ -142,16 +146,27 @@ class _LoginScreen extends State<LoginScreen> {
     );
   }
 
-  userLogIn() {
+  nurseLogIn(BuildContext context) {
     var _email = _emailController.text.trim();
     var _password = _passwordController.text.trim();
-    
+    Utils.showLoader(true, context);
     _authViewModel.logInResult(_email, _password, (isValid, message) {
+      Utils.showLoader(false, context);
       if(isValid){
-        ToastUtils.showToast(context, message, Colors.green);
+        ToastUtils.showToast(context, "Login Successful", Colors.green);
+
         Timer(
-            Duration(seconds: 2),
-                () => Utils.navigateToScreen(context, ChangePwdScreen()));
+          Duration(seconds: 2), () {
+          SharedPreferences.getInstance().then((prefs) async {
+            PrefUtils.getNurseDataFromPref();
+            if(prefs.containsKey(PrefUtils.isFirstTimeLogin) && prefs.getBool(PrefUtils.isFirstTimeLogin)){
+              Utils.navigateReplaceToScreen(context, ScheduleScreen());
+            } else {
+              Utils.navigateToScreen(context, ChangePwdScreen());
+            }
+          });
+          },
+        );
       } else {
         ToastUtils.showToast(context, message, Colors.red);
       }

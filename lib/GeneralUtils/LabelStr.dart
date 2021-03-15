@@ -9,6 +9,7 @@ class LabelStr {
   static const lblNewPwd = "New Password";
   static const lblConfirmPwd = "Confirm Password";
   static const lblUpdatePwd = "Update Password";
+  static const lblChangePwd = "Change Password";
   static const lblOk = "Ok";
   static const lblPlaneForm = "Care Plan Form";
   static const lblDownloadPdf = "Download PDF";

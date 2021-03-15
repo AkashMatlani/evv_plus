@@ -122,9 +122,10 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
   forgotUserPwd(BuildContext context) {
     var emailId = _emailController.text.trim();
 
+    Utils.showLoader(true, context);
     _authViewModel.forgotPwdResult(emailId, (isValid, message) {
+      Utils.showLoader(false, context);
       if (isValid) {
-        //_showDialog(context);
         _showDialog(context);
       } else {
         ToastUtils.showToast(context, message, Colors.red);
@@ -211,7 +212,4 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
           );
         });
   }*/
-
-
-
 }

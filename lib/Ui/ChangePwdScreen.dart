@@ -4,12 +4,14 @@ import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
 import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ChangePwdScreen extends StatefulWidget {
@@ -23,6 +25,17 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
   var _confirmPwdController = TextEditingController();
 
   var authViewModel = AuthViewModel();
+  String nurseId = "", currentPwd = "";
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) async {
+      PrefUtils.getNurseDataFromPref();
+      nurseId = prefs.getInt(PrefUtils.nurseId).toString();
+      currentPwd = prefs.getString(PrefUtils.password);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,12 +145,11 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
     var newPwd = _newPwdController.text.trim();
     var confirmPwd = _confirmPwdController.text.trim();
 
-    authViewModel.updatePwdResult(newPwd, confirmPwd, (isValid, message) {
+    Utils.showLoader(true, context);
+    authViewModel.updatePwdResult(nurseId, currentPwd, newPwd, confirmPwd, (isValid, message) {
+      Utils.showLoader(false, context);
       if (isValid) {
-        ToastUtils.showToast(context, message, Colors.green);
-        Timer(
-            Duration(seconds: 2),
-                () => Utils.navigateReplaceToScreen(context, ScheduleScreen()));
+        Utils.navigateReplaceToScreen(context, ScheduleScreen());
       } else {
         ToastUtils.showToast(context, message, Colors.red);
       }
