@@ -35,7 +35,7 @@ class _CarePlanPdfScreenState extends State<CarePlanPdfScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            ToastUtils.showToast(context, "Back press", Colors.blueAccent);
+            Navigator.of(context).pop();
           },
         ),
       ),

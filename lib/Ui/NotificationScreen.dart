@@ -34,7 +34,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () {
-                ToastUtils.showToast(context, "Back press", Colors.blueAccent);
+                Navigator.of(context).pop();
               },
             ),
         ),

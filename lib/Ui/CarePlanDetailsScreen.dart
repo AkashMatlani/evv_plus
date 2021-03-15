@@ -48,9 +48,12 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                         SizedBox(height: 50),
                         Row(
                           children: [
-                            Container(
-                              child: Icon(Icons.arrow_back, color: Colors.white),
-                              margin: EdgeInsets.only(left: 10),
+                            InkWell(
+                              onTap: (){ Navigator.of(context).pop();},
+                              child: Container(
+                                child: Icon(Icons.arrow_back, color: Colors.white),
+                                margin: EdgeInsets.only(left: 10),
+                              ),
                             ),
                             Expanded(
                                 child: Container(
@@ -206,8 +209,11 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SvgPicture.asset(MyImage.user_placeholder, height: 120, width: 120),
-                    Expanded(
-                      child: SvgPicture.asset(MyImage.ic_call_icons, height: 130, width: 130)
+                    InkWell(
+                      onTap:() {},
+                      child: Expanded(
+                        child: SvgPicture.asset(MyImage.ic_call_icons, height: 130, width: 130)
+                      ),
                     )
                   ],
                 ),

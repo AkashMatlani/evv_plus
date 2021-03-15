@@ -13,11 +13,11 @@ import 'package:intl/intl.dart';
 
 class TaskWithDateDetailsScreen extends StatefulWidget {
   @override
-  _TaskWithDateDetailsScreenState createState() => _TaskWithDateDetailsScreenState();
+  _TaskWithDateDetailsScreenState createState() =>
+      _TaskWithDateDetailsScreenState();
 }
 
 class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
-
   var _clientNameController = TextEditingController();
   var _clinicianNameController = TextEditingController();
   var _checkInDateController = TextEditingController();
@@ -36,17 +36,17 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
           title: Container(
             alignment: Alignment.center,
             margin: EdgeInsets.only(right: 30),
-            child: Text("Task 09/12/2020", style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
+            child: Text("Task 09/12/2020",
+                style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
           ),
           backgroundColor: Colors.white10,
           elevation: 0.0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              ToastUtils.showToast(context, "Back press", Colors.blueAccent);
+              Navigator.of(context).pop();
             },
-          )
-      ),
+          )),
       body: Column(
         children: [
           Container(
@@ -63,59 +63,72 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                 children: [
                   textFieldFor(LabelStr.lblClientName, _clientNameController),
                   SizedBox(height: 12),
-                  textFieldFor(LabelStr.lblClinicianName, _clinicianNameController),
+                  textFieldFor(
+                      LabelStr.lblClinicianName, _clinicianNameController),
                   SizedBox(height: 12),
-                  Text(LabelStr.lblDateNote, style: AppTheme.semiBoldSFTextStyle()),
+                  Text(LabelStr.lblDateNote,
+                      style: AppTheme.semiBoldSFTextStyle()),
                   SizedBox(height: 12),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: HexColor("#d2d2d2"), width: 1),
-                        color: Colors.white
-                    ),
+                        border:
+                            Border.all(color: HexColor("#d2d2d2"), width: 1),
+                        color: Colors.white),
                     padding: EdgeInsets.all(10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(LabelStr.lblCheckIn, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#3d3d3d"))),
+                        Text(LabelStr.lblCheckIn,
+                            style: AppTheme.semiBoldSFTextStyle().copyWith(
+                                fontSize: 14, color: HexColor("#3d3d3d"))),
                         SizedBox(height: 10),
                         Row(
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width*0.42,
+                              width: MediaQuery.of(context).size.width * 0.42,
                               child: textFieldFor(
-                                  "09/03/2020",
-                                  _checkInDateController,
+                                  "09/03/2020", _checkInDateController,
                                   suffixIcon: InkWell(
-                                    onTap: (){
-                                      _selectDate(context, _checkInDateController);
+                                    onTap: () {
+                                      _selectDate(
+                                          context, _checkInDateController);
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.only(top: 15, bottom: 15, left: 5, right: 5),
-                                      child: SvgPicture.asset(MyImage.ic_calender),
+                                      padding: EdgeInsets.only(
+                                          top: 15,
+                                          bottom: 15,
+                                          left: 5,
+                                          right: 5),
+                                      child:
+                                          SvgPicture.asset(MyImage.ic_calender),
                                     ),
                                   ),
-                                  readOnly: true
-                              ),
+                                  readOnly: true),
                             ),
-                            SizedBox(width: MediaQuery.of(context).size.width*0.02),
+                            SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.02),
                             Container(
-                              width: MediaQuery.of(context).size.width*0.4,
+                              width: MediaQuery.of(context).size.width * 0.4,
                               child: textFieldFor(
-                                  "11:30 am",
-                                  _checkInTimeController,
+                                  "11:30 am", _checkInTimeController,
                                   suffixIcon: InkWell(
-                                    onTap: (){
-                                      _selectTime(context, _checkInTimeController);
+                                    onTap: () {
+                                      _selectTime(
+                                          context, _checkInTimeController);
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.only(top: 15, bottom: 15, left: 5, right: 5),
+                                      padding: EdgeInsets.only(
+                                          top: 15,
+                                          bottom: 15,
+                                          left: 5,
+                                          right: 5),
                                       child: SvgPicture.asset(MyImage.ic_clock),
                                     ),
                                   ),
-                                  readOnly: true
-                              ),
+                                  readOnly: true),
                             )
                           ],
                         )
@@ -127,80 +140,90 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: HexColor("#d2d2d2"), width: 1),
-                        color: Colors.white
-                    ),
+                        border:
+                            Border.all(color: HexColor("#d2d2d2"), width: 1),
+                        color: Colors.white),
                     padding: EdgeInsets.all(10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(LabelStr.lblCheckout, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#3d3d3d"))),
+                        Text(LabelStr.lblCheckout,
+                            style: AppTheme.semiBoldSFTextStyle().copyWith(
+                                fontSize: 14, color: HexColor("#3d3d3d"))),
                         SizedBox(height: 10),
                         Row(
                           children: [
                             Container(
-                              width: MediaQuery.of(context).size.width*0.42,
+                              width: MediaQuery.of(context).size.width * 0.42,
                               child: textFieldFor(
-                                  "09/03/2020",
-                                  _checkOutDateController,
+                                  "09/03/2020", _checkOutDateController,
                                   suffixIcon: InkWell(
-                                    onTap: (){
-                                      _selectDate(context, _checkOutDateController);
+                                    onTap: () {
+                                      _selectDate(
+                                          context, _checkOutDateController);
                                     },
                                     child: Container(
-                                      padding: EdgeInsets.only(top: 15, bottom: 15, left: 5, right: 5),
-                                      child: SvgPicture.asset(MyImage.ic_calender),
+                                      padding: EdgeInsets.only(
+                                          top: 15,
+                                          bottom: 15,
+                                          left: 5,
+                                          right: 5),
+                                      child:
+                                          SvgPicture.asset(MyImage.ic_calender),
                                     ),
                                   ),
-                                  readOnly: true
-                              ),
+                                  readOnly: true),
                             ),
-                            SizedBox(width: MediaQuery.of(context).size.width*0.02),
+                            SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.02),
                             Container(
-                              width: MediaQuery.of(context).size.width*0.4,
+                              width: MediaQuery.of(context).size.width * 0.4,
                               child: textFieldFor(
-                                  "11:30 am",
-                                  _checkOutTimeController,
+                                  "11:30 am", _checkOutTimeController,
                                   suffixIcon: InkWell(
-                                    onTap: (){
-                                      _selectTime(context, _checkOutTimeController);
+                                    onTap: () {
+                                      _selectTime(
+                                          context, _checkOutTimeController);
                                     },
                                     child: Container(
-                                        padding: EdgeInsets.only(top: 15, bottom: 15, left: 5, right: 5),
-                                        child: SvgPicture.asset(MyImage.ic_clock)
-                                    ),
+                                        padding: EdgeInsets.only(
+                                            top: 15,
+                                            bottom: 15,
+                                            left: 5,
+                                            right: 5),
+                                        child:
+                                            SvgPicture.asset(MyImage.ic_clock)),
                                   ),
-                                  readOnly: true
-                              ),
+                                  readOnly: true),
                             )
                           ],
                         )
                       ],
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height*0.2),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.2),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: 50,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [
-                          HexColor("#1785e9"),
-                          HexColor("#83cff2")
-                        ]),
+                        gradient: LinearGradient(
+                            colors: [HexColor("#1785e9"), HexColor("#83cff2")]),
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: TextButton(
                       child: Text(LabelStr.lblCollectSign,
-                          style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                          style: AppTheme.boldSFTextStyle()
+                              .copyWith(fontSize: 18, color: Colors.white)),
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         checkConnection().then((isConnected) {
                           if (isConnected) {
                             /*ToastUtils.showToast(context,
                                         "Client sign collection clicked", Colors.green);*/
-                            Utils.navigateToScreen(context, VerificationMenuScreen());
+                            validationForCollectClientSignature();
                           } else {
-                            ToastUtils.showToast(context,
-                                LabelStr.connectionError, Colors.red);
+                            ToastUtils.showToast(
+                                context, LabelStr.connectionError, Colors.red);
                           }
                         });
                       },
@@ -215,17 +238,19 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                         color: HexColor("#c1def8")),
                     child: TextButton(
                       child: Text(LabelStr.lblCancelVerification,
-                          style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: HexColor("#2b91eb"))),
+                          style: AppTheme.boldSFTextStyle().copyWith(
+                              fontSize: 18, color: HexColor("#2b91eb"))),
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         checkConnection().then((isConnected) {
                           if (isConnected) {
                             /*   ToastUtils.showToast(context,
                                         "Client sign collection clicked", Colors.green);*/
-                            Utils.navigateReplaceToScreen(context, ScheduleScreen());
+                            Utils.navigateReplaceToScreen(
+                                context, ScheduleScreen());
                           } else {
-                            ToastUtils.showToast(context,
-                                LabelStr.connectionError, Colors.red);
+                            ToastUtils.showToast(
+                                context, LabelStr.connectionError, Colors.red);
                           }
                         });
                       },
@@ -270,7 +295,17 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
   _formatTimeOfDay(TimeOfDay tod) {
     final now = new DateTime.now();
     final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
-    final format = DateFormat.jm();  //"6:00 AM"
+    final format = DateFormat.jm(); //"6:00 AM"
     return format.format(dt);
+  }
+
+  void validationForCollectClientSignature() {
+    if (_clientNameController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterClientName, Colors.green);
+    } else if (_clinicianNameController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterClinicianName, Colors.green);
+    } else {
+      Utils.navigateToScreen(context, VerificationMenuScreen());
+    }
   }
 }

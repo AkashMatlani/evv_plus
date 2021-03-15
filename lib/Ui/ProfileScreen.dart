@@ -1,7 +1,10 @@
+import 'dart:async';
 
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../GeneralUtils/ColorExtension.dart';
@@ -33,7 +36,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Stack(
                     children: [
-                      SvgPicture.asset(MyImage.profileHeaderBgImage, fit: BoxFit.fill),
+                      SvgPicture.asset(MyImage.profileHeaderBgImage,
+                          fit: BoxFit.fill),
                       Container(
                           height: MediaQuery.of(context).size.height * 0.43,
                           child: Column(
@@ -41,33 +45,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               SizedBox(height: 50),
                               Row(
                                 children: [
-                                  Container(
-                                    child:
-                                    Icon(Icons.arrow_back, color: Colors.white),
-                                    margin: EdgeInsets.only(left: 10),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Container(
+                                      child: Icon(Icons.arrow_back,
+                                          color: Colors.white),
+                                      margin: EdgeInsets.only(left: 10),
+                                    ),
                                   ),
                                   Expanded(
                                       child: Container(
-                                        alignment: Alignment.center,
-                                        margin: EdgeInsets.only(right: 20),
-                                        child: Text(LabelStr.lblMyProfile,
-                                            style: AppTheme.boldSFTextStyle().copyWith(
-                                                fontSize: 24, color: Colors.white)),
-                                      ))
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.only(right: 20),
+                                    child: Text(LabelStr.lblMyProfile,
+                                        style: AppTheme.boldSFTextStyle()
+                                            .copyWith(
+                                                fontSize: 24,
+                                                color: Colors.white)),
+                                  ))
                                 ],
                               ),
                               SizedBox(height: 15),
                               Container(
                                   alignment: Alignment.center,
-                                  child: SvgPicture.asset(MyImage.user_placeholder,
-                                      height: 120, width: 120)),
+                                  child: SvgPicture.asset(
+                                      MyImage.user_placeholder,
+                                      height: 120,
+                                      width: 120)),
                               SizedBox(height: 5),
                               Container(
                                 width: MediaQuery.of(context).size.width,
                                 alignment: Alignment.center,
                                 child: Text("Katie Williamson",
-                                    style: AppTheme.boldSFTextStyle()
-                                        .copyWith(fontSize: 24, color: Colors.white)),
+                                    style: AppTheme.boldSFTextStyle().copyWith(
+                                        fontSize: 24, color: Colors.white)),
                               ),
                               SizedBox(height: 5),
                               Container(
@@ -75,12 +88,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 alignment: Alignment.center,
                                 child: Text("Columbis, ohio",
                                     style: AppTheme.regularSFTextStyle()
-                                        .copyWith(fontSize: 14, color: Colors.white)),
+                                        .copyWith(
+                                            fontSize: 14, color: Colors.white)),
                               ),
                               SizedBox(height: 10),
                             ],
-                          )
-                      )
+                          ))
                     ],
                   ),
                   IntrinsicHeight(
@@ -253,9 +266,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       width: MediaQuery.of(context).size.width,
                       height: 65,
                       child: textFieldFor(LabelStr.lblPhone, _phoneController,
-                          autocorrect: false,
-                          textCapitalization: TextCapitalization.none,
-                          keyboardType: TextInputType.phone)),
+                          keyboardType: TextInputType.number,maxLength: 10)),
                   Container(
                     margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
                     width: MediaQuery.of(context).size.width,
@@ -270,7 +281,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               .copyWith(fontSize: 18, color: Colors.white)),
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
-                        checkConnection().then((isConnected) {});
+                        checkConnection().then((isConnected) {
+                          validationForCollectClientSignature();
+                        });
                       },
                     ),
                   ),
@@ -292,18 +305,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return path;
   }
 
-
+  void validationForCollectClientSignature() {
+    if (_addressLineOneController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterAddressLineOne, Colors.green);
+    } else if (_addressLineTwoController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterAddressLineTwo, Colors.green);
+    } else if (_cityController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterCity, Colors.green);
+    } else if (_zipController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterZip, Colors.green);
+    } else if (_phoneController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterPhoneNumber, Colors.green);
+    } else {
+      Timer(
+        Duration(milliseconds: 200),
+        () => Navigator.of(context).pop(),
+      );
+    }
+  }
 }
+
 // CustomPainter class to for the header curved-container
 class HeaderCurvedContainer extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..color =  Color(0xff1785e9);
-    Paint paint1 = Paint()..color =  Color(0xff83cff2);
+    Paint paint = Paint()..color = Color(0xff1785e9);
+    Paint paint1 = Paint()..color = Color(0xff83cff2);
     Path path = new Path();
     path.lineTo(0, size.height * 0.85);
-    path.quadraticBezierTo(size.width / 2, size.height, size.width,
-        size.height * 0.85);
+    path.quadraticBezierTo(
+        size.width / 2, size.height, size.width, size.height * 0.85);
     path.lineTo(size.width, 0);
     canvas.drawPath(path, paint1);
     canvas.drawPath(path, paint);

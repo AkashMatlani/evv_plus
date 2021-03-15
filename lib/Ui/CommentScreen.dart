@@ -49,7 +49,7 @@ class _CommentScreenState extends State<CommentScreen> with SingleTickerProvider
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            ToastUtils.showToast(context, "Back press", Colors.blueAccent);
+            Navigator.of(context).pop();
           },
         ),
       ),

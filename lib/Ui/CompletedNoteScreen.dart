@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
@@ -18,7 +20,6 @@ class CompletedNoteScreen extends StatefulWidget {
 }
 
 class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
-
   var _clientNameController = TextEditingController();
   var _clinicianNameController = TextEditingController();
   var _signatureDateController = TextEditingController();
@@ -28,22 +29,22 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            toolbarHeight: 100,
-            title: Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(right: 30),
-              child: Text(LabelStr.lblCompletedNote, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
-            ),
-            backgroundColor: Colors.white10,
-            elevation: 0.0,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () {
-                ToastUtils.showToast(context, "Back press", Colors.blueAccent);
-              },
-            )
-        ),
+      appBar: AppBar(
+          toolbarHeight: 100,
+          title: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(right: 30),
+            child: Text(LabelStr.lblCompletedNote,
+                style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
+          ),
+          backgroundColor: Colors.white10,
+          elevation: 0.0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )),
       body: SingleChildScrollView(
         child: Container(
           child: Column(
@@ -55,7 +56,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
               ),
               SizedBox(height: 10),
               Container(
-                height: MediaQuery.of(context).size.height*0.7,
+                height: MediaQuery.of(context).size.height * 0.7,
                 margin: EdgeInsets.only(left: 25, right: 25),
                 child: Column(
                   children: [
@@ -63,18 +64,20 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                       width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.all(5),
                       alignment: Alignment.center,
-                      child: Text("Care Plan 1: 09/12/2020", style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#2ab554"))),
+                      child: Text("Care Plan 1: 09/12/2020",
+                          style: AppTheme.semiBoldSFTextStyle()
+                              .copyWith(color: HexColor("#2ab554"))),
                     ),
                     SizedBox(height: 15),
                     textFieldFor(LabelStr.lblClientName, _clientNameController),
                     SizedBox(height: 15),
-                    textFieldFor(LabelStr.lblClinicianName, _clinicianNameController),
+                    textFieldFor(
+                        LabelStr.lblClinicianName, _clinicianNameController),
                     SizedBox(height: 15),
                     textFieldFor(
-                        LabelStr.lblSignatureDate,
-                        _signatureDateController,
+                        LabelStr.lblSignatureDate, _signatureDateController,
                         suffixIcon: InkWell(
-                          onTap: (){
+                          onTap: () {
                             _selectDate(context, _signatureDateController);
                           },
                           child: Container(
@@ -82,19 +85,18 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                             child: SvgPicture.asset(MyImage.ic_calender),
                           ),
                         ),
-                        readOnly: true
-                    )
+                        readOnly: true)
                   ],
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height*0.1,
+                height: MediaQuery.of(context).size.height * 0.1,
                 margin: EdgeInsets.only(left: 25, right: 25),
                 alignment: Alignment.center,
                 child: Row(
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width*0.4,
+                      width: MediaQuery.of(context).size.width * 0.4,
                       height: 45,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(colors: [
@@ -104,35 +106,30 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                       child: TextButton(
                         child: Text(LabelStr.lblComplete,
-                            style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                            style: AppTheme.boldSFTextStyle()
+                                .copyWith(fontSize: 18, color: Colors.white)),
                         onPressed: () {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          checkConnection().then((isConnected) {
-                            if (isConnected) {
-                              Utils.navigateToScreen(context, TaskWithDateDetailsScreen());
-                            } else {
-                              ToastUtils.showToast(context,
-                                  LabelStr.connectionError, Colors.red);
-                            }
-                          });
+                          validationForCompleteNoteScreen();
                         },
                       ),
                     ),
                     SizedBox(width: 30),
                     Container(
-                      width: MediaQuery.of(context).size.width*0.4,
+                      width: MediaQuery.of(context).size.width * 0.4,
                       height: 45,
                       decoration: BoxDecoration(
                           color: HexColor("#c1def8"),
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                       child: TextButton(
                         child: Text(LabelStr.lblSaveExit,
-                            style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: HexColor("#2b91eb"))),
+                            style: AppTheme.boldSFTextStyle().copyWith(
+                                fontSize: 18, color: HexColor("#2b91eb"))),
                         onPressed: () {
                           FocusScope.of(context).requestFocus(FocusNode());
                           checkConnection().then((isConnected) {
                             if (isConnected) {
-                              Utils.navigateToScreen(context, CustomVisitMenuScreen());
+                              Utils.navigateToScreen(
+                                  context, CustomVisitMenuScreen());
                             } else {
                               ToastUtils.showToast(context,
                                   LabelStr.connectionError, Colors.red);
@@ -164,5 +161,24 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
         String formattedDate = DateFormat('dd/MM/yyyy').format(picked);
         controller.text = formattedDate;
       });
+  }
+
+  void validationForCompleteNoteScreen() {
+    if (_clientNameController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterClientName, Colors.green);
+    } else if (_clinicianNameController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterClinicianName, Colors.green);
+    } else if (_signatureDateController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterSignatureDate, Colors.green);
+    } else {
+      FocusScope.of(context).requestFocus(FocusNode());
+      checkConnection().then((isConnected) {
+        if (isConnected) {
+          Utils.navigateToScreen(context, TaskWithDateDetailsScreen());
+        } else {
+          ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
+        }
+      });
+    }
   }
 }

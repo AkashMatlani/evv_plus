@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
@@ -13,7 +15,6 @@ class PatientCommentScreen extends StatefulWidget {
 }
 
 class _PatientCommentScreenState extends State<PatientCommentScreen> {
-
   var _commentController = TextEditingController();
 
   @override
@@ -42,12 +43,12 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
                             hintText: LabelStr.lblSearchPatientOrPlan,
                           ),
                           keyboardType: TextInputType.text,
-                        )
-                    ),
+                        )),
                     Positioned(
                       child: InkWell(
-                        onTap: (){
-                          ToastUtils.showToast(context, "Search Clicked", Colors.blueAccent);
+                        onTap: () {
+                          ToastUtils.showToast(
+                              context, "Search Clicked", Colors.blueAccent);
                         },
                         child: Container(
                           height: 30,
@@ -64,19 +65,24 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
                 ),
               ),
               SizedBox(height: 15),
-              Text(LabelStr.lblPatientOrPlan, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-              SizedBox(height:5),
-              Text("Michale Johnson", style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+              Text(LabelStr.lblPatientOrPlan,
+                  style: AppTheme.semiBoldSFTextStyle()
+                      .copyWith(color: HexColor("#3d3d3d"))),
+              SizedBox(height: 5),
+              Text("Michale Johnson",
+                  style: AppTheme.regularSFTextStyle()
+                      .copyWith(color: HexColor("#3d3d3d"))),
               SizedBox(height: 20),
-              Text(LabelStr.lblNurseName, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-              SizedBox(height:5),
-              Text("Caliena Zicontrian", style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+              Text(LabelStr.lblNurseName,
+                  style: AppTheme.semiBoldSFTextStyle()
+                      .copyWith(color: HexColor("#3d3d3d"))),
+              SizedBox(height: 5),
+              Text("Caliena Zicontrian",
+                  style: AppTheme.regularSFTextStyle()
+                      .copyWith(color: HexColor("#3d3d3d"))),
               SizedBox(height: 20),
               multilineTextFieldFor(
-                "Comment here...",
-                _commentController,
-                140.0
-              ),
+                  "Comment here...", _commentController, 140.0),
               SizedBox(height: 20),
               Row(
                 children: [
@@ -84,23 +90,23 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
                     width: 100,
                     height: 50,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [
-                          HexColor("#1785e9"),
-                          HexColor("#83cff2")
-                        ]),
+                        gradient: LinearGradient(
+                            colors: [HexColor("#1785e9"), HexColor("#83cff2")]),
                         borderRadius: BorderRadius.all(Radius.circular(5))),
                     child: TextButton(
                       child: Text(LabelStr.lblSubmit,
-                          style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                          style: AppTheme.boldSFTextStyle()
+                              .copyWith(fontSize: 18, color: Colors.white)),
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         checkConnection().then((isConnected) {
                           if (isConnected) {
-                            ToastUtils.showToast(context,
-                                "Click on submit", Colors.red);
+                            /* ToastUtils.showToast(context,
+                                "Click on submit", Colors.red);*/
+                            validationForCollectClientSignature();
                           } else {
-                            ToastUtils.showToast(context,
-                                LabelStr.connectionError, Colors.red);
+                            ToastUtils.showToast(
+                                context, LabelStr.connectionError, Colors.red);
                           }
                         });
                       },
@@ -112,19 +118,20 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
                     height: 50,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(5)),
-                    color: HexColor("#c1def8")),
+                        color: HexColor("#c1def8")),
                     child: TextButton(
                       child: Text(LabelStr.lblCancel,
-                          style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: HexColor("#2b91eb"))),
+                          style: AppTheme.boldSFTextStyle().copyWith(
+                              fontSize: 18, color: HexColor("#2b91eb"))),
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         checkConnection().then((isConnected) {
                           if (isConnected) {
-                            ToastUtils.showToast(context,
-                                "Click on cancel", Colors.red);
+                            ToastUtils.showToast(
+                                context, "Click on cancel", Colors.red);
                           } else {
-                            ToastUtils.showToast(context,
-                                LabelStr.connectionError, Colors.red);
+                            ToastUtils.showToast(
+                                context, LabelStr.connectionError, Colors.red);
                           }
                         });
                       },
@@ -137,5 +144,16 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
         ),
       ),
     );
+  }
+
+  void validationForCollectClientSignature() {
+    if (_commentController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterComment, Colors.green);
+    } else {
+      Timer(
+        Duration(milliseconds: 200),
+        () => Navigator.of(context).pop(),
+      );
+    }
   }
 }

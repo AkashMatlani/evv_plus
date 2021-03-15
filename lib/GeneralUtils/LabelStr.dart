@@ -78,8 +78,15 @@ class LabelStr {
   static const lblAppName= "EVV Plus";
   static const lblSuccess= "Success";
   static const lblCompleteEvv= "Complete EVV";
-
-
+  static const enterClientName = "Please enter Client Name";
+  static const enterClinicianName = "Please enter Clinician Name";
+  static const enterAddressLineOne = "Please enter AddressLine 1";
+  static const enterAddressLineTwo = "Please enter AddressLine 2 ";
+  static const enterCity= "Please enter City";
+  static const enterZip = "Please enter Zip Code";
+  static const enterPhoneNumber = "Please enter Phone Number";
+  static const enterComment = "Please enter Comment";
+  static const enterSignatureDate = "Please enter SignatureDate";
   static const lblLogout = "Logout";
   static const lblComment = "Comment";
   static const lblPatient = "Patient";
