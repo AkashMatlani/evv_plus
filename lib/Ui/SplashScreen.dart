@@ -1,9 +1,13 @@
 import 'dart:async';
 
 import 'package:evv_plus/GeneralUtils/Constant.dart';
+import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
+import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -15,8 +19,16 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(
       Duration(seconds: 2),
-      () => Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginScreen())),
+      (){
+        SharedPreferences.getInstance().then((prefs) async {
+          PrefUtils.getNurseDataFromPref();
+          if(prefs.containsKey(PrefUtils.isLoggedIn) && prefs.getBool(PrefUtils.isLoggedIn)){
+            Utils.navigateReplaceToScreen(context, ScheduleScreen());
+          } else {
+            Utils.navigateReplaceToScreen(context, LoginScreen());
+          }
+        });
+      },
     );
     //print("Splash Done!"))
   }

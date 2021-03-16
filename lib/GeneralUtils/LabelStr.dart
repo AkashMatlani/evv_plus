@@ -104,5 +104,5 @@ class LabelStr {
   static const lblDateNote = "The information below displayed will be saved with signature";
   static const lblCollectSign = "Collect Client Signature";
   static const lblCancelVerification = "Cancel Task Verification";
-
+  static const lblNoData = "No Data Found";
 }

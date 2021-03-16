@@ -4,7 +4,6 @@ import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/NurseResponse.dart';
 import 'package:evv_plus/WebService/WebService.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthViewModel{
 
@@ -17,9 +16,9 @@ class AuthViewModel{
 
     if (password.isEmpty) {
       return ValidationResult(false, LabelStr.enterUserPwd);
-    } /*else if (!Utils.isValidPassword(password)) {
+    } else if (!Utils.isValidPassword(password)) {
       return ValidationResult(false, LabelStr.enterValidPwd);
-    }*/
+    }
     return ValidationResult(true, "success");
   }
 
@@ -51,14 +50,14 @@ class AuthViewModel{
   ValidationResult validateUpdatePwd(String newPwd, String confirmPwd) {
     if (newPwd.isEmpty) {
       return ValidationResult(false, LabelStr.enterNewPwd);
-    } /*else if(!Utils.isValidPassword(newPwd)){
+    } else if(!Utils.isValidPassword(newPwd)){
       return ValidationResult(false, LabelStr.enterValidPwd);
-    }*/
+    }
     if (confirmPwd.isEmpty) {
       return ValidationResult(false, LabelStr.enterConfirmPwd);
-    } /*else if (newPwd.compareTo(confirmPwd) != 0) {
+    } else if (newPwd.compareTo(confirmPwd) != 0) {
       return ValidationResult(false, LabelStr.pwdNotMatchError);
-    }*/
+    }
     return ValidationResult(true, "success");
   }
 
