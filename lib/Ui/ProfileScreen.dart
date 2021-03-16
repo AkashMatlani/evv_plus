@@ -24,9 +24,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   var _phoneController = TextEditingController();
 
   final Widget svg = new SvgPicture.asset(MyImage.profileHeaderBgImage);
-
+  MediaQueryData _mediaQueryData;
+  double screenWidth;
+  double screenHeight;
+  double blockSizeHorizontal;
+  double blockSizeVertical;
   @override
   Widget build(BuildContext context) {
+    _mediaQueryData = MediaQuery.of(context);
+    screenWidth = _mediaQueryData.size.width;
+    screenHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = screenWidth / 100;
+    blockSizeVertical = screenHeight / 100;
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
@@ -39,7 +48,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SvgPicture.asset(MyImage.profileHeaderBgImage,
                           fit: BoxFit.fill),
                       Container(
-                          height: MediaQuery.of(context).size.height * 0.43,
                           child: Column(
                             children: [
                               SizedBox(height: 50),
@@ -91,80 +99,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         .copyWith(
                                             fontSize: 14, color: Colors.white)),
                               ),
-                              SizedBox(height: 10),
                             ],
                           ))
                     ],
                   ),
+                  SizedBox(height: 30,),
                   IntrinsicHeight(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              LabelStr.lblSsn.toUpperCase(),
-                              style: AppTheme.semiBoldSFTextStyle()
-                                  .copyWith(fontSize: 14),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "123-23-3434",
-                              style: AppTheme.regularSFTextStyle().copyWith(
-                                  fontSize: 16, color: Color(0xff868686)),
-                            )
-                          ],
-                        ),
-                        VerticalDivider(color: Color(0xff979797)),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              LabelStr.lblDob.toUpperCase(),
-                              style: AppTheme.semiBoldSFTextStyle()
-                                  .copyWith(fontSize: 14),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "02/12/1990",
-                              style: AppTheme.regularSFTextStyle().copyWith(
-                                  fontSize: 16, color: Color(0xff868686)),
-                            )
-                          ],
-                        ),
-                        VerticalDivider(
-                          color: Color(0xff979797),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              LabelStr.lblGender.toUpperCase(),
-                              style: AppTheme.semiBoldSFTextStyle()
-                                  .copyWith(fontSize: 14),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              "Female",
-                              style: AppTheme.regularSFTextStyle().copyWith(
-                                  fontSize: 16, color: Color(0xff868686)),
-                            )
-                          ],
-                        ),
-                      ],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                LabelStr.lblSsn.toUpperCase(),
+                                style: AppTheme.semiBoldSFTextStyle()
+                                    .copyWith(fontSize: 14),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "123-23-3434",
+                                style: AppTheme.regularSFTextStyle().copyWith(
+                                    fontSize: 16, color: Color(0xff868686)),
+                              )
+                            ],
+                          ),
+                          VerticalDivider(color: Color(0xff979797)),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                LabelStr.lblDob.toUpperCase(),
+                                style: AppTheme.semiBoldSFTextStyle()
+                                    .copyWith(fontSize: 14),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "02/12/1990",
+                                style: AppTheme.regularSFTextStyle().copyWith(
+                                    fontSize: 16, color: Color(0xff868686)),
+                              )
+                            ],
+                          ),
+                          VerticalDivider(
+                            color: Color(0xff979797),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                LabelStr.lblGender.toUpperCase(),
+                                style: AppTheme.semiBoldSFTextStyle()
+                                    .copyWith(fontSize: 14),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "Female",
+                                style: AppTheme.regularSFTextStyle().copyWith(
+                                    fontSize: 16, color: Color(0xff868686)),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                   SizedBox(
                     height: 25,
                   ),
@@ -257,8 +265,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: EdgeInsets.fromLTRB(10, 5, 20, 0),
                           child: textFieldFor(LabelStr.lblZip, _zipController,
                               autocorrect: false,
-                              textCapitalization: TextCapitalization.none,
-                              keyboardType: TextInputType.streetAddress)),
+                              maxLength: 6,
+                              keyboardType: TextInputType.number)),
                     ],
                   ),
                   Container(

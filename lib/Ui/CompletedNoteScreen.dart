@@ -114,28 +114,31 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                       ),
                     ),
                     SizedBox(width: 30),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: 45,
-                      decoration: BoxDecoration(
-                          color: HexColor("#c1def8"),
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: TextButton(
-                        child: Text(LabelStr.lblSaveExit,
-                            style: AppTheme.boldSFTextStyle().copyWith(
-                                fontSize: 18, color: HexColor("#2b91eb"))),
-                        onPressed: () {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          checkConnection().then((isConnected) {
-                            if (isConnected) {
-                              Utils.navigateToScreen(
-                                  context, CustomVisitMenuScreen());
-                            } else {
-                              ToastUtils.showToast(context,
-                                  LabelStr.connectionError, Colors.red);
-                            }
-                          });
-                        },
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: 45,
+                        decoration: BoxDecoration(
+                            color: HexColor("#c1def8"),
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        child: TextButton(
+                          child: Text(LabelStr.lblSaveExit,
+                              style: AppTheme.boldSFTextStyle().copyWith(
+                                  fontSize: 18, color: HexColor("#2b91eb"))),
+                          onPressed: () {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            checkConnection().then((isConnected) {
+                              if (isConnected) {
+                                Utils.navigateToScreen(
+                                    context, CustomVisitMenuScreen());
+                              } else {
+                                ToastUtils.showToast(context,
+                                    LabelStr.connectionError, Colors.red);
+                              }
+                            });
+                          },
+                        ),
                       ),
                     )
                   ],

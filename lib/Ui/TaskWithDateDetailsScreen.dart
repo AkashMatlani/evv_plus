@@ -85,8 +85,12 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                                 fontSize: 14, color: HexColor("#3d3d3d"))),
                         SizedBox(height: 10),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
+
+                            Expanded(
+                              flex: 1,child:Container(
                               width: MediaQuery.of(context).size.width * 0.42,
                               child: textFieldFor(
                                   "09/03/2020", _checkInDateController,
@@ -106,7 +110,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                                     ),
                                   ),
                                   readOnly: true),
-                            ),
+                            )),
                             SizedBox(
                                 width:
                                     MediaQuery.of(context).size.width * 0.02),
@@ -153,26 +157,29 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                         SizedBox(height: 10),
                         Row(
                           children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.42,
-                              child: textFieldFor(
-                                  "09/03/2020", _checkOutDateController,
-                                  suffixIcon: InkWell(
-                                    onTap: () {
-                                      _selectDate(
-                                          context, _checkOutDateController);
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                          top: 15,
-                                          bottom: 15,
-                                          left: 5,
-                                          right: 5),
-                                      child:
-                                          SvgPicture.asset(MyImage.ic_calender),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.25,
+                                child: textFieldFor(
+                                    "09/03/2020", _checkOutDateController,
+                                    suffixIcon: InkWell(
+                                      onTap: () {
+                                        _selectDate(
+                                            context, _checkOutDateController);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.only(
+                                            top: 15,
+                                            bottom: 15,
+                                            left: 5,
+                                            right: 5),
+                                        child:
+                                            SvgPicture.asset(MyImage.ic_calender),
+                                      ),
                                     ),
-                                  ),
-                                  readOnly: true),
+                                    readOnly: true),
+                              ),
                             ),
                             SizedBox(
                                 width:
@@ -202,7 +209,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.15),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: 50,

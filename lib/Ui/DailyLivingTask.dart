@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
@@ -127,8 +129,10 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
                       FocusScope.of(context).requestFocus(FocusNode());
                       checkConnection().then((isConnected) {
                         if (isConnected) {
-                          ToastUtils.showToast(context,
-                              "Click on submit", Colors.red);
+                         /* ToastUtils.showToast(context,
+                              "Click on submit", Colors.red);*/
+
+                          validationForCollectClientSignature();
                         } else {
                           ToastUtils.showToast(context,
                               LabelStr.connectionError, Colors.red);
@@ -143,6 +147,18 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
         ],
       ),
     );
+  }
+
+
+  void validationForCollectClientSignature() {
+    if (_commentController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterComment, Colors.green);
+    } else {
+      Timer(
+        Duration(milliseconds: 200),
+            () => Navigator.of(context).pop(),
+      );
+    }
   }
 }
 
@@ -198,4 +214,7 @@ class RadioGroupWidget extends State {
       ],
     );
   }
+
+
+
 }

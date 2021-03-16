@@ -20,7 +20,10 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      resizeToAvoidBottomInset: false,
+      body:SingleChildScrollView(
+    child: ConstrainedBox(
+    constraints: BoxConstraints(),
         child: Container(
           padding: EdgeInsets.all(15),
           child: Column(
@@ -143,7 +146,7 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   void validationForCollectClientSignature() {

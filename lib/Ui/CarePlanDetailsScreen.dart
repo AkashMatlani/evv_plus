@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+import 'package:url_launcher/url_launcher.dart';
 
 class CarePlanDetailsScreen extends StatefulWidget {
   @override
@@ -17,195 +17,206 @@ class CarePlanDetailsScreen extends StatefulWidget {
 }
 
 class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
-  var _checkInTimeController = TextEditingController();
-  var _checkOutDateController = TextEditingController();
+  MediaQueryData _mediaQueryData;
+  double screenWidth;
+  double screenHeight;
+  double blockSizeHorizontal;
+  double blockSizeVertical;
 
   var p="1234567890";
   TimeOfDay _selectedTime = TimeOfDay(hour: 00, minute: 00);
   @override
   Widget build(BuildContext context) {
+    _mediaQueryData = MediaQuery.of(context);
+    screenWidth = _mediaQueryData.size.width;
+    screenHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = screenWidth / 100;
+    blockSizeVertical = screenHeight / 100;
     var boxWidth = MediaQuery.of(context).size.width*0.6/2;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
-            Container(
-              child: Column(
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height*0.38,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.zero,
-                            topLeft: Radius.zero,
-                            bottomLeft: Radius.zero,
-                            bottomRight: Radius.circular(100)
-                        ),
-                        gradient: LinearGradient(
-                            colors: [
-                              HexColor("#1785e9"),
-                              HexColor("#83cff2")
-                            ]
-                        )
-                    ),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 50),
-                        Row(
-                          children: [
-                            InkWell(
-                              onTap: (){ Navigator.of(context).pop();},
+            Column(
+              children: [
+                Container(
+                  height: blockSizeVertical*50,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.zero,
+                          topLeft: Radius.zero,
+                          bottomLeft: Radius.zero,
+                          bottomRight: Radius.circular(100)
+                      ),
+                      gradient: LinearGradient(
+                          colors: [
+                            HexColor("#1785e9"),
+                            HexColor("#83cff2")
+                          ]
+                      )
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 50),
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: (){ Navigator.of(context).pop();},
+                            child: Container(
+                              child: Icon(Icons.arrow_back, color: Colors.white),
+                              margin: EdgeInsets.only(left: 10),
+                            ),
+                          ),
+                          Expanded(
                               child: Container(
-                                child: Icon(Icons.arrow_back, color: Colors.white),
-                                margin: EdgeInsets.only(left: 10),
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.only(right: 20),
+                                child: Text(LabelStr.lblCarePlan, style: AppTheme.mediumSFTextStyle().copyWith(fontSize:22, color: Colors.white)),
+                              )
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        alignment: Alignment.center,
+                        child: Text("12th March 2021", style: AppTheme.boldSFTextStyle().copyWith(fontSize: 30, color: Colors.white)),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        width: MediaQuery.of(context).size.width*0.6,
+                        height: MediaQuery.of(context).size.height*0.1,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(width: 0.5, color: Colors.white)
+                        ),
+                        alignment: Alignment.center,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: boxWidth - 2,
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(LabelStr.lblCheckIn, style: AppTheme.regularSFTextStyle().copyWith(fontSize:14, color: Colors.white)),
+                                  SizedBox(height: 3),
+                                  Text("00:00 am", style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
+                                ],
                               ),
                             ),
-                            Expanded(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  margin: EdgeInsets.only(right: 20),
-                                  child: Text(LabelStr.lblCarePlan, style: AppTheme.mediumSFTextStyle().copyWith(fontSize:22, color: Colors.white)),
-                                )
+                            Container(
+                              height: MediaQuery.of(context).size.height*0.1,
+                              width: 1,
+                              color: Colors.white,
+                            ),
+                            Container(
+                              width: boxWidth - 2,
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(LabelStr.lblCheckout, style: AppTheme.regularSFTextStyle().copyWith(fontSize:14, color: Colors.white)),
+                                  SizedBox(height: 3),
+                                  Text("00:00 am", style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
+                                ],
+                              ),
                             )
                           ],
                         ),
-                        SizedBox(height: 15),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          alignment: Alignment.center,
-                          child: Text("12th March 2021", style: AppTheme.boldSFTextStyle().copyWith(fontSize: 30, color: Colors.white)),
-                        ),
-                        SizedBox(height: 10),
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.6,
-                          height: MediaQuery.of(context).size.height*0.1,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(width: 0.5, color: Colors.white)
-                          ),
-                          alignment: Alignment.center,
-                          child: Row(
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  height: blockSizeVertical*80,
+                  alignment: Alignment.topLeft,
+                  margin: EdgeInsets.only(left: 25, top: 50, right: 25),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: Text("Michale Johnson", style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 34)),
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                width: boxWidth - 2,
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(LabelStr.lblCheckIn, style: AppTheme.regularSFTextStyle().copyWith(fontSize:14, color: Colors.white)),
-                                    SizedBox(height: 3),
-                                    Text("00:00 am", style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                height: MediaQuery.of(context).size.height*0.1,
-                                width: 1,
-                                color: Colors.white,
-                              ),
-                              Container(
-                                width: boxWidth - 2,
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(LabelStr.lblCheckout, style: AppTheme.regularSFTextStyle().copyWith(fontSize:14, color: Colors.white)),
-                                    SizedBox(height: 3),
-                                    Text("00:00 am", style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
-                                  ],
-                                ),
-                              )
+                              Text(LabelStr.lblAge, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                              SizedBox(height: 5),
+                              Text("38 years", style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height*0.62,
-                    alignment: Alignment.topLeft,
-                    margin: EdgeInsets.only(left: 25, top: 60, right: 25),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Text("Michale Johnson", style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 34)),
+                          SizedBox(width: 30),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(LabelStr.lbNurse, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                              SizedBox(height: 5),
+                              Text("Selena Gomz", style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Text(LabelStr.lbPatientAddress, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                      SizedBox(height: 5),
+                      Text("3921, Kenwood place, orlando florida, 32801USA",
+                          style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                      SizedBox(height: 10),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(width: 1, color: Colors.black12)
                         ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(LabelStr.lblAge, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                                SizedBox(height: 5),
-                                Text("38 years", style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                              ],
-                            ),
-                            SizedBox(width: 30),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(LabelStr.lbNurse, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                                SizedBox(height: 5),
-                                Text("Selena Gomz", style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                              ],
+                        height: blockSizeVertical*30,
+                        alignment: Alignment.center,
+                        child: Text("Map view"),
+                      ),
+
+                      SizedBox(height: 10,),
+                      Expanded(
+                        flex: 2,
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                           child: Container(
+                             margin: EdgeInsets.only(bottom: blockSizeVertical*10),
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                    HexColor("#1785e9"),
+                                    HexColor("#83cff2")
+                                  ]),
+                                  borderRadius: BorderRadius.all(Radius.circular(5))),
+                              child: TextButton(
+                                child: Text(LabelStr.lbStartVisit,
+                                    style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                                onPressed: () {
+                                  FocusScope.of(context).requestFocus(FocusNode());
+                                  checkConnection().then((isConnected) {
+                                    if (isConnected) {
+                                      _showDialog(context);
+                                    } else {
+                                      ToastUtils.showToast(context,
+                                          LabelStr.connectionError, Colors.red);
+                                    }
+                                  });
+                                },
+                              ),
                             )
-                          ],
                         ),
-                        SizedBox(height: 10),
-                        Text(LabelStr.lbPatientAddress, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                        SizedBox(height: 5),
-                        Text("3921, Kenwood place, orlando florida, 32801USA",
-                            style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                        SizedBox(height: 10),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(width: 1, color: Colors.black12)
-                          ),
-                          height: 180,
-                          alignment: Alignment.center,
-                          child: Text("Map view"),
-                        ),
-                        SizedBox(height: 20),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
-                                HexColor("#1785e9"),
-                                HexColor("#83cff2")
-                              ]),
-                              borderRadius: BorderRadius.all(Radius.circular(5))),
-                          child: TextButton(
-                            child: Text(LabelStr.lbStartVisit,
-                                style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
-                            onPressed: () {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              checkConnection().then((isConnected) {
-                                if (isConnected) {
-                                  _showDialog(context);
-                                } else {
-                                  ToastUtils.showToast(context,
-                                      LabelStr.connectionError, Colors.red);
-                                }
-                              });
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
-                ],
-              ),
+                ),
+              ],
             ),
             Positioned(
-              top: MediaQuery.of(context).size.height*0.3,
+              top: blockSizeVertical*35,
               left: 25,
               right: -50,
               child: Container(
@@ -214,13 +225,27 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SvgPicture.asset(MyImage.user_placeholder, height: 120, width: 120),
-                    InkWell(
+                   // SvgPicture.asset(MyImage.user_placeholder, height: blockSizeVertical*20, width: 120),
+                    Container(
+                      height: blockSizeVertical*25,
+                      width: blockSizeHorizontal*25,
+                      margin: EdgeInsets.all(10),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(40),
+                        child: Image(
+                          image: NetworkImage(
+                              'https://www.tutorialkart.com/img/hummingbird.png'),
+                        ),
+                      ),
+                    ),                    InkWell(
                       onTap:() {
-                       // UrlLauncher.launch('tel:+${p.toString()}');
+                        _makingPhoneCall("1234567890");
                       },
-                      child: Expanded(
-                        child: SvgPicture.asset(MyImage.ic_call_icons, height: 130, width: 130)
+                      child: Container(
+                        padding: EdgeInsets.only(left: blockSizeVertical*5),
+                        child: Expanded(
+                          child: SvgPicture.asset(MyImage.ic_call_icons, height: blockSizeVertical*30, width: blockSizeVertical*30)
+                        ),
                       ),
                     )
                   ],
@@ -242,7 +267,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                 borderRadius:
                 BorderRadius.circular(20.0)), //this right here
             child: Container(
-                height: MediaQuery.of(context).size.height*0.18,
+                height:blockSizeVertical*20,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -253,7 +278,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                     ),
                     Flexible(
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20, right: 20, bottom: 30, top: 10),
+                          padding: EdgeInsets.only(left: 20, right: 10, bottom: 30, top: 10),
                           child: Text(
                             LabelStr.lblAskStartVisit,
                             style: AppTheme.mediumSFTextStyle().copyWith(color: HexColor("#3d3d3d")),
@@ -266,42 +291,47 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                       width: MediaQuery.of(context).size.width,
                       color: HexColor("#f5f5f5"),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 51,
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 51,
-                            alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width*0.4,
-                            child: TextButton(
-                                child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20)),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                }),
-                          ),
-                          SizedBox(width: 1),
-                          Container(
-                            width: 1,
-                            height: 51,
-                            color: HexColor("#f5f5f5"),
-                          ),
-                          Container(
-                            height: 51,
-                            alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width*0.4,
-                            child: TextButton(
-                                child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
-                                onPressed: () {
-                                  Timer(
-                                    Duration(milliseconds: 200),
-                                        () => Navigator.pushReplacement(
-                                        context, MaterialPageRoute(builder: (context) => CustomVisitMenuScreen())),
-                                  );
-                                }),
-                          ),
-                        ],
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 51,
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 51,
+                              alignment: Alignment.center,
+                              width: MediaQuery.of(context).size.width*0.4,
+                              child: TextButton(
+                                  child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20)),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                            ),
+                            SizedBox(width: 1),
+                            Container(
+                              width: 1,
+                              height: 51,
+                              color: HexColor("#f5f5f5"),
+                            ),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                              height: 51,
+                              alignment: Alignment.center,
+                              width: MediaQuery.of(context).size.width*0.4,
+                              child: TextButton(
+                                  child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
+                                  onPressed: () {
+                                    Timer(
+                                      Duration(milliseconds: 200),
+                                          () => Navigator.pushReplacement(
+                                          context, MaterialPageRoute(builder: (context) => CustomVisitMenuScreen())),
+                                    );
+                                  }),
+                            )),
+                          ],
+                        ),
                       ),
                     )
                   ],
@@ -328,5 +358,14 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
     final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
     final format = DateFormat.jm(); //"6:00 AM"
     return format.format(dt);
+  }
+
+  _makingPhoneCall(String number) async {
+    String  url ='tel:'+number;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
