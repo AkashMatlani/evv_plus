@@ -168,11 +168,11 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
 
   void validationForCompleteNoteScreen() {
     if (_clientNameController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterClientName, Colors.green);
+      ToastUtils.showToast(context, LabelStr.enterClientName, Colors.red);
     } else if (_clinicianNameController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterClinicianName, Colors.green);
+      ToastUtils.showToast(context, LabelStr.enterClinicianName, Colors.red);
     } else if (_signatureDateController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterSignatureDate, Colors.green);
+      ToastUtils.showToast(context, LabelStr.enterSignatureDate, Colors.red);
     } else {
       FocusScope.of(context).requestFocus(FocusNode());
       checkConnection().then((isConnected) {

@@ -1,7 +1,6 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
-import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +17,7 @@ class _ClientPatientSignatureScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: AppBar(
             toolbarHeight: 100,
             elevation: 0.0,

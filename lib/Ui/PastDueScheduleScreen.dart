@@ -32,7 +32,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
       String nurseId = prefs.getInt(PrefUtils.nurseId).toString();
       checkConnection().then((isConnected) {
         if(isConnected){
-          _getPastDueList(nurseId);
+          _getPastDueList("4");
         } else {
           ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
         }

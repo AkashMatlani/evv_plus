@@ -151,7 +151,7 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
 
   void validationForCollectClientSignature() {
     if (_commentController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterComment, Colors.green);
+      ToastUtils.showToast(context, LabelStr.enterComment, Colors.red);
     } else {
       Timer(
         Duration(milliseconds: 200),

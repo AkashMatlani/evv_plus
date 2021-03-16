@@ -5,6 +5,9 @@ class PrefUtils {
   static const String isLoggedIn = "com.evv_plus.isLoggedIn";
   static const String nurseId = "com.evv_plus.nurseId";
   static const String password = "com.evv_plus.password";
+  static const String email = "com.evv_plus.email";
+  static const String firstName = "com.evv_plus.firstName";
+  static const String lastName = "com.evv_plus.lastname";
   static const String isFirstTimeLogin = "com.evv_plus.isFirstTimeLogin";
 
   static setStringValue(String key, String defaultValue) async {
@@ -36,6 +39,9 @@ class PrefUtils {
   static void saveUserDataToPref(NurseResponse nurseDetails) {
     PrefUtils.setIntValue(PrefUtils.nurseId, nurseDetails.nurseid);
     PrefUtils.setStringValue(PrefUtils.password, nurseDetails.password);
+    PrefUtils.setStringValue(PrefUtils.email, nurseDetails.email);
+    PrefUtils.setStringValue(PrefUtils.firstName, nurseDetails.firstName);
+    PrefUtils.setStringValue(PrefUtils.lastName, nurseDetails.lastName);
     PrefUtils.setBoolValue(PrefUtils.isFirstTimeLogin, nurseDetails.isFirtsTimeLogin);
     PrefUtils.setBoolValue(PrefUtils.isLoggedIn, true);
   }
@@ -45,6 +51,9 @@ class PrefUtils {
     var _password = await getValueFor(PrefUtils.password);
     var _isLoggedIn = await getValueFor(PrefUtils.isLoggedIn);
     var _isFirstTimeLogin = await getValueFor(PrefUtils.isFirstTimeLogin);
+    var _isEmail = await getValueFor(PrefUtils.email);
+    var _isFirstName = await getValueFor(PrefUtils.firstName);
+    var _isLastName = await getValueFor(PrefUtils.lastName);
   }
 
   static Future getValueFor(String key) async {

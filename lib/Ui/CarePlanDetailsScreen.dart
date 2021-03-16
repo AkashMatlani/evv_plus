@@ -47,7 +47,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
             Column(
               children: [
                 Container(
-                  height: blockSizeVertical*50,
+                  height: blockSizeVertical*40,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                           topRight: Radius.zero,
@@ -143,6 +143,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: 40,),
                       Container(
                         child: Text("Michale Johnson", style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 34)),
                       ),
@@ -174,7 +175,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                       Text("3921, Kenwood place, orlando florida, 32801USA",
                           style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
                       SizedBox(height: 10),
-                      Container(
+                      /*Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(width: 1, color: Colors.black12)
@@ -182,11 +183,21 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                         height: blockSizeVertical*30,
                         alignment: Alignment.center,
                         child: Text("Map view"),
+                      ),*/
+                      Container(
+                        height: 200,
+                        child: GoogleMap(
+                          mapType: MapType.normal,
+                          initialCameraPosition: _kGooglePlex,
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                          },
+                        ),
                       ),
 
                       SizedBox(height: 10,),
                       Expanded(
-                        flex: 2,
+                        flex: 0,
                         child: Align(
                           alignment: Alignment.bottomCenter,
                            child: Container(
@@ -222,7 +233,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
               ],
             ),
             Positioned(
-              top: blockSizeVertical*35,
+              top: blockSizeVertical*30,
               left: 25,
               right: -50,
               child: Container(
@@ -231,9 +242,9 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                   // SvgPicture.asset(MyImage.user_placeholder, height: blockSizeVertical*20, width: 120),
-                    Container(
-                      height: blockSizeVertical*25,
+                   Image(image: AssetImage(MyImage.ic_rectangle,),height: 160,width: 160,),
+                   /* Container(
+                      height: ic_rectangle,
                       width: blockSizeHorizontal*25,
                       margin: EdgeInsets.all(10),
                       child: ClipRRect(
@@ -243,14 +254,14 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                               'https://www.tutorialkart.com/img/hummingbird.png'),
                         ),
                       ),
-                    ),                    InkWell(
+                    ),       */             InkWell(
                       onTap:() {
                         _makingPhoneCall("1234567890");
                       },
                       child: Container(
                         padding: EdgeInsets.only(left: blockSizeVertical*5),
                         child: Expanded(
-                          child: SvgPicture.asset(MyImage.ic_call_icons, height: blockSizeVertical*30, width: blockSizeVertical*30)
+                          child: SvgPicture.asset(MyImage.ic_call_icons, height: 160,width: 160,)
                         ),
                       ),
                     )
@@ -282,9 +293,9 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                       alignment: Alignment.center,
                       child: Text(LabelStr.lbStartVisit, style: AppTheme.headerTextStyle().copyWith(fontSize: 20)),
                     ),
-                    Flexible(
+                    Expanded(
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20, right: 10, bottom: 30, top: 10),
+                          padding: EdgeInsets.only(left: 20, right: 10, bottom: 0, top: 10),
                           child: Text(
                             LabelStr.lblAskStartVisit,
                             style: AppTheme.mediumSFTextStyle().copyWith(color: HexColor("#3d3d3d")),
@@ -309,7 +320,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                               alignment: Alignment.center,
                               width: MediaQuery.of(context).size.width*0.4,
                               child: TextButton(
-                                  child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20)),
+                                  child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   }),

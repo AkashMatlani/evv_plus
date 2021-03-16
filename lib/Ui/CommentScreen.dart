@@ -42,7 +42,7 @@ class _CommentScreenState extends State<CommentScreen> with SingleTickerProvider
         title: Container(
           alignment: Alignment.center,
           margin: EdgeInsets.only(right: 30),
-          child: Text(LabelStr.lblCarePlan, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
+          child: Text(LabelStr.lblComment, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
         ),
         backgroundColor: Colors.white10,
         elevation: 0.0,

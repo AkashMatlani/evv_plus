@@ -96,7 +96,7 @@ listRowItems(BuildContext context, int position) {
           Container(
             height: MediaQuery.of(context).size.height*0.09,
             padding: EdgeInsets.all(5),
-            alignment: Alignment.topRight,
+            alignment: Alignment.center,
             child: Row(
               children: [
                 Container(
@@ -106,7 +106,7 @@ listRowItems(BuildContext context, int position) {
                   child: SvgPicture.asset(MyImage.ic_fill_circle, color: HexColor("#2ab554")),
                 ),
                 SizedBox(width: 3),
-                Text("Care plan", style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
+                Text("Care Plan", style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
               ],
             ),
           )

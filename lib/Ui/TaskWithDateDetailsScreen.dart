@@ -309,9 +309,9 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
 
   void validationForCollectClientSignature() {
     if (_clientNameController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterClientName, Colors.green);
+      ToastUtils.showToast(context, LabelStr.enterClientName, Colors.red);
     } else if (_clinicianNameController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterClinicianName, Colors.green);
+      ToastUtils.showToast(context, LabelStr.enterClinicianName, Colors.red);
     } else {
       Utils.navigateToScreen(context, VerificationMenuScreen());
     }

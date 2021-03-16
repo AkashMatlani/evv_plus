@@ -1,6 +1,7 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/Ui/ChangePwdScreen.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
@@ -9,6 +10,7 @@ import 'package:evv_plus/Ui/TaskWithDateDetailsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../GeneralUtils/Utils.dart';
 import 'CompletedScheduleScreen.dart';
@@ -26,6 +28,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   TabController _tabController;
   int activeTabIndex = 0;
   int _selectedIndex = 0;
+  String email,firstName,lastName;
 
   final List<String> _menuNameList = [
     LabelStr.lblHome,
@@ -74,6 +77,13 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       setState(() {
         activeTabIndex = _tabController.index;
       });
+    });
+
+    SharedPreferences.getInstance().then((prefs) async {
+      PrefUtils.getNurseDataFromPref();
+      email = prefs.getString(PrefUtils.email);
+      firstName = prefs.getString(PrefUtils.firstName);
+      lastName= prefs.getString(PrefUtils.lastName);
     });
   }
 
@@ -139,7 +149,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                         Container(
                           margin: EdgeInsets.only(left: 32),
                           width: MediaQuery.of(context).size.width,
-                          child: Text("Katiecomaina Willimson",
+                          child: Text(firstName+" "+lastName,
                               style: AppTheme.semiBoldSFTextStyle()
                                   .copyWith(fontSize: 20, color: Colors.white)),
                         ),
@@ -147,7 +157,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                         Container(
                           margin: EdgeInsets.only(left: 32),
                           width: MediaQuery.of(context).size.width,
-                          child: Text("example123@gmail.com",
+                          child: Text(email,
                               style: AppTheme.regularSFTextStyle()
                                   .copyWith(fontSize: 14, color: Colors.white60)),
                         ),

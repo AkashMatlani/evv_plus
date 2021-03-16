@@ -315,15 +315,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void validationForCollectClientSignature() {
     if (_addressLineOneController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterAddressLineOne, Colors.green);
+      ToastUtils.showToast(context, LabelStr.enterAddressLineOne, Colors.red);
     } else if (_addressLineTwoController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterAddressLineTwo, Colors.green);
+      ToastUtils.showToast(context, LabelStr.enterAddressLineTwo, Colors.red);
     } else if (_cityController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterCity, Colors.green);
+      ToastUtils.showToast(context, LabelStr.enterCity, Colors.red);
     } else if (_zipController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterZip, Colors.green);
+      ToastUtils.showToast(context, LabelStr.enterZip, Colors.red);
     } else if (_phoneController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterPhoneNumber, Colors.green);
+      ToastUtils.showToast(context, LabelStr.enterPhoneNumber, Colors.red);
     } else {
       Timer(
         Duration(milliseconds: 200),
