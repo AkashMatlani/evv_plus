@@ -7,18 +7,29 @@ import 'package:http/http.dart' as http;
 
 class WebService {
 
-  static const baseUrl = "http://35.231.45.54:70/api/Nurse/";
+  static const baseUrl = "http://35.231.45.54:70/api/";
 
-  static const nurseLogin = "NurseSignIn";
-  static const changePwd = "ChangePassword";
-  static const forgotPwd = "ForgetPassword";
+  static const nurseLogin = "Nurse/NurseSignIn";
+  static const changePwd = "Nurse/ChangePassword";
+  static const forgotPwd = "Nurse/ForgetPassword";
+  static const pastDueScheduleList = "Patient/PatientPastDueListing";
+  static const upcommingScheduleList = "Patient/PatientUpComingListing";
+  static const completeScheduleList = "Patient/PatientCompletedListing";
 
-  static Future<ServerResponse> getAPICall(String apiName,) async {
+  static Future<ServerResponse> getAPICall(String apiName, Map<String, dynamic> params) async {
     var url = baseUrl + apiName;
     print("Get Url :"+url);
     var postUri = Uri.parse(url);
 
-    var response = await http.get(postUri);
+    var response;
+    if(params != null){
+      String queryString = Uri(queryParameters: params).query;
+      var requestUrl = url + '?' + queryString;
+      var postUri = Uri.parse(requestUrl);
+      response = await http.get(postUri);
+    } else {
+      response = await http.get(postUri);
+    }
     var jsValue = json.decode(response.body);
     ServerResponse serverResponse = ServerResponse.withJson(jsValue);
     return serverResponse;

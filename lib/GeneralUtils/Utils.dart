@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 
 class Utils {
   static void showLoader(bool show, BuildContext context) {
@@ -50,9 +51,21 @@ class Utils {
 
   static bool isValidPassword(String password) {
     bool result = RegExp(
-            r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{5,}$")
+            r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$")
         .hasMatch(password);
     return result;
+  }
+
+  static String convertDate(String date){
+    DateTime tempDate = new DateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(date);
+    return DateFormat('dd/MM/yyyy').format(tempDate);
+  }
+
+  static String convertTime(String time){
+    TimeOfDay releaseTime = TimeOfDay(hour: int.parse(time.split(":")[0]), minute: int.parse(time.split(":")[1]));
+    final now = new DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, releaseTime.hour, releaseTime.minute);
+    return DateFormat("hh:mm a").format(dt);
   }
 }
 

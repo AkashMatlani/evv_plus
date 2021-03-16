@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CarePlanDetailsScreen extends StatefulWidget {
   @override
@@ -23,6 +24,11 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
   double blockSizeHorizontal;
   double blockSizeVertical;
 
+  Completer<GoogleMapController> _controller = Completer();
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(23.012429, 72.510775),
+    zoom: 14.4746,
+  );
   var p="1234567890";
   TimeOfDay _selectedTime = TimeOfDay(hour: 00, minute: 00);
   @override
