@@ -61,7 +61,7 @@ class _LoginScreen extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    child: Text(LabelStr.lblSignIn,
+                    child: Text(LabelStr.lblLogIn,
                         style: AppTheme.boldSFTextStyle().copyWith(fontSize: 28)),
                     width: MediaQuery.of(context).size.width,
                   ),
@@ -163,7 +163,7 @@ class _LoginScreen extends State<LoginScreen> {
              firstName = prefs.getString(PrefUtils.firstName);
              lastName= prefs.getString(PrefUtils.lastName);
             if(prefs.containsKey(PrefUtils.isFirstTimeLogin) && prefs.getBool(PrefUtils.isFirstTimeLogin)){
-              Utils.navigateReplaceToScreen(context, ScheduleScreen([email,firstName,lastName]));
+              Utils.navigateReplaceToScreen(context, ScheduleScreen());
             } else {
               Utils.navigateToScreen(context, ChangePwdScreen());
             }

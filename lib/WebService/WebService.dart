@@ -15,10 +15,15 @@ class WebService {
   static const pastDueScheduleList = "Patient/PatientPastDueListing";
   static const upcommingScheduleList = "Patient/PatientUpComingListing";
   static const completeScheduleList = "Patient/PatientCompletedListing";
+  static const scheduleCount = "Patient/TotalCount";
+  static const nurseVisitCheckInTime = "NurseVisit/NurseVisitCheckInTime";
+
   static const nurseDetail = "Nurse/ViewNurse";
   static const nurseUpdateProfile = "Nurse/UpdatenurseProfile";
   static const getState = "Nurse/GetAllState";
   static const getCity = "Nurse/GetCityByState";
+
+
   static Future<ServerResponse> getAPICall(String apiName, Map<String, dynamic> params) async {
     var url = baseUrl + apiName;
     print("Get Url :"+url);

@@ -26,7 +26,7 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
   @override
   void initState() {
     super.initState();
-    menuNameList = List<String>();
+    menuNameList = [];
     menuNameList = [
       LabelStr.lblPatientSign,
       LabelStr.lblPatientVoice,

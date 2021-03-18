@@ -37,7 +37,7 @@ dependencies:
   connectivity: '>=0.4.9 <2.0.0'
   flutter_calendar_carousel: ^1.5.3
   google_maps_flutter: ^2.0.1
-
+  url_launcher: ^6.0.2
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
@@ -10,6 +12,7 @@ import 'package:evv_plus/Ui/CarePlanDetailsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CompletedScheduleScreen extends StatefulWidget {
@@ -21,6 +24,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
 
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   List<ScheduleInfoResponse> _completedVisitList = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -28,13 +32,17 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
     SharedPreferences.getInstance().then((prefs) async {
       PrefUtils.getNurseDataFromPref();
       String nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-      checkConnection().then((isConnected) {
-        if(isConnected){
-          _getCompletedList(nurseId);
-        } else {
-          ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
-        }
-      });
+      Timer(
+        Duration(milliseconds: 100), (){
+        checkConnection().then((isConnected) {
+          if(isConnected){
+            _getCompletedList(nurseId);
+          } else {
+            ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
+          }
+        });
+      },
+      );
     });
   }
 
@@ -53,14 +61,14 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
   emptyListView() {
     return Container(
       alignment: Alignment.center,
-      child: Text(LabelStr.lblNoData, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 18, color: Colors.red)),
+      child: isLoading ? Container() : Text(LabelStr.lblNoData, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 18, color: Colors.red)),
     );
   }
 
   listRowItems(BuildContext context, int position) {
     return InkWell(
       onTap: (){
-        Utils.navigateToScreen(context, CarePlanDetailsScreen());
+        Utils.navigateToScreen(context, CarePlanDetailsScreen(_completedVisitList[position]));
       },
       child: Card(
         elevation: 2,
@@ -93,7 +101,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
                       children: [
                         Text(_completedVisitList[position].firstName+" "+_completedVisitList[position].lastName, style: AppTheme.boldSFTextStyle().copyWith(fontSize: 16)),
                         SizedBox(height: 3),
-                        Text(Utils.convertDate(_completedVisitList[position].visitDate), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
+                        Text(Utils.convertDate(_completedVisitList[position].visitDate, DateFormat('dd/MM/yyyy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
                         SizedBox(height: 3),
                         Text(Utils.convertTime(_completedVisitList[position].timeFrom.substring(0, 5))+" - "+Utils.convertTime(_completedVisitList[position].timeTo.substring(0, 5)), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696")))
                       ],
@@ -129,6 +137,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
     Utils.showLoader(true, context);
     _scheduleViewModel.getCompletedListAPICall(nurseId, (isSuccess, response){
       Utils.showLoader(false, context);
+      isLoading = false;
       if(isSuccess){
         setState(() {
           _completedVisitList = [];
