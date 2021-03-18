@@ -8,10 +8,11 @@ class PrefUtils {
   static const String email = "com.evv_plus.email";
   static const String firstName = "com.evv_plus.firstName";
   static const String MiddleName = "com.evv_plus.middleName";
+  static const String lastName = "com.evv_plus.lastname";
+  static const String fullName = "com.evv_plus.fullname";
   static const String NurseImage = "com.evv_plus.nusrseImage";
   static const String Gender = "com.evv_plus.gender";
   static const String DateOfBirth = "com.evv_plus.dateOfBirth";
-  static const String lastName = "com.evv_plus.lastname";
   static const String addressLineOne = "com.evv_plus.addressLineOne";
   static const String addressLineTwo = "com.evv_plus.addressLineTwo";
   static const String phoneNumber = "com.evv_plus.phoneNumber";
@@ -54,10 +55,15 @@ class PrefUtils {
     PrefUtils.setStringValue(PrefUtils.email, nurseDetails.email);
     PrefUtils.setStringValue(PrefUtils.firstName, nurseDetails.firstName);
     PrefUtils.setStringValue(PrefUtils.MiddleName, nurseDetails.middleName);
+    PrefUtils.setStringValue(PrefUtils.lastName, nurseDetails.lastName);
+
+    String nurseName = nurseDetails.firstName + " "+nurseDetails.middleName+" "+nurseDetails.lastName;
+    PrefUtils.setStringValue(PrefUtils.fullName, nurseName);
+
     PrefUtils.setStringValue(PrefUtils.NurseImage, nurseDetails.nurseImage);
     PrefUtils.setStringValue(PrefUtils.Gender, nurseDetails.gender);
     PrefUtils.setStringValue(PrefUtils.DateOfBirth, nurseDetails.dateOfBirth);
-    PrefUtils.setStringValue(PrefUtils.lastName, nurseDetails.lastName);
+
     PrefUtils.setStringValue(PrefUtils.addressLineOne, nurseDetails.address1);
     PrefUtils.setStringValue(PrefUtils.addressLineTwo, nurseDetails.address2);
     PrefUtils.setStringValue(PrefUtils.phoneNumber, nurseDetails.phoneNumber);

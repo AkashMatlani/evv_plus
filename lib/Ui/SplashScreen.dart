@@ -15,7 +15,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  var email,firstName,lastName;
+
   void initState() {
     super.initState();
     Timer(
@@ -24,10 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
         SharedPreferences.getInstance().then((prefs) async {
           PrefUtils.getNurseDataFromPref();
           if(prefs.containsKey(PrefUtils.isLoggedIn) && prefs.getBool(PrefUtils.isLoggedIn)){
-            email = prefs.getString(PrefUtils.email);
-            firstName = prefs.getString(PrefUtils.firstName);
-            lastName= prefs.getString(PrefUtils.lastName);
-            Utils.navigateReplaceToScreen(context, ScheduleScreen([email,firstName,lastName]));
+            Utils.navigateReplaceToScreen(context, ScheduleScreen());
           } else {
             Utils.navigateReplaceToScreen(context, LoginScreen());
           }

@@ -1,9 +1,8 @@
 class LabelStr {
-  static const lblSignIn = "Sign In";
   static const lblEmailId = "Email ID";
   static const lblPassword = "Password";
   static const lblLogIn = "Log In";
-  static const lblForgotPwd = "Forgot Password";
+  static const lblForgotPwd = "Forgot Password?";
   static const lblResetPwd = "Reset Password";
   static const lblReset = "Reset";
   static const lblNewPwd = "New Password";
@@ -48,7 +47,7 @@ class LabelStr {
   static const enterNewPwd = "Please enter new password";
   static const enterConfirmPwd = "Please enter confirm password";
   static const pwdNotMatchError = "New password and confirm password should be same";
-  static const enterValidPwd = "Password must contain at least 1 characters, digits, special characters";
+  static const enterValidPwd = "Passwords must contain at least six characters including letters, numbers and special characters";
   static const lblAddressLineOne = "Address line 1";
   static const lblAddressLineTwo = "Address line 2";
   static const lblCity = "City";
@@ -60,7 +59,7 @@ class LabelStr {
   static const lblGetPatientSign= "Get Patient Sign";
   static const lblGetCaretakerSignature= "Get Caretaker Signature";
   static const lblGetReasonOther= "Reason : Other";
-  static const checkMailLink = "Please check your email box and click on the link";
+  static const checkMailLink = "Please check your email box";
   static const connectionError = "Please check you internet connectivity, Try again";
   static const serverError = "Server not responding, Try again";
   static const emptyFieldError = "Please fill required details";
@@ -84,8 +83,8 @@ class LabelStr {
   static const enterClinicianName = "Please enter clinician name";
   static const enterAddressLineOne = "Please enter addressline 1";
   static const enterAddressLineTwo = "Please enter addressline 2 ";
-  static const enterState= "Please select state";
   static const enterCity= "Please enter city";
+  static const enterState= "Please enter state";
   static const enterZip = "Please enter zip code";
   static const enterPhoneNumber = "Please enter phone number";
   static const enterComment = "Please enter comment";

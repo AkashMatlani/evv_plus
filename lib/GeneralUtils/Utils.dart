@@ -42,23 +42,22 @@ class Utils {
     );
   }
 
+  //r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"
   static bool isValidEmail(String email) {
-    bool result = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(email);
+    bool result = RegExp(r"^^[\w\.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(email);
     return result;
   }
 
   static bool isValidPassword(String password) {
     bool result = RegExp(
-            r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$")
+            r"(?=.*[A-Za-z])(?=.*\d)(?=.*[!@£$%^&*()#€])[A-Za-z\d!@£$%^&*()#€]{6,}$")
         .hasMatch(password);
     return result;
   }
 
-  static String convertDate(String date){
+  static String convertDate(String date, DateFormat outputFormat){
     DateTime tempDate = new DateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(date);
-    return DateFormat('dd/MM/yyyy').format(tempDate);
+    return outputFormat.format(tempDate);
   }
 
   static String convertTime(String time){

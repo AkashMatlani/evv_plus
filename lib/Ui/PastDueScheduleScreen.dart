@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
@@ -23,6 +25,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
 
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   List<ScheduleInfoResponse> _pastVisitList = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -30,13 +33,17 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
     SharedPreferences.getInstance().then((prefs) async {
       PrefUtils.getNurseDataFromPref();
       String nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-      checkConnection().then((isConnected) {
-        if(isConnected){
-          _getPastDueList("4");
-        } else {
-          ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
-        }
-      });
+      Timer(
+        Duration(milliseconds: 100), (){
+        checkConnection().then((isConnected) {
+          if(isConnected){
+            _getPastDueList(nurseId);
+          } else {
+            ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
+          }
+        });
+      },
+      );
     });
   }
 
@@ -55,7 +62,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
   emptyListView() {
     return Container(
       alignment: Alignment.center,
-      child: Text(LabelStr.lblNoData, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 18, color: Colors.red)),
+      child: isLoading ? Container() : Text(LabelStr.lblNoData, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 18, color: Colors.red)),
     );
   }
 
@@ -63,6 +70,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
     Utils.showLoader(true, context);
     _scheduleViewModel.getPastDueListAPICall(nurseId, (isSuccess, response){
       Utils.showLoader(false, context);
+      isLoading = false;
       if(isSuccess){
         setState(() {
           _pastVisitList = [];
@@ -79,7 +87,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
   listRowItems(BuildContext context, int position) {
     return InkWell(
       onTap: (){
-        Utils.navigateToScreen(context, CarePlanDetailsScreen());
+        Utils.navigateToScreen(context, CarePlanDetailsScreen(_pastVisitList[position]));
       },
       child: Card(
         elevation: 2,
@@ -112,7 +120,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
                       children: [
                         Text(_pastVisitList[position].firstName+" "+_pastVisitList[position].lastName, style: AppTheme.boldSFTextStyle().copyWith(fontSize: 16)),
                         SizedBox(height: 3),
-                        Text(Utils.convertDate(_pastVisitList[position].visitDate), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
+                        Text(Utils.convertDate(_pastVisitList[position].visitDate, DateFormat('dd/MM/yyyy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
                         SizedBox(height: 3),
                         Text(Utils.convertTime(_pastVisitList[position].timeFrom.substring(0, 5))+" - "+Utils.convertTime(_pastVisitList[position].timeTo.substring(0, 5)), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696")))
                       ],

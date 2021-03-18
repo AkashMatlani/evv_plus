@@ -15,6 +15,8 @@ class AuthViewModel{
   ValidationResult validateLogIn(String email, String password) {
     if (email.isEmpty) {
       return ValidationResult(false, LabelStr.enterUserEmail);
+    } else if(!email.startsWith(RegExp(r'^[a-zA-Z]'))){
+      return ValidationResult(false, LabelStr.enterValidEmail);
     } else if(!Utils.isValidEmail(email)){
       return ValidationResult(false, LabelStr.enterValidEmail);
     }
@@ -96,6 +98,8 @@ class AuthViewModel{
   ValidationResult validateForgotPwd(String email) {
     if (email.isEmpty) {
       return ValidationResult(false, LabelStr.enterUserEmail);
+    } else if(!email.startsWith(RegExp(r'^[a-zA-Z]'))){
+      return ValidationResult(false, LabelStr.enterValidEmail);
     } else if(!Utils.isValidEmail(email)){
       return ValidationResult(false, LabelStr.enterValidEmail);
     }

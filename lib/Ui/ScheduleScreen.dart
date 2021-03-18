@@ -3,6 +3,7 @@ import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/ChangePwdScreen.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:evv_plus/Ui/PastDueScheduleScreen.dart';
@@ -18,11 +19,9 @@ import 'NotificationScreen.dart';
 import 'ProfileScreen.dart';
 import 'UpcommingScheduleScreen.dart';
 
+
 class ScheduleScreen extends StatefulWidget {
-  var email;
-  var firstName;
-  var lastName;
-  ScheduleScreen([this.email,this.firstName,this.lastName]);
+
 
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
@@ -33,6 +32,10 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   TabController _tabController;
   int activeTabIndex = 0;
   int _selectedIndex = 0;
+
+  String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "";
+  String pastDueCount, upcommingCount, completeCount;
+  ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
 
   final List<String> _menuNameList = [
     LabelStr.lblHome,
@@ -82,12 +85,29 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         activeTabIndex = _tabController.index;
       });
     });
+
+    SharedPreferences.getInstance().then((prefs) async {
+      PrefUtils.getNurseDataFromPref();
+      nurseName = prefs.getString(PrefUtils.fullName);
+      nurseEmailId = prefs.getString(PrefUtils.email);
+      nurseProfile = prefs.getString(PrefUtils.NurseImage);
+      nurseId = prefs.getInt(PrefUtils.nurseId).toString();
+
+      _getScheduleCount();
+    });
+
+    setState(() {
+      pastDueCount="";
+      upcommingCount="";
+      completeCount="";
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var tabWidth = MediaQuery.of(context).size.width / 3;
+    var tabWidth = (MediaQuery.of(context).size.width-80) / 3;
     var tabHeight = MediaQuery.of(context).size.height * 0.1;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
@@ -145,7 +165,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                         Container(
                           margin: EdgeInsets.only(left: 32),
                           width: MediaQuery.of(context).size.width,
-                          child: Text("${widget.email[1]+""+widget.email[2]}",
+                          child: Text(nurseName,
                               style: AppTheme.semiBoldSFTextStyle()
                                   .copyWith(fontSize: 20, color: Colors.white)),
                         ),
@@ -153,7 +173,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                         Container(
                           margin: EdgeInsets.only(left: 32),
                           width: MediaQuery.of(context).size.width,
-                          child: Text(widget.email[0],
+                          child: Text(nurseEmailId,
                               style: AppTheme.regularSFTextStyle()
                                   .copyWith(fontSize: 14, color: Colors.white60)),
                         ),
@@ -219,7 +239,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                       child: TextField(
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: "Search Here..",
+                          hintText: "Search patient name/care plan",
                         ),
                         keyboardType: TextInputType.text,
                       )
@@ -227,7 +247,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                   Positioned(
                     child: InkWell(
                       onTap: (){
-                        ToastUtils.showToast(context, "Search Clicked", Colors.blueAccent);
+                        ToastUtils.showToast(context, "Selected Tab : "+activeTabIndex.toString(), Colors.blueAccent);
                       },
                       child: Container(
                         height: 30,
@@ -252,27 +272,27 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                       width: tabWidth,
                       height: tabHeight,
                       child: activeTabIndex == 0
-                          ? _columnSelected("Past Due(20)", Colors.blue, false)
+                          ? _columnSelected("Past Due("+pastDueCount+")", Colors.blue, false)
                           : _columnSelected(
-                          "Past Due(20)", HexColor("#969696"), true)),
+                          "Past Due("+pastDueCount+")", HexColor("#969696"), true)),
                 ),
                 Tab(
                   child: Container(
                       width: tabWidth,
                       height: tabHeight,
                       child: activeTabIndex == 1
-                          ? _columnSelected("Upcomming(20)", Colors.blue, false)
+                          ? _columnSelected("Upcoming("+upcommingCount+")", Colors.blue, false)
                           : _columnSelected(
-                          "Upcomming(20)", HexColor("#969696"), true)),
+                          "Upcoming("+upcommingCount+")", HexColor("#969696"), true)),
                 ),
                 Tab(
                   child: Container(
                       width: tabWidth,
                       height: tabHeight,
                       child: activeTabIndex == 2
-                          ? _columnSelected("Completed(30)", Colors.blue, false)
+                          ? _columnSelected("Completed("+completeCount+")", Colors.blue, false)
                           : _columnSelected(
-                          "Completed(30)", HexColor("#969696"), true)),
+                          "Completed("+completeCount+")", HexColor("#969696"), true)),
                 ),
               ],
               controller: _tabController,
@@ -332,19 +352,26 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         ) : BoxDecoration(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(menuIconsList[position], color: _selectedIndex == position ? Colors.white : Colors.black45),
             SizedBox(width: 15),
-            Expanded(
-              child: Container(
-                alignment: Alignment.centerLeft,
-                child: Text(_menuNameList[position], style: AppTheme.sfProLightTextStyle().copyWith(color: _selectedIndex == position ? Colors.white : Colors.black45)),
-              ),
+            Container(
+              child: Text(_menuNameList[position], style: AppTheme.sfProLightTextStyle().copyWith(color: _selectedIndex == position ? Colors.white : Colors.black45)),
             )
           ],
         ),
       ),
     );
+  }
+
+  _getScheduleCount(){
+    _scheduleViewModel.getScheduleCountAPICall(nurseId, (isSuccess, response) {
+      setState(() {
+        pastDueCount = _scheduleViewModel.pastDueVisitCount.toString();
+        upcommingCount = _scheduleViewModel.upcommingVisitCount.toString();
+        completeCount = _scheduleViewModel.completedVisitCount.toString();
+      });
+    });
   }
 }
