@@ -36,7 +36,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   double blockSizeHorizontal;
   double blockSizeVertical;
   AuthViewModel _nurseViewModel = AuthViewModel();
-  UpdateNurseProfile updateNurseProfile;
   var email,
       addressLineOne,
       addressLineTwo,
@@ -50,10 +49,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isLoading = true;
   String nurseId;
   List<StateData> stateList = [];
-  List<CityData> cityList;
+  List<CityData> cityList=[];
   String stateId;
   String cityId;
   String gender;
+  String state;
+  String city;
 
   @override
   void initState() {
@@ -72,6 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       gender = prefs.getString(PrefUtils.Gender);
       dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
       nurseImage = prefs.getString(PrefUtils.NurseImage);
+
       checkConnection().then((isConnected) {
         if (isConnected) {
           _getSateLIst();
@@ -80,6 +82,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
         }
       });
+      stateId = prefs.getInt(PrefUtils.stateId).toString();
+      if (stateList.length > 0) {
+        for (int i = 0; i < stateList.length; i++) {
+          stateId == stateList[i].stateId;
+          state = stateList[i].stateName;
+          return stateList[i].stateName;
+        }
+      }
+      _getCityList(stateId);
+      cityId = prefs.getInt(PrefUtils.cityId).toString();
+      if (cityList.length > 0) {
+        for (int i = 0; i < cityList.length; i++) {
+          cityId == cityList[i].cityId;
+          city = cityList[i].cityName;
+          return cityList[i].cityName;
+        }
+      }
     });
   }
 
@@ -90,7 +109,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     screenHeight = _mediaQueryData.size.height;
     blockSizeHorizontal = screenWidth / 100;
     blockSizeVertical = screenHeight / 100;
-
     if (isLoading) {
       return Container(
         color: Colors.white,
@@ -329,7 +347,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             isExpanded: true,
                             items: stateList.map((item) {
                               return new DropdownMenuItem(
-                                child: new Text(item.stateName),
+                                child: state != null
+                                    ? new Text(state)
+                                    : new Text(item.stateName),
                                 value: item.stateId.toString(),
                               );
                             }).toList(),
@@ -373,7 +393,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       isExpanded: true,
                                       items: cityList.map((item) {
                                         return new DropdownMenuItem(
-                                          child: new Text(item.cityName),
+                                          child: city != null
+                                              ? new Text(city)
+                                              : new Text(item.cityName),
                                           value: item.cityId.toString(),
                                         );
                                       }).toList(),
@@ -507,6 +529,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _phoneController.text = phoneNumber;
           firstName = _nurseViewModel.nurseResponse.firstName;
           lastName = _nurseViewModel.nurseResponse.lastName;
+          cityId = _nurseViewModel.nurseResponse.fkcityId.toString();
+          stateId = _nurseViewModel.nurseResponse.fkstateId.toString();
         });
       } else {
         setState(() {});

@@ -16,6 +16,10 @@ class PrefUtils {
   static const String addressLineTwo = "com.evv_plus.addressLineTwo";
   static const String phoneNumber = "com.evv_plus.phoneNumber";
   static const String zipCode = "com.evv_plus.zipCode";
+  static const String state="com.evv_plus.state";
+  static const String city="com.evv_plus.city";
+  static const String stateId="com.evv_plus.stateId";
+  static const String cityId="com.evv_plus.cityId";
   static const String isFirstTimeLogin = "com.evv_plus.isFirstTimeLogin";
 
   static setStringValue(String key, String defaultValue) async {
@@ -58,6 +62,10 @@ class PrefUtils {
     PrefUtils.setStringValue(PrefUtils.addressLineTwo, nurseDetails.address2);
     PrefUtils.setStringValue(PrefUtils.phoneNumber, nurseDetails.phoneNumber);
     PrefUtils.setStringValue(PrefUtils.zipCode, nurseDetails.zipCode);
+    PrefUtils.setStringValue(PrefUtils.state, nurseDetails.state);
+    PrefUtils.setStringValue(PrefUtils.city, nurseDetails.city);
+    PrefUtils.setIntValue(PrefUtils.stateId, nurseDetails.fkstateId);
+    PrefUtils.setIntValue(PrefUtils.cityId, nurseDetails.fkcityId);
     PrefUtils.setBoolValue(PrefUtils.isFirstTimeLogin, nurseDetails.isFirtsTimeLogin);
     PrefUtils.setBoolValue(PrefUtils.isLoggedIn, true);
   }

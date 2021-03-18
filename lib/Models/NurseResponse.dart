@@ -1,4 +1,3 @@
-
 class NurseResponse {
   int _nurseid;
   String _firstName;
@@ -11,8 +10,10 @@ class NurseResponse {
   String _phoneNumber;
   String _email;
   String _password;
-  int _fkcityId;
-  int _fkstateId;
+  int _cityId;
+  int _stateId;
+  String _city;
+  String _state;
   String _zipCode;
   String _dateOfBirth;
   dynamic _nurseImage;
@@ -31,65 +32,99 @@ class NurseResponse {
   List<dynamic> _tblPatients;
 
   int get nurseid => _nurseid;
+
   String get firstName => _firstName;
+
   String get middleName => _middleName;
+
   String get lastName => _lastName;
+
   String get gender => _gender;
+
   String get role => _role;
+
   String get address1 => _address1;
+
   String get address2 => _address2;
+
   String get phoneNumber => _phoneNumber;
+
   String get email => _email;
+
   String get password => _password;
-  int get fkcityId => _fkcityId;
-  int get fkstateId => _fkstateId;
+
+  int get fkcityId => _cityId;
+
+  int get fkstateId => _stateId;
+
+  String get city => _city;
+
+  String get state => _state;
+
   String get zipCode => _zipCode;
+
   String get dateOfBirth => _dateOfBirth;
+
   dynamic get nurseImage => _nurseImage;
+
   String get fkcreatedBy => _fkcreatedBy;
+
   String get createDate => _createDate;
+
   dynamic get fkmodifiedBy => _fkmodifiedBy;
+
   String get modifiedDate => _modifiedDate;
+
   bool get isActive => _isActive;
+
   bool get isDeleted => _isDeleted;
+
   dynamic get nurseGuid => _nurseGuid;
+
   String get staffOtherNo => _staffOtherNo;
+
   String get sequenceNo => _sequenceNo;
+
   String get staffNo => _staffNo;
+
   String get staffSSNNo => _staffSSNNo;
+
   bool get isFirtsTimeLogin => _isFirtsTimeLogin;
+
   List<dynamic> get tblPatients => _tblPatients;
 
-  NurseResponse({
-      int nurseid, 
-      String firstName, 
-      String middleName, 
-      String lastName, 
-      String gender, 
-      String role, 
-      String address1, 
-      String address2, 
-      String phoneNumber, 
-      String email, 
-      String password, 
-      int fkcityId, 
-      int fkstateId, 
-      String zipCode, 
-      String dateOfBirth, 
-      dynamic nurseImage, 
-      String fkcreatedBy, 
-      String createDate, 
-      dynamic fkmodifiedBy, 
-      String modifiedDate, 
-      bool isActive, 
-      bool isDeleted, 
-      dynamic nurseGuid, 
-      String staffOtherNo, 
-      String sequenceNo, 
-      String staffNo, 
-      String staffSSNNo, 
-      bool isFirtsTimeLogin, 
-      List<dynamic> tblPatients}){
+  NurseResponse(
+      {int nurseid,
+      String firstName,
+      String middleName,
+      String lastName,
+      String gender,
+      String role,
+      String address1,
+      String address2,
+      String phoneNumber,
+      String email,
+      String password,
+      int fkcityId,
+      int fkstateId,
+      String city,
+      String state,
+      String zipCode,
+      String dateOfBirth,
+      dynamic nurseImage,
+      String fkcreatedBy,
+      String createDate,
+      dynamic fkmodifiedBy,
+      String modifiedDate,
+      bool isActive,
+      bool isDeleted,
+      dynamic nurseGuid,
+      String staffOtherNo,
+      String sequenceNo,
+      String staffNo,
+      String staffSSNNo,
+      bool isFirtsTimeLogin,
+      List<dynamic> tblPatients}) {
     _nurseid = nurseid;
     _firstName = firstName;
     _middleName = middleName;
@@ -101,8 +136,10 @@ class NurseResponse {
     _phoneNumber = phoneNumber;
     _email = email;
     _password = password;
-    _fkcityId = fkcityId;
-    _fkstateId = fkstateId;
+    _cityId = fkcityId;
+    _stateId = fkstateId;
+    _city = city;
+    _state = state;
     _zipCode = zipCode;
     _dateOfBirth = dateOfBirth;
     _nurseImage = nurseImage;
@@ -119,7 +156,7 @@ class NurseResponse {
     _staffSSNNo = staffSSNNo;
     _isFirtsTimeLogin = isFirtsTimeLogin;
     _tblPatients = tblPatients;
-}
+  }
 
   NurseResponse.fromJson(dynamic json) {
     _nurseid = json["nurseid"];
@@ -133,8 +170,10 @@ class NurseResponse {
     _phoneNumber = json["phoneNumber"];
     _email = json["email"];
     _password = json["password"];
-    _fkcityId = json["fkcityId"];
-    _fkstateId = json["fkstateId"];
+    _cityId = json["cityId"];
+    _stateId = json["stateId"];
+    _city=json["city"];
+    _state=json["state"];
     _zipCode = json["zipCode"];
     _dateOfBirth = json["dateOfBirth"];
     _nurseImage = json["nurseImage"];
@@ -152,7 +191,7 @@ class NurseResponse {
     _isFirtsTimeLogin = json["isFirtsTimeLogin"];
     if (json["tblPatients"] != null) {
       _tblPatients = [];
-      /*json["tblPatients"].forEach((v) {
+     /* json["tblPatients"].forEach((v) {
         _tblPatients.add(dynamic.fromJson(v));
       });*/
     }
@@ -171,8 +210,10 @@ class NurseResponse {
     map["phoneNumber"] = _phoneNumber;
     map["email"] = _email;
     map["password"] = _password;
-    map["fkcityId"] = _fkcityId;
-    map["fkstateId"] = _fkstateId;
+    map["cityId"] = _cityId;
+    map["city"]=_city;
+    map["state"]=_state;
+    map["stateId"] = _stateId;
     map["zipCode"] = _zipCode;
     map["dateOfBirth"] = _dateOfBirth;
     map["nurseImage"] = _nurseImage;
@@ -193,5 +234,5 @@ class NurseResponse {
     }
     return map;
   }
-
 }
+
