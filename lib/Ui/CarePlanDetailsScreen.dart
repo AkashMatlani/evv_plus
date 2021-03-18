@@ -429,7 +429,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
         Timer(
           Duration(seconds: 2),
               () => Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => CustomVisitMenuScreen())),
+              context, MaterialPageRoute(builder: (context) => CustomVisitMenuScreen(widget._scheduleDetailInfo))),
         );
       } else{
         ToastUtils.showToast(context, message, Colors.red);

@@ -5,6 +5,7 @@ import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
 import 'package:evv_plus/Ui/CustomVisitMenuScreen.dart';
 import 'package:evv_plus/Ui/TaskWithDateDetailsScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -130,7 +131,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                             checkConnection().then((isConnected) {
                               if (isConnected) {
                                 Utils.navigateToScreen(
-                                    context, CustomVisitMenuScreen());
+                                    context, CustomVisitMenuScreen(ScheduleInfoResponse()));
                               } else {
                                 ToastUtils.showToast(context,
                                     LabelStr.connectionError, Colors.red);

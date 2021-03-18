@@ -88,6 +88,7 @@ class LabelStr {
   static const enterZip = "Please enter zip code";
   static const enterPhoneNumber = "Please enter phone number";
   static const enterComment = "Please enter comment";
+  static const invalidComment = "Comment must have more than 2 characters or less than 250 characters";
   static const enterSignatureDate = "Please enter signature date";
   static const lblLogout = "Logout";
   static const lblPatient = "Patient";

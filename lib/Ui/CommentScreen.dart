@@ -1,6 +1,7 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
 import 'package:evv_plus/Ui/CarePlanCommentScreen.dart';
 import 'package:evv_plus/Ui/PatientCommentScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CommentScreen extends StatefulWidget {
+  CommentScreen(this.isSearchVisible, this.scheduleDetailInfo);
+  bool isSearchVisible;
+  ScheduleInfoResponse scheduleDetailInfo;
+
   @override
   _CommentScreenState createState() => _CommentScreenState();
 }
@@ -96,8 +101,8 @@ class _CommentScreenState extends State<CommentScreen> with SingleTickerProvider
                   child: TabBarView(
                     controller: _tabController,
                     children: <Widget>[
-                      PatientCommentScreen(),
-                      CarePlanCommentScreen()
+                      PatientCommentScreen(widget.isSearchVisible, widget.scheduleDetailInfo),
+                      CarePlanCommentScreen(widget.isSearchVisible, widget.scheduleDetailInfo)
                     ],
                   ),
                 ),

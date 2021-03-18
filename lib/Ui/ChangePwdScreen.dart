@@ -15,6 +15,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ChangePwdScreen extends StatefulWidget {
+  ChangePwdScreen(this.title);
+  String title;
+
   @override
   _ChangePwdScreenState createState() => _ChangePwdScreenState();
 }
@@ -68,7 +71,7 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    child: Text(LabelStr.lblNewPwd,
+                    child: Text(widget.title,
                         style: AppTheme.boldSFTextStyle().copyWith(fontSize: 28)),
                     width: MediaQuery.of(context).size.width,
                   ),
