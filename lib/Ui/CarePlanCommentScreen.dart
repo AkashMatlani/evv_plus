@@ -38,8 +38,9 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
     planName = widget.scheduleDetailInfo.carePlanName;
     SharedPreferences.getInstance().then((prefs) async {
       PrefUtils.getNurseDataFromPref();
-      nurseId = prefs.getString(PrefUtils.nurseId);
+      nurseId = prefs.getInt(PrefUtils.nurseId).toString();
       nurseName = prefs.getString(PrefUtils.fullName);
+      print("CarePlane :: $nurseName");
     });
   }
   
@@ -57,7 +58,6 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               widget.isSearchVisible ? Container(
-                height: 50,
                 alignment: Alignment.centerLeft,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -65,39 +65,52 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
                 child: Stack(
                   children: [
                     Container(
-                        padding: EdgeInsets.only(left: 10, right: 50),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: LabelStr.lblSearchPatientOrPlan,
+                      height: 50,
+                      alignment: Alignment.centerLeft,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: HexColor("#eaeff2")),
+                      child: Stack(
+                        children: [
+                          Container(
+                              padding: EdgeInsets.only(left: 10, right: 50),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: LabelStr.lblSearchPatientOrPlan,
+                                ),
+                                keyboardType: TextInputType.text,
+                                controller: _searchController,
+                              )),
+                          Positioned(
+                            child: InkWell(
+                              onTap: () {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                checkConnection().then((isConnected) {
+                                  if(isConnected){
+                                    _getFilterItemList(context, _searchController.text.toString());
+                                  } else {
+                                    ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
+                                  }
+                                });
+                              },
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.all(5),
+                                child: SvgPicture.asset(MyImage.ic_search),
+                              ),
+                            ),
+                            right: 5,
+                            top: 10,
                           ),
-                          keyboardType: TextInputType.text,
-                          controller: _searchController,
-                        )),
-                    Positioned(
-                      child: InkWell(
-                        onTap: () {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          checkConnection().then((isConnected) {
-                            if(isConnected){
-                              _getFilterItemList(context, _searchController.text.toString());
-                            } else {
-                              ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
-                            }
-                          });
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(5),
-                          child: SvgPicture.asset(MyImage.ic_search),
-                        ),
+                        ],
                       ),
-                      right: 5,
-                      top: 10,
                     ),
-                    _filterList.length == 0 ? Container() : _searchListView()
+                    Container(
+                      child: _filterList.length == 0 ? Container() : _searchListView(),
+                    )
                   ],
                 ),
               ) : Container(),
@@ -192,19 +205,17 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
         });
   }
 
-  void _getFilterItemList(BuildContext context, String patientName) {
-    _nurseVisitViewModel.getFilterListAPICall("1", patientName, "", (isSuccess, message){
+  void _getFilterItemList(BuildContext context, String searchStr) {
+    Utils.showLoader(true, context);
+    _nurseVisitViewModel.getFilterListAPICall("2", "", searchStr, (isSuccess, message){
+      Utils.showLoader(false, context);
       if(isSuccess){
-        _filterList = [];
         setState(() {
           _filterList = _nurseVisitViewModel.commentFilterList;
         });
       } else {
-        _filterList = [];
         setState(() {
-          patientName = widget.scheduleDetailInfo.firstName+" "+
-              widget.scheduleDetailInfo.middleName+" "+
-              widget.scheduleDetailInfo.lastName;
+          planName = widget.scheduleDetailInfo.carePlanName;
         });
         ToastUtils.showToast(context, message, Colors.red);
       }
@@ -216,6 +227,7 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
       margin: EdgeInsets.only(right: 50, bottom: 5),
       color: HexColor("#eaeff2"),
       child: ListView.builder(
+        shrinkWrap: true,
         itemCount: _filterList.length,
         itemBuilder: (context, int index) {
           return Container(
@@ -233,14 +245,8 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
                 setState(() {
                   planName = _filterList[index].carePlanName;
                   patientId = _filterList[index].patientId.toString();
-                });
-                checkConnection().then((isConnected) {
-                  if (isConnected) {
-                    sendCommentApi();
-                  } else {
-                    ToastUtils.showToast(
-                        context, LabelStr.connectionError, Colors.red);
-                  }
+                  _searchController.text = planName;
+                  _filterList = [];
                 });
               },
               title: Text(_filterList[index].carePlanName,

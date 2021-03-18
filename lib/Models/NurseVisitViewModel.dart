@@ -18,6 +18,7 @@ class NurseVisitViewModel{
     };
     WebService.getAPICall(WebService.patientOrCarePlanSearch, params).then((response) {
       if (response.statusCode == 1) {
+        commentFilterList = [];
         for (var data in response.body) {
           commentFilterList.add(CommentFilterResponse.fromJson(data));
         }
@@ -33,7 +34,7 @@ class NurseVisitViewModel{
 
   ValidationResult validateCommentField(String comment) {
     if (comment.isEmpty) {
-      return ValidationResult(false, LabelStr.enterUserEmail);
+      return ValidationResult(false, LabelStr.enterComment);
     } else if(comment.length < 2 && comment.length > 250){
       return ValidationResult(false, LabelStr.invalidComment);
     }
