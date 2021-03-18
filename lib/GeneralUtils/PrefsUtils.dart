@@ -7,7 +7,15 @@ class PrefUtils {
   static const String password = "com.evv_plus.password";
   static const String email = "com.evv_plus.email";
   static const String firstName = "com.evv_plus.firstName";
+  static const String MiddleName = "com.evv_plus.middleName";
+  static const String NurseImage = "com.evv_plus.nusrseImage";
+  static const String Gender = "com.evv_plus.gender";
+  static const String DateOfBirth = "com.evv_plus.dateOfBirth";
   static const String lastName = "com.evv_plus.lastname";
+  static const String addressLineOne = "com.evv_plus.addressLineOne";
+  static const String addressLineTwo = "com.evv_plus.addressLineTwo";
+  static const String phoneNumber = "com.evv_plus.phoneNumber";
+  static const String zipCode = "com.evv_plus.zipCode";
   static const String isFirstTimeLogin = "com.evv_plus.isFirstTimeLogin";
 
   static setStringValue(String key, String defaultValue) async {
@@ -41,7 +49,15 @@ class PrefUtils {
     PrefUtils.setStringValue(PrefUtils.password, nurseDetails.password);
     PrefUtils.setStringValue(PrefUtils.email, nurseDetails.email);
     PrefUtils.setStringValue(PrefUtils.firstName, nurseDetails.firstName);
+    PrefUtils.setStringValue(PrefUtils.MiddleName, nurseDetails.middleName);
+    PrefUtils.setStringValue(PrefUtils.NurseImage, nurseDetails.nurseImage);
+    PrefUtils.setStringValue(PrefUtils.Gender, nurseDetails.gender);
+    PrefUtils.setStringValue(PrefUtils.DateOfBirth, nurseDetails.dateOfBirth);
     PrefUtils.setStringValue(PrefUtils.lastName, nurseDetails.lastName);
+    PrefUtils.setStringValue(PrefUtils.addressLineOne, nurseDetails.address1);
+    PrefUtils.setStringValue(PrefUtils.addressLineTwo, nurseDetails.address2);
+    PrefUtils.setStringValue(PrefUtils.phoneNumber, nurseDetails.phoneNumber);
+    PrefUtils.setStringValue(PrefUtils.zipCode, nurseDetails.zipCode);
     PrefUtils.setBoolValue(PrefUtils.isFirstTimeLogin, nurseDetails.isFirtsTimeLogin);
     PrefUtils.setBoolValue(PrefUtils.isLoggedIn, true);
   }
@@ -54,6 +70,14 @@ class PrefUtils {
     var _isEmail = await getValueFor(PrefUtils.email);
     var _isFirstName = await getValueFor(PrefUtils.firstName);
     var _isLastName = await getValueFor(PrefUtils.lastName);
+    var addressLineOne = await getValueFor(PrefUtils.addressLineOne);
+    var addressLineTwo = await getValueFor(PrefUtils.addressLineTwo);
+    var phoneNumber = await getValueFor(PrefUtils.phoneNumber);
+    var zipCode = await getValueFor(PrefUtils.zipCode);
+    var middleName = await getValueFor(PrefUtils.MiddleName);
+    var gender = await getValueFor(PrefUtils.Gender);
+    var dateOfBirth = await getValueFor(PrefUtils.DateOfBirth);
+    var nurseImage = await getValueFor(PrefUtils.NurseImage);
   }
 
   static Future getValueFor(String key) async {

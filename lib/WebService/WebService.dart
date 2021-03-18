@@ -15,7 +15,10 @@ class WebService {
   static const pastDueScheduleList = "Patient/PatientPastDueListing";
   static const upcommingScheduleList = "Patient/PatientUpComingListing";
   static const completeScheduleList = "Patient/PatientCompletedListing";
-
+  static const nurseDetail = "Nurse/ViewNurse";
+  static const nurseUpdateProfile = "Nurse/UpdatenurseProfile";
+  static const getState = "Nurse/GetAllState";
+  static const getCity = "Nurse/GetCityByState";
   static Future<ServerResponse> getAPICall(String apiName, Map<String, dynamic> params) async {
     var url = baseUrl + apiName;
     print("Get Url :"+url);
@@ -35,6 +38,21 @@ class WebService {
     return serverResponse;
   }
 
+
+  static Future<ServerResponse> getAPICallWithoutParmas(String apiName) async {
+    var url = baseUrl + apiName;
+    print("Get Url :"+url);
+    var postUri = Uri.parse(url);
+
+    var response;
+      var requestUrl = url;
+      var postUris = Uri.parse(requestUrl);
+      response = await http.get(postUris);
+
+    var jsValue = json.decode(response.body);
+    ServerResponse serverResponse = ServerResponse.withJson(jsValue);
+    return serverResponse;
+  }
   static Future<ServerResponse> postAPICall(
       String apiName, Map<String, dynamic> params) async {
     var url = baseUrl + apiName;

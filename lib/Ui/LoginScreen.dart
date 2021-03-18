@@ -29,7 +29,7 @@ class _LoginScreen extends State<LoginScreen> {
   var _passwordController = TextEditingController();
 
   var _authViewModel = AuthViewModel();
-
+  var email,firstName,lastName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,8 +159,11 @@ class _LoginScreen extends State<LoginScreen> {
           Duration(seconds: 2), () {
           SharedPreferences.getInstance().then((prefs) async {
             PrefUtils.getNurseDataFromPref();
+             email = prefs.getString(PrefUtils.email);
+             firstName = prefs.getString(PrefUtils.firstName);
+             lastName= prefs.getString(PrefUtils.lastName);
             if(prefs.containsKey(PrefUtils.isFirstTimeLogin) && prefs.getBool(PrefUtils.isFirstTimeLogin)){
-              Utils.navigateReplaceToScreen(context, ScheduleScreen());
+              Utils.navigateReplaceToScreen(context, ScheduleScreen([email,firstName,lastName]));
             } else {
               Utils.navigateToScreen(context, ChangePwdScreen());
             }

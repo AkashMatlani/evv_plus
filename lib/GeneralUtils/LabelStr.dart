@@ -84,6 +84,7 @@ class LabelStr {
   static const enterClinicianName = "Please enter clinician name";
   static const enterAddressLineOne = "Please enter addressline 1";
   static const enterAddressLineTwo = "Please enter addressline 2 ";
+  static const enterState= "Please select state";
   static const enterCity= "Please enter city";
   static const enterZip = "Please enter zip code";
   static const enterPhoneNumber = "Please enter phone number";

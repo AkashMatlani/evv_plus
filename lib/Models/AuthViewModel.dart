@@ -5,6 +5,11 @@ import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/NurseResponse.dart';
 import 'package:evv_plus/WebService/WebService.dart';
 
+import 'CityListResponse.dart';
+import 'StateListResponse.dart';
+import 'UpdateNurseProfile.dart';
+import 'StateListResponse.dart';
+
 class AuthViewModel{
 
   ValidationResult validateLogIn(String email, String password) {
@@ -117,4 +122,96 @@ class AuthViewModel{
       callback(false, validateResult.message);
     }
   }
+
+  NurseResponse nurseResponse;
+  void getProfileAPICall(String nurseId, ResponseCallback callback) {
+    var params = {
+      "NurseId":nurseId,
+
+    };
+    WebService.getAPICall(WebService.nurseDetail, params).then((response) {
+      if (response.statusCode == 1) {
+        if (response.body!=null) {
+          nurseResponse= NurseResponse.fromJson(response.body);
+        }
+        callback(true, "");
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+  UpdateNurseProfile updateNurseProfile;
+  void getUpdateProfileAPICall(String nurseId, String addressOne,String addressTwo,String zipCode,String city,String state,String phoneNumber,String firstName,String middleName,String lastName,String gender,String dateOfBirth,String email,String nurseImage,ResponseCallback callback) {
+    var params = {"NurseId":nurseId,
+      "Address1":addressOne,
+      "Address2":addressTwo,
+      "ZipCode":zipCode,
+      "FKcityID":city,
+      "FKstateID":state,
+      "PhoneNumber":phoneNumber,
+      "FirstName":firstName,
+      "MiddleName":middleName,
+      "LastName":lastName,
+      "Gender":gender,
+      "DateOfBirth":dateOfBirth,
+      "Email":email,
+      "NurseImage":nurseImage
+    };
+
+    WebService.postAPICall(WebService.nurseUpdateProfile, params).then((response) {
+      if (response.statusCode == 1) {
+        if (response.body!=null) {
+          updateNurseProfile= UpdateNurseProfile.fromJson(response.body);
+        }
+        callback(true, updateNurseProfile);
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+  List<StateData> stateList = [];
+
+  void getStateList(ResponseCallback callback) {
+    WebService.getAPICallWithoutParmas(WebService.getState).then((response) {
+      if (response.statusCode == 1) {
+        for (var data in response.body) {
+          stateList.add(StateData.fromJson(data));
+        }
+        callback(true, "");
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+  List<CityData> cityDataList = [];
+
+  void getCityList(String stateId, ResponseCallback callback) {
+    var params = {"StateId":stateId};
+    WebService.getAPICall(WebService.getCity, params).then((response) {
+      if (response.statusCode == 1) {
+        for (var data in response.body) {
+          cityDataList.add(CityData.fromJson(data));
+        }
+        callback(true, "");
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
 }

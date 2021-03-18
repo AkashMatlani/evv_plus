@@ -19,6 +19,11 @@ import 'ProfileScreen.dart';
 import 'UpcommingScheduleScreen.dart';
 
 class ScheduleScreen extends StatefulWidget {
+  var email;
+  var firstName;
+  var lastName;
+  ScheduleScreen([this.email,this.firstName,this.lastName]);
+
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
 }
@@ -28,7 +33,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   TabController _tabController;
   int activeTabIndex = 0;
   int _selectedIndex = 0;
-  String email,firstName,lastName;
 
   final List<String> _menuNameList = [
     LabelStr.lblHome,
@@ -78,20 +82,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         activeTabIndex = _tabController.index;
       });
     });
-
-    SharedPreferences.getInstance().then((prefs) async {
-      PrefUtils.getNurseDataFromPref();
-      email = prefs.getString(PrefUtils.email);
-      firstName = prefs.getString(PrefUtils.firstName);
-      lastName= prefs.getString(PrefUtils.lastName);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     var tabWidth = MediaQuery.of(context).size.width / 3;
     var tabHeight = MediaQuery.of(context).size.height * 0.1;
-
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
@@ -149,7 +145,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                         Container(
                           margin: EdgeInsets.only(left: 32),
                           width: MediaQuery.of(context).size.width,
-                          child: Text(firstName+" "+lastName,
+                          child: Text("${widget.email[1]+""+widget.email[2]}",
                               style: AppTheme.semiBoldSFTextStyle()
                                   .copyWith(fontSize: 20, color: Colors.white)),
                         ),
@@ -157,7 +153,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                         Container(
                           margin: EdgeInsets.only(left: 32),
                           width: MediaQuery.of(context).size.width,
-                          child: Text(email,
+                          child: Text(widget.email[0],
                               style: AppTheme.regularSFTextStyle()
                                   .copyWith(fontSize: 14, color: Colors.white60)),
                         ),
