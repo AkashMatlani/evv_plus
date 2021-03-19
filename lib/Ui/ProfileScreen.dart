@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:date_format/date_format.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
@@ -6,11 +7,11 @@ import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
 import 'package:evv_plus/Models/CityListResponse.dart';
 import 'package:evv_plus/Models/StateListResponse.dart';
-import 'package:evv_plus/Models/UpdateNurseProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../GeneralUtils/ColorExtension.dart';
@@ -25,7 +26,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   var _addressLineOneController = TextEditingController();
   var _addressLineTwoController = TextEditingController();
-  var _cityController = TextEditingController();
   var _zipController = TextEditingController();
   var _phoneController = TextEditingController();
 
@@ -55,7 +55,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String gender;
   String state;
   String city;
-
+  String formattedStr;
+  String apiDateString;
   @override
   void initState() {
     super.initState();
@@ -72,8 +73,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       lastName = prefs.getString(PrefUtils.lastName);
       gender = prefs.getString(PrefUtils.Gender);
       dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
+      print("dateofbirth"+dateOfBirth);
       nurseImage = prefs.getString(PrefUtils.NurseImage);
-
+      DateTime tempDate = new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
+      print("tenpdate"+tempDate.toString());
+      formattedStr = formatDate(tempDate, [dd, '/', mm, '/', yyyy]);
+      print("formattedStr"+formattedStr);
       checkConnection().then((isConnected) {
         if (isConnected) {
           _getSateLIst();
@@ -221,7 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: 5,
                               ),
                               Text(
-                                "02/12/1990",
+                                formattedStr,
                                 style: AppTheme.regularSFTextStyle().copyWith(
                                     fontSize: 16, color: Color(0xff868686)),
                               )
@@ -325,6 +330,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 5,
                     ),
                     Container(
+                      padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
+                      child: Align(alignment:Alignment.topLeft,child: Container(child: Text("State",style: AppTheme.semiBoldSFTextStyle()
+                          .copyWith(fontSize: 14),),)),
+                    ),
+                    Container(
                       color: Colors.white,
                       child: Center(
                         child: Container(
@@ -364,6 +374,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ),
+                    ),
+
+                    Container(
+                      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      child: Align(alignment:Alignment.topLeft,child: Container(child: Text("City",style: AppTheme.semiBoldSFTextStyle()
+                          .copyWith(fontSize: 14),),)),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -490,7 +506,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           middleName,
           lastName,
           gender,
-          dateOfBirth,
+          apiDateString,
           email,
           nurseImage, (isSuccess, response) {
         Utils.showLoader(false, context);
@@ -531,6 +547,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           lastName = _nurseViewModel.nurseResponse.lastName;
           cityId = _nurseViewModel.nurseResponse.fkcityId.toString();
           stateId = _nurseViewModel.nurseResponse.fkstateId.toString();
+          dateOfBirth=_nurseViewModel.nurseResponse.dateOfBirth;
+          DateTime tempDate = new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
+          print("tenpdate"+tempDate.toString());
+          apiDateString = formatDate(tempDate, [yyyy, '-', mm, '-', dd]);
+          print("formattedStr"+apiDateString);
         });
       } else {
         setState(() {});

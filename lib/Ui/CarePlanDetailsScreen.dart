@@ -38,6 +38,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
     target: LatLng(23.012429, 72.510775),
     zoom: 14.4746,
   );
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{}; // CLASS MEMBER, MAP OF MARKS
 
   TimeOfDay _selectedTime = TimeOfDay(hour: 00, minute: 00);
 
@@ -220,6 +221,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                           onMapCreated: (GoogleMapController controller) {
                             _controller.complete(controller);
                           },
+                            markers: Set<Marker>.of(  markers.values)
                         ),
                       ),
 
