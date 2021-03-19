@@ -165,7 +165,7 @@ class _LoginScreen extends State<LoginScreen> {
             if(prefs.containsKey(PrefUtils.isFirstTimeLogin) && prefs.getBool(PrefUtils.isFirstTimeLogin)){
               Utils.navigateReplaceToScreen(context, ScheduleScreen());
             } else {
-              Utils.navigateToScreen(context, ChangePwdScreen());
+              Utils.navigateToScreen(context, ChangePwdScreen(LabelStr.lblNewPwd));
             }
           });
           },

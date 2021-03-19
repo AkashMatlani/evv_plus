@@ -2,6 +2,7 @@ import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
 import 'package:evv_plus/Ui/CarePlanPdfScreen.dart';
 import 'package:evv_plus/Ui/CommentScreen.dart';
 import 'package:evv_plus/Ui/CompletedNoteScreen.dart';
@@ -14,6 +15,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../GeneralUtils/ColorExtension.dart';
 
 class CustomVisitMenuScreen extends StatefulWidget {
+  CustomVisitMenuScreen(this.scheduleDetailInfo);
+  ScheduleInfoResponse scheduleDetailInfo;
+
   @override
   _CustomVisitMenuScreenState createState() => _CustomVisitMenuScreenState();
 }
@@ -142,11 +146,11 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
         } else if (position == 1) {
           Utils.navigateToScreen(context, VisitHistoryListScreen());
         } else if (position == 2) {
-          Utils.navigateToScreen(context, CommentScreen());
+          Utils.navigateToScreen(context, CommentScreen(false, widget.scheduleDetailInfo));
         } else if (position == 3) {
           Utils.navigateToScreen(context, DailyLivingTask());
         } else if (position == 4) {
-          Utils.navigateToScreen(context, CommentScreen());
+          Utils.navigateToScreen(context, CommentScreen(true, widget.scheduleDetailInfo));
         }
       },
       child: Card(

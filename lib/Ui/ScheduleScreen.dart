@@ -68,7 +68,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     } else if (index == 4) {
       Utils.navigateToScreen(context, ProfileScreen());
     } else if (index == 5) {
-      Utils.navigateToScreen(context, ChangePwdScreen());
+      Utils.navigateToScreen(context, ChangePwdScreen(LabelStr.lblChangePwd));
     }
   }
 

@@ -82,8 +82,8 @@ class ScheduleViewModel{
 
   void nurseCheckInAPICall(String nurseId, String patientId, String checkInDate, String checkInTime, ResponseCallback callback, {Function onInactiveAccount}) {
     var params = {
-      "PatientId": patientId,
-      "NurseId": nurseId,
+      "PatientId": "4",
+      "NurseId": "7",
       "CheckOutTime": "00:00:00",
       "CheckOutDate":"",
       "CheckInTime":checkInTime,
