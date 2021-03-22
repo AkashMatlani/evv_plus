@@ -205,12 +205,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                   child: Container(
                     height: MediaQuery.of(context).size.height*0.1,
                     margin: EdgeInsets.only(left: 25),
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.fromLTRB(20,0,10,0),
                     child: Row(
                       children: [
                         SvgPicture.asset(MyImage.logout_icon),
                         SizedBox(width: 15),
-                        Text(LabelStr.lblLogout, style: AppTheme.sfProLightTextStyle().copyWith(color: Colors.black45))
+                        Container( padding: EdgeInsets.fromLTRB(15,0,10,0),child: Text(LabelStr.lblLogout, style: AppTheme.sfProLightTextStyle().copyWith(color: Colors.black45)))
                       ],
                     ),
                   ),
@@ -354,9 +354,10 @@ class _ScheduleScreenState extends State<ScheduleScreen>
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SvgPicture.asset(menuIconsList[position], color: _selectedIndex == position ? Colors.white : Colors.black45),
+            Container(padding:EdgeInsets.fromLTRB(5, 0, 0, 0),child: SvgPicture.asset(menuIconsList[position], color: _selectedIndex == position ? Colors.white : Colors.black45)),
             SizedBox(width: 15),
             Container(
+              padding:EdgeInsets.fromLTRB(15, 0, 5, 0),
               child: Text(_menuNameList[position], style: AppTheme.sfProLightTextStyle().copyWith(color: _selectedIndex == position ? Colors.white : Colors.black45)),
             )
           ],

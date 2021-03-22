@@ -39,7 +39,7 @@ class AuthViewModel{
       WebService.postAPICall(WebService.nurseLogin, params).then((response) {
         if (response.statusCode == 1) {
           if (response.body != null) {
-            PrefUtils.saveUserDataToPref(NurseResponse.fromJson(response.body));
+            PrefUtils.saveUserDataToPref(NurseResponse.fromJson(response.body),password);
             callback(true, "");
           }
         } else {

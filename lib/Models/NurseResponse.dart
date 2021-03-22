@@ -12,8 +12,8 @@ class NurseResponse {
   String _password;
   int _cityId;
   int _stateId;
-  String _city;
-  String _state;
+  String _cityName;
+  String _stateName;
   String _zipCode;
   String _dateOfBirth;
   dynamic _nurseImage;
@@ -57,9 +57,9 @@ class NurseResponse {
 
   int get fkstateId => _stateId;
 
-  String get city => _city;
+  String get city => _cityName;
 
-  String get state => _state;
+  String get state => _stateName;
 
   String get zipCode => _zipCode;
 
@@ -138,8 +138,8 @@ class NurseResponse {
     _password = password;
     _cityId = fkcityId;
     _stateId = fkstateId;
-    _city = city;
-    _state = state;
+    _cityName = city;
+    _stateName = state;
     _zipCode = zipCode;
     _dateOfBirth = dateOfBirth;
     _nurseImage = nurseImage;
@@ -172,8 +172,8 @@ class NurseResponse {
     _password = json["password"];
     _cityId = json["cityId"];
     _stateId = json["stateId"];
-    _city=json["city"];
-    _state=json["state"];
+    _cityName=json["cityName"];
+    _stateName=json["stateName"];
     _zipCode = json["zipCode"];
     _dateOfBirth = json["dateOfBirth"];
     _nurseImage = json["nurseImage"];
@@ -211,8 +211,8 @@ class NurseResponse {
     map["email"] = _email;
     map["password"] = _password;
     map["cityId"] = _cityId;
-    map["city"]=_city;
-    map["state"]=_state;
+    map["cityName"]=_cityName;
+    map["stateName"]=_stateName;
     map["stateId"] = _stateId;
     map["zipCode"] = _zipCode;
     map["dateOfBirth"] = _dateOfBirth;

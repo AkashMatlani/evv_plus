@@ -21,6 +21,8 @@ class PrefUtils {
   static const String city="com.evv_plus.city";
   static const String stateId="com.evv_plus.stateId";
   static const String cityId="com.evv_plus.cityId";
+  static const String cityName="com.evv_plus.cityName";
+  static const String stateName="com.evv_plus.stateName";
   static const String isFirstTimeLogin = "com.evv_plus.isFirstTimeLogin";
 
   static setStringValue(String key, String defaultValue) async {
@@ -49,9 +51,9 @@ class PrefUtils {
     prefs.clear();
   }
 
-  static void saveUserDataToPref(NurseResponse nurseDetails) {
+  static void saveUserDataToPref(NurseResponse nurseDetails,String password) {
     PrefUtils.setIntValue(PrefUtils.nurseId, nurseDetails.nurseid);
-    PrefUtils.setStringValue(PrefUtils.password, nurseDetails.password);
+    PrefUtils.setStringValue(PrefUtils.password, password);
     PrefUtils.setStringValue(PrefUtils.email, nurseDetails.email);
     PrefUtils.setStringValue(PrefUtils.firstName, nurseDetails.firstName);
     PrefUtils.setStringValue(PrefUtils.MiddleName, nurseDetails.middleName);
@@ -63,15 +65,14 @@ class PrefUtils {
     PrefUtils.setStringValue(PrefUtils.NurseImage, nurseDetails.nurseImage);
     PrefUtils.setStringValue(PrefUtils.Gender, nurseDetails.gender);
     PrefUtils.setStringValue(PrefUtils.DateOfBirth, nurseDetails.dateOfBirth);
-
     PrefUtils.setStringValue(PrefUtils.addressLineOne, nurseDetails.address1);
     PrefUtils.setStringValue(PrefUtils.addressLineTwo, nurseDetails.address2);
     PrefUtils.setStringValue(PrefUtils.phoneNumber, nurseDetails.phoneNumber);
     PrefUtils.setStringValue(PrefUtils.zipCode, nurseDetails.zipCode);
-    PrefUtils.setStringValue(PrefUtils.state, nurseDetails.state);
-    PrefUtils.setStringValue(PrefUtils.city, nurseDetails.city);
     PrefUtils.setIntValue(PrefUtils.stateId, nurseDetails.fkstateId);
     PrefUtils.setIntValue(PrefUtils.cityId, nurseDetails.fkcityId);
+    PrefUtils.setStringValue(PrefUtils.cityName, nurseDetails.city);
+    PrefUtils.setStringValue(PrefUtils.stateName, nurseDetails.state);
     PrefUtils.setBoolValue(PrefUtils.isFirstTimeLogin, nurseDetails.isFirtsTimeLogin);
     PrefUtils.setBoolValue(PrefUtils.isLoggedIn, true);
   }
@@ -92,6 +93,8 @@ class PrefUtils {
     var gender = await getValueFor(PrefUtils.Gender);
     var dateOfBirth = await getValueFor(PrefUtils.DateOfBirth);
     var nurseImage = await getValueFor(PrefUtils.NurseImage);
+    var stateName = await getValueFor(PrefUtils.stateName);
+    var cityName = await getValueFor(PrefUtils.cityName);
   }
 
   static Future getValueFor(String key) async {
