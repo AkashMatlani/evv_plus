@@ -129,7 +129,7 @@ class _LoginScreen extends State<LoginScreen> {
                   ),
                   InkWell(
                     onTap: () => {
-                      Utils.navigateReplaceToScreen(context, ForgotPwdScreen())
+                      Utils.navigateToScreen(context, ForgotPwdScreen())
                     },
                     child: Container(
                       padding: EdgeInsets.all(5),

@@ -33,10 +33,13 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((prefs) async {
-      PrefUtils.getNurseDataFromPref();
-      nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-      currentPwd = prefs.getString(PrefUtils.password);
+    Timer(
+      Duration(milliseconds: 100), () {
+      SharedPreferences.getInstance().then((prefs) async {
+        PrefUtils.getNurseDataFromPref();
+        nurseId = prefs.getInt(PrefUtils.nurseId).toString();
+        currentPwd = prefs.getString(PrefUtils.password);
+      });
     });
   }
 

@@ -68,7 +68,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
   listRowItems(BuildContext context, int position) {
     return InkWell(
       onTap: (){
-        Utils.navigateToScreen(context, CarePlanDetailsScreen(_completedVisitList[position]));
+        Utils.navigateToScreen(context, CarePlanDetailsScreen(_completedVisitList[position], false));
       },
       child: Card(
         elevation: 2,

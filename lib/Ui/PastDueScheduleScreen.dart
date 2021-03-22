@@ -87,7 +87,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
   listRowItems(BuildContext context, int position) {
     return InkWell(
       onTap: (){
-        Utils.navigateToScreen(context, CarePlanDetailsScreen(_pastVisitList[position]));
+        Utils.navigateToScreen(context, CarePlanDetailsScreen(_pastVisitList[position], false));
       },
       child: Card(
         elevation: 2,

@@ -48,9 +48,10 @@ class Utils {
     return result;
   }
 
+  //r"(?=.*[A-Za-z])(?=.*\d)(?=.*[!@£$%^&*()#€])[A-Za-z\d!@£$%^&*()#€]{6,}$")
   static bool isValidPassword(String password) {
     bool result = RegExp(
-            r"(?=.*[A-Za-z])(?=.*\d)(?=.*[!@£$%^&*()#€])[A-Za-z\d!@£$%^&*()#€]{6,}$")
+            r"(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$")
         .hasMatch(password);
     return result;
   }

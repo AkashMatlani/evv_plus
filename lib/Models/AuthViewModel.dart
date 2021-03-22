@@ -8,7 +8,7 @@ import 'package:evv_plus/WebService/WebService.dart';
 import 'CityListResponse.dart';
 import 'StateListResponse.dart';
 import 'UpdateNurseProfile.dart';
-import 'StateListResponse.dart';
+
 
 class AuthViewModel{
 
@@ -23,9 +23,9 @@ class AuthViewModel{
 
     if (password.isEmpty) {
       return ValidationResult(false, LabelStr.enterUserPwd);
-    } /*else if (!Utils.isValidPassword(password)) {
-      return ValidationResult(false, LabelStr.enterValidPwd);
-    }*/
+    } else if (password.length < 6) {
+      return ValidationResult(false, LabelStr.invalidPassword);
+    }
     return ValidationResult(true, "success");
   }
 

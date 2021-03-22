@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:date_format/date_format.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
@@ -87,7 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
       print("tenpdate" + tempDate.toString());
 
-      formattedStr = formatDate(tempDate, [dd, '/', mm, '/', yyyy]);
+      formattedStr = Utils.convertDate(tempDate.toString(), DateFormat("dd/MM/yyyy"));
       print("formattedStr" + formattedStr);
 
       checkConnection().then((isConnected) {
@@ -622,7 +621,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           DateTime tempDate =
               new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
           print("tenpdate" + tempDate.toString());
-          apiDateString = formatDate(tempDate, [yyyy, '-', mm, '-', dd]);
+          apiDateString = Utils.convertDate(tempDate.toString(), DateFormat("yyyy-MM-dd"));;
           print("formattedStr" + apiDateString);
         });
       } else {

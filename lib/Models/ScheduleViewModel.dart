@@ -1,4 +1,5 @@
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/WebService/WebService.dart';
 
@@ -82,8 +83,8 @@ class ScheduleViewModel{
 
   void nurseCheckInAPICall(String nurseId, String patientId, String checkInDate, String checkInTime, ResponseCallback callback, {Function onInactiveAccount}) {
     var params = {
-      "PatientId": "4",
-      "NurseId": "7",
+      "PatientId": patientId,
+      "NurseId": nurseId,
       "CheckOutTime": "00:00:00",
       "CheckOutDate":"",
       "CheckInTime":checkInTime,
@@ -92,12 +93,16 @@ class ScheduleViewModel{
 
     WebService.postAPICall(WebService.nurseVisitCheckInTime, params).then((response) {
       if (response.statusCode == 1) {
+        int visitId = response.body["id"];
+        PrefUtils.setIntValue(PrefUtils.visitId, visitId);
         callback(true, response.message);
       } else {
+        PrefUtils.setIntValue(PrefUtils.visitId, 0);
         callback(false, response.message);
       }
     }).catchError((error) {
       print(error);
+      PrefUtils.setIntValue(PrefUtils.visitId, 0);
       callback(false, LabelStr.serverError);
     });
   }
