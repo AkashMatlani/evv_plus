@@ -23,9 +23,9 @@ class AuthViewModel{
 
     if (password.isEmpty) {
       return ValidationResult(false, LabelStr.enterUserPwd);
-    } else if (!Utils.isValidPassword(password)) {
+    } /*else if (!Utils.isValidPassword(password)) {
       return ValidationResult(false, LabelStr.enterValidPwd);
-    }
+    }*/
     return ValidationResult(true, "success");
   }
 

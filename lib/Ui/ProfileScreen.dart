@@ -61,6 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String apiDateString;
   File _image;
   String stateName, cityName;
+
   @override
   void initState() {
     super.initState();
@@ -83,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       cityName = prefs.getString(PrefUtils.cityName);
 
       DateTime tempDate =
-      new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
+          new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
       print("tenpdate" + tempDate.toString());
 
       formattedStr = formatDate(tempDate, [dd, '/', mm, '/', yyyy]);
@@ -142,103 +143,98 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fit: BoxFit.fill),
                         Container(
                             child: Column(
+                          children: [
+                            SizedBox(height: 50),
+                            Row(
                               children: [
-                                SizedBox(height: 50),
-                                Row(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Container(
-                                        child: Icon(Icons.arrow_back,
-                                            color: Colors.white),
-                                        margin: EdgeInsets.only(left: 10),
-                                      ),
-                                    ),
-                                    Expanded(
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          margin: EdgeInsets.only(right: 20),
-                                          child: Text(LabelStr.lblMyProfile,
-                                              style: AppTheme.boldSFTextStyle()
-                                                  .copyWith(
-                                                  fontSize: 24,
-                                                  color: Colors.white)),
-                                        ))
-                                  ],
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Container(
+                                    child: Icon(Icons.arrow_back,
+                                        color: Colors.white),
+                                    margin: EdgeInsets.only(left: 10),
+                                  ),
                                 ),
-                                SizedBox(height: 15),
-                                /*   Container(
+                                Expanded(
+                                    child: Container(
+                                  alignment: Alignment.center,
+                                  margin: EdgeInsets.only(right: 20),
+                                  child: Text(LabelStr.lblMyProfile,
+                                      style: AppTheme.boldSFTextStyle()
+                                          .copyWith(
+                                              fontSize: 24,
+                                              color: Colors.white)),
+                                ))
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            /*   Container(
                                 alignment: Alignment.center,
                                 child: SvgPicture.asset(
                                     MyImage.user_placeholder,
                                     height: 120,
                                     width: 120)),*/
 
-                                Center(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        _showPicker(context);
-                                      },
-                                      child: CircleAvatar(
-                                        radius: 55,
-                                        backgroundColor: Color(0xffFDCF09),
-                                        child: _image != null
-                                            ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                              50),
-                                          child: Image.file(
-                                            _image,
-                                            width: 100,
-                                            height: 100,
-                                            fit: BoxFit.fitHeight,
-                                          ),
-                                        )
-                                            : Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey[200],
-                                              borderRadius:
-                                              BorderRadius.circular(50)),
+                            Center(
+                                child: GestureDetector(
+                              onTap: () {
+                                _showPicker(context);
+                              },
+                              child: CircleAvatar(
+                                radius: 55,
+                                backgroundColor: Color(0xffFDCF09),
+                                child: _image != null
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: Image.file(
+                                          _image,
                                           width: 100,
                                           height: 100,
-                                          child: Icon(
-                                            Icons.camera_alt,
-                                            color: Colors.grey[800],
-                                          ),
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                      )
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                        width: 100,
+                                        height: 100,
+                                        child: Icon(
+                                          Icons.camera_alt,
+                                          color: Colors.grey[800],
                                         ),
                                       ),
-                                    )),
-                                SizedBox(height: 5),
-                                Container(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width,
-                                  alignment: Alignment.center,
-                                  child: Text("${firstName + " " + lastName}",
-                                      style: AppTheme.boldSFTextStyle()
-                                          .copyWith(
-                                          fontSize: 24, color: Colors.white)),
-                                ),
-                                SizedBox(height: 5),
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  alignment: Alignment.center,
-                                  child: state != null
-                                      ? new Text(state,
+                              ),
+                            )),
+                            SizedBox(height: 5),
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              alignment: Alignment.center,
+                              child: Text("${firstName + " " + lastName}",
+                                  style: AppTheme.boldSFTextStyle().copyWith(
+                                      fontSize: 24, color: Colors.white)),
+                            ),
+                            SizedBox(height: 5),
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              alignment: Alignment.center,
+                              child: state != null
+                                  ? new Text(state,
                                       style: AppTheme.regularSFTextStyle()
                                           .copyWith(
-                                          fontSize: 14,
-                                          color: Colors.white))
-                                      : new Text("Columbia ohia",
+                                              fontSize: 14,
+                                              color: Colors.white))
+                                  : new Text("Columbia ohia",
                                       style: AppTheme.regularSFTextStyle()
                                           .copyWith(
-                                          fontSize: 14,
-                                          color: Colors.white)),
-                                ),
-                              ],
-                            ))
+                                              fontSize: 14,
+                                              color: Colors.white)),
+                            ),
+                          ],
+                        ))
                       ],
                     ),
                     SizedBox(
@@ -366,10 +362,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Container(
                         padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        width: MediaQuery.of(context).size.width,
                         height: 65,
                         child: textFieldFor(
                             addressLineOne, _addressLineOneController,
@@ -378,10 +371,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             keyboardType: TextInputType.streetAddress)),
                     Container(
                         padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        width: MediaQuery.of(context).size.width,
                         height: 65,
                         child: textFieldFor(
                             addressLineTwo, _addressLineTwoController,
@@ -416,13 +406,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: HexColor("#D2D2D2"),
                                   style: BorderStyle.solid),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(5.0)),
+                                  BorderRadius.all(Radius.circular(5.0)),
                             ),
                           ),
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width,
+                          width: MediaQuery.of(context).size.width,
                           height: 45,
                           child: new DropdownButton(
                             underline: SizedBox(),
@@ -476,37 +463,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       color: HexColor("#D2D2D2"),
                                       style: BorderStyle.solid),
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0)),
+                                      BorderRadius.all(Radius.circular(5.0)),
                                 ),
                               ),
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width * 0.42,
+                              width: MediaQuery.of(context).size.width * 0.42,
                               height: 45,
                               child: cityList.length != 0
                                   ? DropdownButton(
-                                underline: SizedBox(),
-                                isExpanded: true,
-                                items: cityList.map((item) {
-                                  return new DropdownMenuItem(
-                                    child: city != null
-                                        ? new Text(city)
-                                        : new Text(item.cityName),
-                                    value: item.cityId.toString(),
-                                  );
-                                }).toList(),
-                                onChanged: (newVal) {
-                                  setState(() {
-                                    cityId = newVal;
-                                  });
-                                },
-                                value: cityId,
-                              )
+                                      underline: SizedBox(),
+                                      isExpanded: true,
+                                      items: cityList.map((item) {
+                                        return new DropdownMenuItem(
+                                          child: city != null
+                                              ? new Text(city)
+                                              : new Text(item.cityName),
+                                          value: item.cityId.toString(),
+                                        );
+                                      }).toList(),
+                                      onChanged: (newVal) {
+                                        setState(() {
+                                          cityId = newVal;
+                                        });
+                                      },
+                                      value: cityId,
+                                    )
                                   : Center(
-                                  child: Container(
-                                    child: Text("Please select state"),
-                                  )),
+                                      child: Container(
+                                      child: Text("Please select state"),
+                                    )),
                             ),
                           ),
                         ),
@@ -524,19 +508,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     Container(
                         padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                        width: MediaQuery.of(context).size.width,
                         height: 65,
                         child: textFieldFor(phoneNumber, _phoneController,
                             keyboardType: TextInputType.number, maxLength: 10)),
                     Container(
                       margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
+                      width: MediaQuery.of(context).size.width,
                       height: 50,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(colors: [
@@ -602,14 +580,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             PrefUtils.setIntValue(PrefUtils.stateId, int.parse(stateId));
             PrefUtils.setIntValue(PrefUtils.cityId, int.parse(cityId));
 
-           /* if(stateName!=null)
+            /* if(stateName!=null)
             PrefUtils.setStringValue(PrefUtils.stateName, state);
             PrefUtils.setStringValue(PrefUtils.cityName,city);*/
             ToastUtils.showToast(
                 context, "NurseProfile Updated Successfully.", Colors.green);
             Timer(
               Duration(milliseconds: 200),
-                  () => Navigator.of(context).pop(),
+              () => Navigator.of(context).pop(),
             );
           });
         } else {
@@ -642,7 +620,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           stateId = _nurseViewModel.nurseResponse.fkstateId.toString();
           dateOfBirth = _nurseViewModel.nurseResponse.dateOfBirth;
           DateTime tempDate =
-          new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
+              new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
           print("tenpdate" + tempDate.toString());
           apiDateString = formatDate(tempDate, [yyyy, '-', mm, '-', dd]);
           print("formattedStr" + apiDateString);
