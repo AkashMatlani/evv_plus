@@ -631,7 +631,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           print("formattedStr" + apiDateString);
 
         });
-         if (stateList.length > 0) {
+        /* if (stateList.length > 0) {
             for (int i = 0; i < stateList.length; i++) {
               if (stateId.compareTo(stateList[i].stateId.toString()) == 0) {
                 PrefUtils.setStringValue(
@@ -639,7 +639,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 PrefUtils.setIntValue(PrefUtils.stateId, stateList[i].stateId);
               }
             }
-          }
+          }*/
 
         //_getCityList(stateId);
 
