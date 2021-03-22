@@ -24,6 +24,7 @@ class PrefUtils {
   static const String cityName="com.evv_plus.cityName";
   static const String stateName="com.evv_plus.stateName";
   static const String isFirstTimeLogin = "com.evv_plus.isFirstTimeLogin";
+  static const String visitId = "com.evv_plus.visitId";
 
   static setStringValue(String key, String defaultValue) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

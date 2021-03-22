@@ -69,7 +69,7 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
   listRowItems(BuildContext context, int position) {
     return InkWell(
       onTap: (){
-        Utils.navigateToScreen(context, CarePlanDetailsScreen(_upcommingVisitList[position]));
+        Utils.navigateToScreen(context, CarePlanDetailsScreen(_upcommingVisitList[position], true));
       },
       child: Card(
         elevation: 2,

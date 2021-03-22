@@ -9,6 +9,7 @@ import 'package:evv_plus/WebService/WebService.dart';
 class NurseVisitViewModel{
 
   List<CommentFilterResponse> commentFilterList = [];
+  String carePlanPdfPath = "";
 
   void getFilterListAPICall(String flag, String patientName, String carePlan, ResponseCallback callback) {
     var params = {
@@ -65,5 +66,41 @@ class NurseVisitViewModel{
     } else {
       callback(false, validateResult.message);
     }
+  }
+
+  void getCarePlanPdf(ResponseCallback callback) {
+    WebService.getAPICall(WebService.carePlanPdf, {}).then((response) {
+      if (response.statusCode == 1) {
+        carePlanPdfPath = response.body["data"];
+        callback(true, "Care plan pdf file found");
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+  void dailyLivingTaskApiCall(String patientId, String queName, String answer, String comment, String date, String nurseId, String visitId, ResponseCallback callback, {Function onInactiveAccount}) {
+    var params = {
+      "PatientId": patientId,
+      "QuestionName": queName,
+      "Answer": answer,
+      "OptionalText": comment,
+      "CreatedDate": date,
+      "NurseId": nurseId,
+      "VisitId": visitId
+    };
+    WebService.postAPICall(WebService.dailyLivingTask, params).then((response) {
+      if (response.statusCode == 1) {
+        callback(true, response.message);
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
   }
 }

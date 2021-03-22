@@ -47,7 +47,9 @@ class LabelStr {
   static const enterNewPwd = "Please enter new password";
   static const enterConfirmPwd = "Please enter confirm password";
   static const pwdNotMatchError = "New password and confirm password should be same";
-  static const enterValidPwd = "Passwords must contain at least six characters including letters, numbers and special characters";
+  //static const enterValidPwd = "Passwords must contain at least six characters including letters, numbers and special characters";
+  static const enterValidPwd = "Passwords must contain at least six characters including letters, numbers";
+  static const invalidPassword = "Passwords must contain at least six characters";
   static const lblAddressLineOne = "Address line 1";
   static const lblAddressLineTwo = "Address line 2";
   static const lblCity = "City";
@@ -106,4 +108,5 @@ class LabelStr {
   static const lblCollectSign = "Collect Client Signature";
   static const lblCancelVerification = "Cancel Task Verification";
   static const lblNoData = "No Data Found";
+  static const lblNoFile = "File not found";
 }

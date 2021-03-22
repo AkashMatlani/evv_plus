@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
@@ -200,7 +202,14 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 ),
                 InkWell(
                   onTap: (){
-                    Utils.logoutFromApp(context, LoginScreen());
+                    Scaffold.of(context).openEndDrawer();
+                    Utils.showLoader(true, context);
+                    PrefUtils.clearPref();
+                    Timer(
+                      Duration(seconds: 1), (){
+                      Utils.showLoader(false, context);
+                      Utils.logoutFromApp(context, LoginScreen());
+                    });
                   },
                   child: Container(
                     height: MediaQuery.of(context).size.height*0.1,

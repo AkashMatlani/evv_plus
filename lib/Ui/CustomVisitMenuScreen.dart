@@ -148,7 +148,7 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
         } else if (position == 2) {
           Utils.navigateToScreen(context, CommentScreen(false, widget.scheduleDetailInfo));
         } else if (position == 3) {
-          Utils.navigateToScreen(context, DailyLivingTask());
+          Utils.navigateToScreen(context, DailyLivingTask(widget.scheduleDetailInfo));
         } else if (position == 4) {
           Utils.navigateToScreen(context, CommentScreen(true, widget.scheduleDetailInfo));
         }
