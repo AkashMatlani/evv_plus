@@ -637,8 +637,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _phoneController.text = phoneNumber;
           firstName = _nurseViewModel.nurseResponse.firstName;
           lastName = _nurseViewModel.nurseResponse.lastName;
-          cityId = _nurseViewModel.nurseResponse.fkcityId.toString();
-          stateId = _nurseViewModel.nurseResponse.fkstateId.toString();
+          cityId = _nurseViewModel.nurseResponse.cityId.toString();
+          stateId = _nurseViewModel.nurseResponse.stateId.toString();
           dateOfBirth = _nurseViewModel.nurseResponse.dateOfBirth;
           DateTime tempDate =
           new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);

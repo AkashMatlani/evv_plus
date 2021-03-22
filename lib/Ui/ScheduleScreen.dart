@@ -5,6 +5,7 @@ import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/ChangePwdScreen.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
@@ -24,7 +25,6 @@ import 'UpcommingScheduleScreen.dart';
 
 class ScheduleScreen extends StatefulWidget {
 
-
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
 }
@@ -35,9 +35,10 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   int activeTabIndex = 0;
   int _selectedIndex = 0;
 
-  String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "";
+  String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "", searchKey="";
   String pastDueCount, upcommingCount, completeCount;
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
+  var searchController = TextEditingController();
 
   final List<String> _menuNameList = [
     LabelStr.lblHome,
@@ -251,12 +252,19 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                           hintText: "Search patient name/care plan",
                         ),
                         keyboardType: TextInputType.text,
+                        controller: searchController,
                       )
                   ),
                   Positioned(
                     child: InkWell(
                       onTap: (){
-                        ToastUtils.showToast(context, "Selected Tab : "+activeTabIndex.toString(), Colors.blueAccent);
+                        searchKey = searchController.text.toString();
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        /*if(searchKey.isNotEmpty){
+                          getFilterList();
+                        } else {
+                          ToastUtils.showToast(context, "No Keyword found", Colors.red);
+                        }*/
                       },
                       child: Container(
                         height: 30,
@@ -311,9 +319,9 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 child: TabBarView(
                   controller: _tabController,
                   children: <Widget>[
-                    PastDueScheduleScreen(),
-                    UpcommingScheduleScreen(),
-                    CompletedScheduleScreen(),
+                    PastDueScheduleScreen(searchKey),
+                    UpcommingScheduleScreen(searchKey),
+                    CompletedScheduleScreen(searchKey),
                   ],
                 ),
               ),
@@ -353,8 +361,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         _onSelected(position);
       },
       child: Container(
-        margin: EdgeInsets.only(left: 20, top: 5, bottom: 5, right: MediaQuery.of(context).size.width*0.28),
-        padding: EdgeInsets.only(left: 15, right: 10, top: 10, bottom: 10),
+        margin: EdgeInsets.only(left: 15, top: 5, bottom: 5, right: MediaQuery.of(context).size.width*0.28),
+        padding: EdgeInsets.all(10),
         decoration: _selectedIndex == position ? BoxDecoration(
             borderRadius: BorderRadius.circular(25),
             color: HexColor("#3399eb")
@@ -384,4 +392,29 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       });
     });
   }
+
+  void getFilterList() {
+    Utils.showLoader(true, context);
+    _scheduleViewModel.getScheduleFilterAPICall((activeTabIndex+1).toString(), searchKey, (isSuccess, message) {
+      Utils.showLoader(false, context);
+      if(isSuccess){
+        //_updateTabUI(searchKey, _scheduleViewModel.filterScheduleList);
+        ToastUtils.showToast(context, _scheduleViewModel.filterScheduleList.length.toString(), Colors.green);
+      } else {
+        //_updateTabUI(searchKey, _scheduleViewModel.filterScheduleList);
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
+  }
+
+
+  /*_updateTabUI(String searchKey, List<ScheduleInfoResponse> filterList){
+    if(activeTabIndex == 0){
+      PastDueScheduleScreen(searchKey, filterList);
+    } else if(activeTabIndex == 1){
+      UpcommingScheduleScreen(searchKey, filterList);
+    } else{
+      CompletedScheduleScreen(searchKey, filterList);
+    }
+  }*/
 }

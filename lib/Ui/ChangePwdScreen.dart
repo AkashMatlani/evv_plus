@@ -155,7 +155,11 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
     authViewModel.updatePwdResult(nurseId, currentPwd, newPwd, confirmPwd, (isValid, message) {
       Utils.showLoader(false, context);
       if (isValid) {
-        Utils.navigateReplaceToScreen(context, ScheduleScreen());
+        ToastUtils.showToast(context, message, Colors.green);
+        Timer(
+          Duration(seconds: 2), (){
+          Utils.navigateReplaceToScreen(context, ScheduleScreen());
+        });
       } else {
         ToastUtils.showToast(context, message, Colors.red);
       }

@@ -16,6 +16,9 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CompletedScheduleScreen extends StatefulWidget {
+  CompletedScheduleScreen(this.searchKey);
+  String searchKey;
+
   @override
   _CompletedScheduleScreenState createState() => _CompletedScheduleScreenState();
 }
@@ -36,6 +39,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
         Duration(milliseconds: 100), (){
         checkConnection().then((isConnected) {
           if(isConnected){
+            ToastUtils.showToast(context, widget.searchKey, Colors.green);
             _getCompletedList(nurseId);
           } else {
             ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);

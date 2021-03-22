@@ -10,6 +10,7 @@ class ScheduleViewModel{
   List<ScheduleInfoResponse> pastDueScheduleList = [];
   List<ScheduleInfoResponse> upCommingScheduleList = [];
   List<ScheduleInfoResponse> completedScheduleList = [];
+  List<ScheduleInfoResponse> filterScheduleList = [];
 
   int pastDueVisitCount=0, upcommingVisitCount=0, completedVisitCount=0;
 
@@ -106,4 +107,25 @@ class ScheduleViewModel{
       callback(false, LabelStr.serverError);
     });
   }
+
+  void getScheduleFilterAPICall(String flag, String keyword, ResponseCallback callback) {
+    var params = {"flag":flag, "Searchword":keyword};
+    WebService.getAPICall(WebService.scheduleFilter, params).then((response) {
+      if (response.statusCode == 1) {
+        filterScheduleList=[];
+        for (var data in response.body) {
+          filterScheduleList.add(ScheduleInfoResponse.fromJson(data));
+        }
+        callback(true, "");
+      } else {
+        filterScheduleList=[];
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      filterScheduleList=[];
+      callback(false, LabelStr.serverError);
+    });
+  }
+
 }
