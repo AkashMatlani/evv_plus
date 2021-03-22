@@ -17,6 +17,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'CarePlanDetailsScreen.dart';
 
 class UpcommingScheduleScreen extends StatefulWidget {
+  UpcommingScheduleScreen(this.searchKey);
+  String searchKey;
+
   @override
   _UpcommingScheduleScreenState createState() => _UpcommingScheduleScreenState();
 }
@@ -37,6 +40,7 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
         Duration(milliseconds: 100), (){
               checkConnection().then((isConnected) {
                 if(isConnected){
+                  ToastUtils.showToast(context, widget.searchKey, Colors.green);
                   _getUpCommingList(nurseId);
                 } else {
                   ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);

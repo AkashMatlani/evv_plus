@@ -39,11 +39,14 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
         widget.scheduleDetailInfo.lastName;
     patientId = widget.scheduleDetailInfo.patientId.toString();
 
-    SharedPreferences.getInstance().then((prefs) async {
-      PrefUtils.getNurseDataFromPref();
-      nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-      nurseName = prefs.getString(PrefUtils.fullName);
-      print("PatientComment :: $nurseName");
+    Timer(Duration(milliseconds: 100), (){
+      SharedPreferences.getInstance().then((prefs) async {
+        PrefUtils.getNurseDataFromPref();
+        nurseId = prefs.getInt(PrefUtils.nurseId).toString();
+        setState(() {
+          nurseName = prefs.getString(PrefUtils.fullName);
+        });
+      });
     });
   }
 

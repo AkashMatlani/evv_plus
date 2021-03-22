@@ -17,6 +17,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'CarePlanDetailsScreen.dart';
 
 class PastDueScheduleScreen extends StatefulWidget {
+  PastDueScheduleScreen(this.searchKey);
+  String searchKey;
+
   @override
   _PastDueScheduleScreenState createState() => _PastDueScheduleScreenState();
 }
@@ -47,6 +50,11 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
     });
   }
 
+  @override
+  void setState(fn) {
+    super.setState(fn);
+    ToastUtils.showToast(context, widget.searchKey, Colors.green);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

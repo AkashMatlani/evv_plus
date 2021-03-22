@@ -36,11 +36,14 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
   void initState() {
     super.initState();
     planName = widget.scheduleDetailInfo.carePlanName;
-    SharedPreferences.getInstance().then((prefs) async {
-      PrefUtils.getNurseDataFromPref();
-      nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-      nurseName = prefs.getString(PrefUtils.fullName);
-      print("CarePlane :: $nurseName");
+    Timer(Duration(milliseconds: 100), (){
+      SharedPreferences.getInstance().then((prefs) async {
+        PrefUtils.getNurseDataFromPref();
+        nurseId = prefs.getInt(PrefUtils.nurseId).toString();
+        setState(() {
+          nurseName = prefs.getString(PrefUtils.fullName);
+        });
+      });
     });
   }
   

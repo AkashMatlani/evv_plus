@@ -26,13 +26,13 @@ class DailyLivingTask extends StatefulWidget {
 class _DailyLivingTaskState extends State<DailyLivingTask> {
 
   var _commentController = TextEditingController();
-  String radioItemName = 'Yes';
+  /*String radioItemName = 'Yes';
   int radioItemId = 1;
 
   List<ItemList> itemList = [
     ItemList(index: 1, value: "Yes"),
     ItemList(index: 2, value: "No")
-  ];
+  ];*/
 
   NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
   String nurseId="", visitId="";
@@ -43,10 +43,14 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((prefs) async {
-      PrefUtils.getNurseDataFromPref();
-      nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-      visitId = prefs.getString(PrefUtils.visitId);
+    Timer(
+      Duration(milliseconds: 100), (){
+      SharedPreferences.getInstance().then((prefs) async {
+        PrefUtils.getNurseDataFromPref();
+        nurseId = prefs.getInt(PrefUtils.nurseId).toString();
+        visitId = prefs.getInt(PrefUtils.visitId).toString();
+        print("Visit Id :: $visitId");
+      });
     });
   }
 
@@ -99,8 +103,8 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: HexColor("#e9e9e9"), width: 1)
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: HexColor("#e9e9e9"), width: 1)
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,81 +148,62 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
               ],
             ),
           ),
-          isRowExpaned ? Column(
-            children: [
-              Container(
-                height: 1,
-                width: MediaQuery.of(context).size.width,
-                color: HexColor("#e9e9e9"),
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 15, top: 10, bottom: 10, right: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Column(
-                        children:
-                        itemList.map((data) => RadioListTile(
-                          title: Text("${data.value}"),
-                          groupValue: radioItemId,
-                          value: data.index,
-                          onChanged: (val) {
-                            setState(() {
-                              radioItemName = data.value;
-                              radioItemId = data.index;
-                            });
-                          },
-                        )).toList(),
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    multilineTextFieldFor(
-                        "Comment here...",
-                        _commentController,
-                        100.0
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            HexColor("#1785e9"),
-                            HexColor("#83cff2")
-                          ]),
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: TextButton(
-                        child: Text(LabelStr.lblSubmit,
-                            style: AppTheme.mediumSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
-                        onPressed: () {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          checkConnection().then((isConnected) {
-                            if (isConnected) {
-                              submitDetails();
-                            } else {
-                              ToastUtils.showToast(context,
-                                  LabelStr.connectionError, Colors.red);
-                            }
-                          });
-                        },
-                      ),
-                    )
-                  ],
+          Container(
+            height: 1,
+            width: MediaQuery.of(context).size.width,
+            color: HexColor("#e9e9e9"),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 15, top: 10, bottom: 10, right: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _radioGroup(),
+                SizedBox(height: 5),
+                multilineTextFieldFor(
+                    "Comment here...",
+                    _commentController,
+                    100.0
                 ),
-              )
-            ],
-          ):Container()
+                SizedBox(height: 10),
+                Container(
+                  width: 100,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        HexColor("#1785e9"),
+                        HexColor("#83cff2")
+                      ]),
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
+                  child: TextButton(
+                    child: Text(LabelStr.lblSubmit,
+                        style: AppTheme.mediumSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                    onPressed: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      checkConnection().then((isConnected) {
+                        if (isConnected) {
+                          //submitDetails(RadioGroupWidget.radioButtonItem);
+                        } else {
+                          ToastUtils.showToast(context,
+                              LabelStr.connectionError, Colors.red);
+                        }
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  void submitDetails() {
+  void submitDetails(String answer) {
     String date = DateFormat("yyyy-MM-dd'T'hh:mm:ss").format(DateTime.now());
     Utils.showLoader(true, context);
     _nurseVisitViewModel.dailyLivingTaskApiCall(widget._scheduleDetailInfo.patientId.toString(),
-        "Did you completed the task?", radioItemName, _commentController.text.toString(), date, nurseId, visitId, (isSuccess, message) {
+        "Did you completed the task?", answer, _commentController.text.toString(), date, nurseId, visitId, (isSuccess, message) {
       Utils.showLoader(false, context);
       if(isSuccess){
         ToastUtils.showToast(context, message, Colors.green);
@@ -226,6 +211,62 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
         ToastUtils.showToast(context, message, Colors.red);
       }
     });
+  }
+}
+
+class _radioGroup extends StatefulWidget {
+  @override
+  RadioGroupWidget createState() => RadioGroupWidget();
+}
+
+class RadioGroupWidget extends State {
+
+  String radioButtonItem = 'Yes';
+  int id = 1;
+
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Radio(
+              value: 1,
+              groupValue: id,
+              onChanged: (val) {
+                setState(() {
+                  radioButtonItem = 'Yes';
+                  id = 1;
+                  ToastUtils.showToast(context, radioButtonItem, Colors.green);
+                });
+              },
+            ),
+            Text(
+              'Yes',
+              style: new TextStyle(fontSize: 17.0),
+            ),
+
+            Radio(
+              value: 2,
+              groupValue: id,
+              onChanged: (val) {
+                setState(() {
+                  radioButtonItem = 'No';
+                  id = 2;
+                  ToastUtils.showToast(context, radioButtonItem, Colors.green);
+                });
+              },
+            ),
+            Text(
+              'No',
+              style: new TextStyle(
+                fontSize: 17.0,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
 

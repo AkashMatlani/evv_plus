@@ -70,11 +70,11 @@ class PrefUtils {
     PrefUtils.setStringValue(PrefUtils.addressLineTwo, nurseDetails.address2);
     PrefUtils.setStringValue(PrefUtils.phoneNumber, nurseDetails.phoneNumber);
     PrefUtils.setStringValue(PrefUtils.zipCode, nurseDetails.zipCode);
-    PrefUtils.setIntValue(PrefUtils.stateId, nurseDetails.fkstateId);
-    PrefUtils.setIntValue(PrefUtils.cityId, nurseDetails.fkcityId);
-    PrefUtils.setStringValue(PrefUtils.cityName, nurseDetails.city);
-    PrefUtils.setStringValue(PrefUtils.stateName, nurseDetails.state);
-    PrefUtils.setBoolValue(PrefUtils.isFirstTimeLogin, nurseDetails.isFirtsTimeLogin);
+    PrefUtils.setIntValue(PrefUtils.stateId, nurseDetails.stateId);
+    PrefUtils.setIntValue(PrefUtils.cityId, nurseDetails.cityId);
+    PrefUtils.setStringValue(PrefUtils.cityName, nurseDetails.cityName);
+    PrefUtils.setStringValue(PrefUtils.stateName, nurseDetails.stateName);
+    PrefUtils.setBoolValue(PrefUtils.isFirstTimeLogin, nurseDetails.isFirstTimeLogin);
     PrefUtils.setBoolValue(PrefUtils.isLoggedIn, true);
   }
 
