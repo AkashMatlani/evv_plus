@@ -79,14 +79,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
       print("dateofbirth" + dateOfBirth);
       nurseImage = prefs.getString(PrefUtils.NurseImage);
-      stateName = prefs.getString(PrefUtils.stateName);
-      cityName = prefs.getString(PrefUtils.cityName);
+     /* setState(() {
+        stateName = prefs.getString(PrefUtils.stateName);
+        cityName = prefs.getString(PrefUtils.cityName);
+      });*/
 
       DateTime tempDate =
           new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
       print("tenpdate" + tempDate.toString());
 
-      formattedStr = Utils.convertDate(tempDate.toString(), DateFormat("dd/MM/yyyy"));
+      formattedStr =
+          Utils.convertDate(dateOfBirth.toString(), DateFormat("dd/MM/yyyy"));
       print("formattedStr" + formattedStr);
 
       checkConnection().then((isConnected) {
@@ -220,8 +223,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Container(
                               width: MediaQuery.of(context).size.width,
                               alignment: Alignment.center,
-                              child: state != null
-                                  ? new Text(state,
+                              child: stateName != null || cityName != null
+                                  ? new Text("${stateName + " " + cityName}",
                                       style: AppTheme.regularSFTextStyle()
                                           .copyWith(
                                               fontSize: 14,
@@ -578,10 +581,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           setState(() {
             PrefUtils.setIntValue(PrefUtils.stateId, int.parse(stateId));
             PrefUtils.setIntValue(PrefUtils.cityId, int.parse(cityId));
-
-            /* if(stateName!=null)
-            PrefUtils.setStringValue(PrefUtils.stateName, state);
-            PrefUtils.setStringValue(PrefUtils.cityName,city);*/
+            if (stateName != null) {
+              PrefUtils.setStringValue(PrefUtils.stateName, stateName);
+            }
+            if (cityName != null) {
+              PrefUtils.setStringValue(PrefUtils.cityName, cityName);
+            }
             ToastUtils.showToast(
                 context, "NurseProfile Updated Successfully.", Colors.green);
             Timer(
@@ -621,9 +626,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
           DateTime tempDate =
               new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
           print("tenpdate" + tempDate.toString());
-          apiDateString = Utils.convertDate(tempDate.toString(), DateFormat("yyyy-MM-dd"));;
+          apiDateString = Utils.convertDate(
+              dateOfBirth.toString(), DateFormat("yyyy-MM-dd"));
           print("formattedStr" + apiDateString);
+
         });
+         if (stateList.length > 0) {
+            for (int i = 0; i < stateList.length; i++) {
+              if (stateId.compareTo(stateList[i].stateId.toString()) == 0) {
+                PrefUtils.setStringValue(
+                    PrefUtils.stateName, stateList[i].stateName);
+                PrefUtils.setIntValue(PrefUtils.stateId, stateList[i].stateId);
+              }
+            }
+          }
+
+        //_getCityList(stateId);
+
       } else {
         setState(() {});
       }
