@@ -44,6 +44,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
 
   String _nurseId="", _nurseName="";
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
+  bool isVisitStarted = false;
 
   @override
   void initState() {
@@ -136,7 +137,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                   children: [
                                     Text(LabelStr.lblCheckIn, style: AppTheme.regularSFTextStyle().copyWith(fontSize:14, color: Colors.white)),
                                     SizedBox(height: 3),
-                                    Text(widget._scheduleDetailInfo.checkInTime, style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
+                                    Text("00:00:00", style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
                                   ],
                                 ),
                               ),
@@ -153,7 +154,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                   children: [
                                     Text(LabelStr.lblCheckout, style: AppTheme.regularSFTextStyle().copyWith(fontSize:14, color: Colors.white)),
                                     SizedBox(height: 3),
-                                    Text(widget._scheduleDetailInfo.checkOutTime, style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
+                                    Text("00:00:00", style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
                                   ],
                                 ),
                               )
@@ -240,18 +241,22 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                     ]),
                                     borderRadius: BorderRadius.all(Radius.circular(5))),
                                 child: TextButton(
-                                  child: Text(LabelStr.lbStartVisit,
+                                  child: Text(isVisitStarted ? LabelStr.lbVisitNote : LabelStr.lbStartVisit,
                                       style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
                                   onPressed: () {
                                     FocusScope.of(context).requestFocus(FocusNode());
-                                    checkConnection().then((isConnected) {
-                                      if (isConnected) {
-                                        _showDialog(context);
-                                      } else {
-                                        ToastUtils.showToast(context,
-                                            LabelStr.connectionError, Colors.red);
-                                      }
-                                    });
+                                    if(isVisitStarted){
+                                      Utils.navigateReplaceToScreen(context, CustomVisitMenuScreen(widget._scheduleDetailInfo));
+                                    } else {
+                                      checkConnection().then((isConnected) {
+                                        if (isConnected) {
+                                          _showDialog(context);
+                                        } else {
+                                          ToastUtils.showToast(context,
+                                              LabelStr.connectionError, Colors.red);
+                                        }
+                                      });
+                                    }
                                   },
                                 ),
                               )
@@ -426,15 +431,18 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
     String checkInDate = formatted.split("T")[0];
     String checkInTime = formatted.split("T")[1];
 
+    Utils.showLoader(true, context);
     _scheduleViewModel.nurseCheckInAPICall(nurseId, patientId.toString(), checkInDate, checkInTime, (isSuccess, message) {
+      Utils.showLoader(false, context);
+      Navigator.of(context).pop();
       if(isSuccess){
-        ToastUtils.showToast(context, message, Colors.green);
-        Timer(
-          Duration(seconds: 2),
-              () => Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => CustomVisitMenuScreen(widget._scheduleDetailInfo))),
-        );
+        setState(() {
+          isVisitStarted = true;
+        });
       } else{
+        setState(() {
+          isVisitStarted = false;
+        });
         ToastUtils.showToast(context, message, Colors.red);
       }
     });

@@ -198,7 +198,7 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
         nurseId, _commentController.text, widget.scheduleDetailInfo.carePlanName, (isSuccess, message){
           Utils.showLoader(false, context);
           if(isSuccess){
-            ToastUtils.showToast(context, message, Colors.green);
+            ToastUtils.showToast(context, "Data saved successfully", Colors.green);
             Timer(
               Duration(seconds: 2),
                   () => Navigator.of(context).pop(),

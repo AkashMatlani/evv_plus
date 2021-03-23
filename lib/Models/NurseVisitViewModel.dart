@@ -71,7 +71,7 @@ class NurseVisitViewModel{
   void getCarePlanPdf(ResponseCallback callback) {
     WebService.getAPICall(WebService.carePlanPdf, {}).then((response) {
       if (response.statusCode == 1) {
-        carePlanPdfPath = response.body["data"];
+        carePlanPdfPath = response.body;
         callback(true, "Care plan pdf file found");
       } else {
         callback(false, response.message);

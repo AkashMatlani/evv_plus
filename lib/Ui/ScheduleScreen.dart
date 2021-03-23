@@ -5,12 +5,10 @@ import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
-import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/ChangePwdScreen.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:evv_plus/Ui/PastDueScheduleScreen.dart';
-import 'package:evv_plus/Ui/SearchScreen.dart';
 import 'package:evv_plus/Ui/TaskWithDateDetailsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +26,9 @@ class ScheduleScreen extends StatefulWidget {
 
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
+
+  static _ScheduleScreenState of(BuildContext context) =>
+      context.findAncestorStateOfType<_ScheduleScreenState>();
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen>
@@ -36,7 +37,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   int activeTabIndex = 0;
   int _selectedIndex = 0;
 
-  String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "", searchKey="";
+  String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "";
   String pastDueCount, upcommingCount, completeCount;
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   var searchController = TextEditingController();
@@ -204,7 +205,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 ),
                 InkWell(
                   onTap: (){
-                    Scaffold.of(context).openEndDrawer();
                     Utils.showLoader(true, context);
                     PrefUtils.clearPref();
                     Timer(
@@ -259,25 +259,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                   Positioned(
                     child: InkWell(
                       onTap: (){
-                        searchKey = searchController.text.toString();
                         FocusScope.of(context).requestFocus(FocusNode());
-                        if(searchKey.isNotEmpty){
-                          getFilterList();
-                          _scheduleViewModel.filterScheduleList.length!=null?
-
-
-                          SearchScreen("test"):Container();
-                          /*Expanded(
-                            child:ListView.builder(
-                              itemCount: _scheduleViewModel.filterScheduleList.length,
-                              itemBuilder: (context, position)
-                          {
-                            return listRowItems(context, position);
-                          })):Container();*/
-
-                        } else {
-                          ToastUtils.showToast(context, "No Keyword found", Colors.red);
-                        }
                       },
                       child: Container(
                         height: 30,
@@ -332,10 +314,9 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 child: TabBarView(
                   controller: _tabController,
                   children: <Widget>[
-                 PastDueScheduleScreen(searchKey),
-                    //PastDueScheduleScreen(searchKey),
-                    UpcommingScheduleScreen(searchKey),
-                    CompletedScheduleScreen(searchKey),
+                    PastDueScheduleScreen(),
+                    UpcommingScheduleScreen(),
+                    CompletedScheduleScreen(),
                   ],
                 ),
               ),
@@ -409,7 +390,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
   void getFilterList() {
     Utils.showLoader(true, context);
-    _scheduleViewModel.getScheduleFilterAPICall((activeTabIndex+1).toString(), searchKey, (isSuccess, message) {
+    _scheduleViewModel.getScheduleFilterAPICall((activeTabIndex+1).toString(), searchController.text.toString(), (isSuccess, message) {
       Utils.showLoader(false, context);
       if(isSuccess){
         //_updateTabUI(searchKey, _scheduleViewModel.filterScheduleList);
@@ -432,8 +413,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     }
   }*/
 
-
-    listRowItems(BuildContext context, int position) {
+   listRowItems(BuildContext context, int position) {
       return InkWell(
         onTap: (){
          // Utils.navigateToScreen(context, CarePlanDetailsScreen(_pastVisitList[position], false));

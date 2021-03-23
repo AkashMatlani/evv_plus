@@ -38,8 +38,7 @@ class _CarePlanPdfScreenState extends State<CarePlanPdfScreen> {
           ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
         }
       });
-    },
-    );
+    });
   }
 
   @override
