@@ -26,14 +26,6 @@ class DailyLivingTask extends StatefulWidget {
 class _DailyLivingTaskState extends State<DailyLivingTask> {
 
   var _commentController = TextEditingController();
-  /*String radioItemName = 'Yes';
-  int radioItemId = 1;
-
-  List<ItemList> itemList = [
-    ItemList(index: 1, value: "Yes"),
-    ItemList(index: 2, value: "No")
-  ];*/
-
   NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
   String nurseId="", visitId="";
   int expanedBtiClick=0, prevPos=0;
@@ -123,6 +115,7 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
                       prevPos = position;
                       expanedBtiClick=0;
                     }
+                    expanedBtiClick++;
                     if(expanedBtiClick%2 == 0){
                       setState(() {
                         isRowExpaned = false;
@@ -148,52 +141,56 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
               ],
             ),
           ),
-          Container(
-            height: 1,
-            width: MediaQuery.of(context).size.width,
-            color: HexColor("#e9e9e9"),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 15, top: 10, bottom: 10, right: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _radioGroup(),
-                SizedBox(height: 5),
-                multilineTextFieldFor(
-                    "Comment here...",
-                    _commentController,
-                    100.0
+          (position == prevPos && isRowExpaned) ? Column(
+            children: [
+              Container(
+                height: 1,
+                width: MediaQuery.of(context).size.width,
+                color: HexColor("#e9e9e9"),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 15, top: 10, bottom: 10, right: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _radioGroup(),
+                    SizedBox(height: 5),
+                    multilineTextFieldFor(
+                        "Comment here...",
+                        _commentController,
+                        100.0
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      width: 100,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: [
+                            HexColor("#1785e9"),
+                            HexColor("#83cff2")
+                          ]),
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      child: TextButton(
+                        child: Text(LabelStr.lblSubmit,
+                            style: AppTheme.mediumSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                        onPressed: () {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          checkConnection().then((isConnected) {
+                            if (isConnected) {
+                              submitDetails(Utils.answer);
+                            } else {
+                              ToastUtils.showToast(context,
+                                  LabelStr.connectionError, Colors.red);
+                            }
+                          });
+                        },
+                      ),
+                    )
+                  ],
                 ),
-                SizedBox(height: 10),
-                Container(
-                  width: 100,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        HexColor("#1785e9"),
-                        HexColor("#83cff2")
-                      ]),
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: TextButton(
-                    child: Text(LabelStr.lblSubmit,
-                        style: AppTheme.mediumSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
-                    onPressed: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      checkConnection().then((isConnected) {
-                        if (isConnected) {
-                          //submitDetails(RadioGroupWidget.radioButtonItem);
-                        } else {
-                          ToastUtils.showToast(context,
-                              LabelStr.connectionError, Colors.red);
-                        }
-                      });
-                    },
-                  ),
-                )
-              ],
-            ),
-          ),
+              )
+            ],
+          ) : Container(),
         ],
       ),
     );
@@ -237,7 +234,7 @@ class RadioGroupWidget extends State {
                 setState(() {
                   radioButtonItem = 'Yes';
                   id = 1;
-                  ToastUtils.showToast(context, radioButtonItem, Colors.green);
+                  Utils.answer = radioButtonItem;
                 });
               },
             ),
@@ -253,7 +250,7 @@ class RadioGroupWidget extends State {
                 setState(() {
                   radioButtonItem = 'No';
                   id = 2;
-                  ToastUtils.showToast(context, radioButtonItem, Colors.green);
+                  Utils.answer = radioButtonItem;
                 });
               },
             ),
@@ -268,11 +265,4 @@ class RadioGroupWidget extends State {
       ],
     );
   }
-}
-
-class ItemList {
-  String value;
-  int index;
-  ItemList({this.value, this.index});
-
 }

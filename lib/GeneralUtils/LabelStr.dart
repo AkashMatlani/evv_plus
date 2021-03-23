@@ -31,6 +31,7 @@ class LabelStr {
   static const lbNurse = "Nurse:";
   static const lbPatientAddress = "Patient Address:";
   static const lbStartVisit = "Start Visit";
+  static const lbVisitNote = "Visit Note";
   static const lblAskStartVisit = "Would you like to start visit?";
   static const lblYes = "Yes";
   static const lblNo = "No";

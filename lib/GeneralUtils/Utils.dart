@@ -4,6 +4,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
+  static String answer = "Yes";
+
   static void showLoader(bool show, BuildContext context) {
     if (show) {
       showDialog(

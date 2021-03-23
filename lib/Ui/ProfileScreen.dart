@@ -19,6 +19,7 @@ import '../GeneralUtils/ColorExtension.dart';
 import '../GeneralUtils/Constant.dart';
 import '../GeneralUtils/LabelStr.dart';
 
+
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -54,12 +55,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String stateId;
   String cityId;
   String gender;
-  String state;
   String city;
   String formattedStr;
   String apiDateString;
   File _image;
-  String stateName, cityName;
+  String stateName="", cityName="";
 
   @override
   void initState() {
@@ -79,13 +79,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
       print("dateofbirth" + dateOfBirth);
       nurseImage = prefs.getString(PrefUtils.NurseImage);
-     /* setState(() {
+      stateId = prefs.getInt(PrefUtils.stateId).toString();
+       setState(() {
         stateName = prefs.getString(PrefUtils.stateName);
         cityName = prefs.getString(PrefUtils.cityName);
-      });*/
+      });
 
       DateTime tempDate =
-          new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
+      new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
       print("tenpdate" + tempDate.toString());
 
       formattedStr =
@@ -95,28 +96,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       checkConnection().then((isConnected) {
         if (isConnected) {
           _getSateLIst();
+          _getCityList(stateId);
           _getNurseProfileDetail(nurseId);
         } else {
           ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
         }
       });
-      stateId = prefs.getInt(PrefUtils.stateId).toString();
-      if (stateList.length > 0) {
-        for (int i = 0; i < stateList.length; i++) {
-          stateId == stateList[i].stateId;
-          state = stateList[i].stateName;
-          return stateList[i].stateName;
-        }
-      }
-      _getCityList(stateId);
-      cityId = prefs.getInt(PrefUtils.cityId).toString();
-      if (cityList.length > 0) {
-        for (int i = 0; i < cityList.length; i++) {
-          cityId == cityList[i].cityId;
-          city = cityList[i].cityName;
-          return cityList[i].cityName;
-        }
-      }
     });
   }
 
@@ -145,98 +130,85 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fit: BoxFit.fill),
                         Container(
                             child: Column(
-                          children: [
-                            SizedBox(height: 50),
-                            Row(
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Container(
-                                    child: Icon(Icons.arrow_back,
-                                        color: Colors.white),
-                                    margin: EdgeInsets.only(left: 10),
-                                  ),
+                                SizedBox(height: 50),
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Container(
+                                        child: Icon(Icons.arrow_back,
+                                            color: Colors.white),
+                                        margin: EdgeInsets.only(left: 10),
+                                      ),
+                                    ),
+                                    Expanded(
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          margin: EdgeInsets.only(right: 20),
+                                          child: Text(LabelStr.lblMyProfile,
+                                              style: AppTheme.boldSFTextStyle()
+                                                  .copyWith(
+                                                  fontSize: 24,
+                                                  color: Colors.white)),
+                                        ))
+                                  ],
                                 ),
-                                Expanded(
-                                    child: Container(
-                                  alignment: Alignment.center,
-                                  margin: EdgeInsets.only(right: 20),
-                                  child: Text(LabelStr.lblMyProfile,
-                                      style: AppTheme.boldSFTextStyle()
-                                          .copyWith(
-                                              fontSize: 24,
-                                              color: Colors.white)),
-                                ))
-                              ],
-                            ),
-                            SizedBox(height: 15),
-                            /*   Container(
-                                alignment: Alignment.center,
-                                child: SvgPicture.asset(
-                                    MyImage.user_placeholder,
-                                    height: 120,
-                                    width: 120)),*/
-
-                            Center(
-                                child: GestureDetector(
-                              onTap: () {
-                                _showPicker(context);
-                              },
-                              child: CircleAvatar(
-                                radius: 55,
-                                backgroundColor: Color(0xffFDCF09),
-                                child: _image != null
-                                    ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(50),
-                                        child: Image.file(
-                                          _image,
+                                SizedBox(height: 15),
+                                Center(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _showPicker(context);
+                                      },
+                                      child: CircleAvatar(
+                                        radius: 55,
+                                        backgroundColor: Color(0xffFDCF09),
+                                        child: _image != null
+                                            ? ClipRRect(
+                                          borderRadius: BorderRadius.circular(50),
+                                          child: Image.file(
+                                            _image,
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                        )
+                                            : Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.grey[200],
+                                              borderRadius:
+                                              BorderRadius.circular(50)),
                                           width: 100,
                                           height: 100,
-                                          fit: BoxFit.fitHeight,
-                                        ),
-                                      )
-                                    : Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.grey[200],
-                                            borderRadius:
-                                                BorderRadius.circular(50)),
-                                        width: 100,
-                                        height: 100,
-                                        child: Icon(
-                                          Icons.camera_alt,
-                                          color: Colors.grey[800],
+                                          child: Icon(
+                                            Icons.camera_alt,
+                                            color: Colors.grey[800],
+                                          ),
                                         ),
                                       ),
-                              ),
-                            )),
-                            SizedBox(height: 5),
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              alignment: Alignment.center,
-                              child: Text("${firstName + " " + lastName}",
-                                  style: AppTheme.boldSFTextStyle().copyWith(
-                                      fontSize: 24, color: Colors.white)),
-                            ),
-                            SizedBox(height: 5),
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              alignment: Alignment.center,
-                              child: stateName != null || cityName != null
-                                  ? new Text("${stateName + " " + cityName}",
+                                    )),
+                                SizedBox(height: 5),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  alignment: Alignment.center,
+                                  child: Text("${firstName + " " + lastName}",
+                                      style: AppTheme.boldSFTextStyle().copyWith(
+                                          fontSize: 24, color: Colors.white)),
+                                ),
+                                SizedBox(height: 5),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  alignment: Alignment.center,
+                                  child: Text("${stateName + ", " + cityName}",
                                       style: AppTheme.regularSFTextStyle()
                                           .copyWith(
-                                              fontSize: 14,
-                                              color: Colors.white))
-                                  : new Text("Columbia ohia",
-                                      style: AppTheme.regularSFTextStyle()
-                                          .copyWith(
-                                              fontSize: 14,
-                                              color: Colors.white)),
-                            ),
-                          ],
-                        ))
+                                          fontSize: 14,
+                                          color: Colors.white))
+                                ),
+                              ],
+                            ))
                       ],
                     ),
                     SizedBox(
@@ -408,7 +380,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: HexColor("#D2D2D2"),
                                   style: BorderStyle.solid),
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0)),
+                              BorderRadius.all(Radius.circular(5.0)),
                             ),
                           ),
                           width: MediaQuery.of(context).size.width,
@@ -418,15 +390,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             isExpanded: true,
                             items: stateList.map((item) {
                               return new DropdownMenuItem(
-                                child: state != null
-                                    ? new Text(state)
-                                    : new Text(item.stateName),
+                                child: Text(item.stateName),
                                 value: item.stateId.toString(),
                               );
                             }).toList(),
                             onChanged: (newVal) {
                               setState(() {
                                 stateId = newVal;
+                                for (var i=0; i<stateList.length; i++){
+                                  if(stateId.compareTo(stateList[i].stateId.toString()) == 0){
+                                    stateName = stateList[i].stateName;
+                                  }
+                                }
                                 cityList.clear();
                                 _getCityList(stateId);
                               });
@@ -465,34 +440,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       color: HexColor("#D2D2D2"),
                                       style: BorderStyle.solid),
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(5.0)),
+                                  BorderRadius.all(Radius.circular(5.0)),
                                 ),
                               ),
                               width: MediaQuery.of(context).size.width * 0.42,
                               height: 45,
-                              child: cityList.length != 0
+                              child: cityList.length > 0
                                   ? DropdownButton(
-                                      underline: SizedBox(),
-                                      isExpanded: true,
-                                      items: cityList.map((item) {
-                                        return new DropdownMenuItem(
-                                          child: city != null
-                                              ? new Text(city)
-                                              : new Text(item.cityName),
-                                          value: item.cityId.toString(),
-                                        );
-                                      }).toList(),
-                                      onChanged: (newVal) {
-                                        setState(() {
-                                          cityId = newVal;
-                                        });
-                                      },
-                                      value: cityId,
-                                    )
+                                underline: SizedBox(),
+                                isExpanded: true,
+                                items: cityList.map((item) {
+                                  return new DropdownMenuItem(
+                                    child: Text(item.cityName),
+                                    value: item.cityId.toString(),
+                                  );
+                                }).toList(),
+                                onChanged: (newVal) {
+                                  setState(() {
+                                    cityId = newVal;
+                                    for (var i=0; i<cityList.length; i++){
+                                      if(cityId.compareTo(cityList[i].cityId.toString()) == 0){
+                                        cityName = cityList[i].cityName;
+                                      }
+                                    }
+                                  });
+                                },
+                                value: cityId,
+                              )
                                   : Center(
-                                      child: Container(
-                                      child: Text("Please select state"),
-                                    )),
+                                  child: Container(
+                                    child: Text("Select city"),
+                                  )),
                             ),
                           ),
                         ),
@@ -575,7 +553,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           gender,
           apiDateString,
           email,
-          nurseImage, (isSuccess, response) {
+          nurseImage, (isSuccess, message) {
         Utils.showLoader(false, context);
         if (isSuccess) {
           setState(() {
@@ -591,11 +569,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 context, "NurseProfile Updated Successfully.", Colors.green);
             Timer(
               Duration(milliseconds: 200),
-              () => Navigator.of(context).pop(),
+                  () => Navigator.of(context).pop(),
             );
           });
         } else {
-          setState(() {});
+          ToastUtils.showToast(context, message, Colors.red);
         }
       });
     }
@@ -603,7 +581,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _getNurseProfileDetail(String nurseId) {
     Utils.showLoader(true, context);
-    _nurseViewModel.getProfileAPICall(nurseId, (isSuccess, response) {
+    _nurseViewModel.getProfileAPICall(nurseId, (isSuccess, message) {
       Utils.showLoader(false, context);
       if (isSuccess) {
         setState(() {
@@ -624,27 +602,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           stateId = _nurseViewModel.nurseResponse.stateId.toString();
           dateOfBirth = _nurseViewModel.nurseResponse.dateOfBirth;
           DateTime tempDate =
-              new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
+          new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
           print("tenpdate" + tempDate.toString());
           apiDateString = Utils.convertDate(
               dateOfBirth.toString(), DateFormat("yyyy-MM-dd"));
           print("formattedStr" + apiDateString);
 
         });
-        /* if (stateList.length > 0) {
-            for (int i = 0; i < stateList.length; i++) {
-              if (stateId.compareTo(stateList[i].stateId.toString()) == 0) {
-                PrefUtils.setStringValue(
-                    PrefUtils.stateName, stateList[i].stateName);
-                PrefUtils.setIntValue(PrefUtils.stateId, stateList[i].stateId);
-              }
-            }
-          }*/
-
-        //_getCityList(stateId);
-
       } else {
-        setState(() {});
+        ToastUtils.showToast(context, message, Colors.red);
       }
     });
   }
@@ -660,7 +626,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           cityList = [];
         });
       } else {
-        setState(() {});
+        setState(() {
+          stateList = [];
+          cityList = [];
+        });
       }
     });
   }
