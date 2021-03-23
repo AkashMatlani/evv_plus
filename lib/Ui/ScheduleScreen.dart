@@ -246,27 +246,27 @@ class _ScheduleScreenState extends State<ScheduleScreen>
               child: Stack(
                 children: [
                   Container(
-                      padding: EdgeInsets.only(left: 10, right: 50),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Search patient name/care plan",
-                        ),
-                        keyboardType: TextInputType.text,
-                        controller: searchController,
-                      )
-                  ),
+                        padding: EdgeInsets.only(left: 10, right: 50),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Search patient name/care plan",
+                          ),
+                          keyboardType: TextInputType.text,
+                          controller: searchController,
+                        )
+                    ),
                   Positioned(
                     child: InkWell(
                       onTap: (){
                         searchKey = searchController.text.toString();
                         FocusScope.of(context).requestFocus(FocusNode());
                         if(searchKey.isNotEmpty){
-                          getFilterList();
-                          _scheduleViewModel.filterScheduleList.length!=null?
+                         getFilterList();
+                         // _scheduleViewModel.filterScheduleList.length!=null?
 
 
-                          SearchScreen("test"):Container();
+                          //SearchScreen("test"):Container();
                           /*Expanded(
                             child:ListView.builder(
                               itemCount: _scheduleViewModel.filterScheduleList.length,
@@ -500,4 +500,42 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         ),
       );
     }
+
 }
+
+class DataSearch extends SearchDelegate<String>
+{
+
+  List<String> suggestions1;
+  final cities=["Mumbai, Vishakhapatnam"];
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    // TODO: implement buildActions
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    // TODO: implement buildLeading
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestions = query.isEmpty ? suggestions1 : cities;
+    return ListView.builder(
+      itemCount: suggestions.length,
+      itemBuilder: (content, index) => ListTile(
+          leading: Icon(Icons.arrow_left), title: Text(suggestions[index])),
+    );
+  }
+
+  
+}
+
