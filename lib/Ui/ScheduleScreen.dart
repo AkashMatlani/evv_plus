@@ -4,7 +4,6 @@ import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
-import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/ChangePwdScreen.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
@@ -40,7 +39,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "";
   String pastDueCount, upcommingCount, completeCount;
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
-  var searchController = TextEditingController();
 
   final List<String> _menuNameList = [
     LabelStr.lblHome,
@@ -236,45 +234,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         height: MediaQuery.of(context).size.height,
         child: Column(
           children: <Widget>[
-            Container(
-              height: 50,
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: HexColor("#eaeff2")),
-              child: Stack(
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(left: 10, right: 50),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Search patient name/care plan",
-                        ),
-                        keyboardType: TextInputType.text,
-                        controller: searchController,
-                      )
-                  ),
-                  Positioned(
-                    child: InkWell(
-                      onTap: (){
-                        FocusScope.of(context).requestFocus(FocusNode());
-                      },
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(5),
-                        child: SvgPicture.asset(MyImage.ic_search),
-                      ),
-                    ),
-                    right: 5,
-                    top: 10,
-                  )
-                ],
-              ),
-            ),
             TabBar(
               indicatorColor: Colors.transparent,
               isScrollable: true,
@@ -387,31 +346,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       });
     });
   }
-
-  void getFilterList() {
-    Utils.showLoader(true, context);
-    _scheduleViewModel.getScheduleFilterAPICall((activeTabIndex+1).toString(), searchController.text.toString(), (isSuccess, message) {
-      Utils.showLoader(false, context);
-      if(isSuccess){
-        //_updateTabUI(searchKey, _scheduleViewModel.filterScheduleList);
-        ToastUtils.showToast(context, _scheduleViewModel.filterScheduleList.length.toString(), Colors.green);
-      } else {
-        //_updateTabUI(searchKey, _scheduleViewModel.filterScheduleList);
-        ToastUtils.showToast(context, message, Colors.red);
-      }
-    });
-  }
-
-
-  /*_updateTabUI(String searchKey, List<ScheduleInfoResponse> filterList){
-    if(activeTabIndex == 0){
-      PastDueScheduleScreen(searchKey, filterList);
-    } else if(activeTabIndex == 1){
-      UpcommingScheduleScreen(searchKey, filterList);
-    } else{
-      CompletedScheduleScreen(searchKey, filterList);
-    }
-  }*/
 
    listRowItems(BuildContext context, int position) {
       return InkWell(

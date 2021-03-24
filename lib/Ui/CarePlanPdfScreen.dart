@@ -15,6 +15,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 class CarePlanPdfScreen extends StatefulWidget {
   @override
@@ -167,41 +169,23 @@ class _CarePlanPdfScreenState extends State<CarePlanPdfScreen> {
     await Share.file('Care plan pdf', 'careplan.pdf', bytes, '*/*');
   }
 
-  static var httpClient = new HttpClient();
-  _downloadCarePlanPdfFile(String filename) async{
+  _downloadCarePlanPdfFile(String filename) async {
+    var httpClient = new HttpClient();
     var request = await httpClient.getUrl(Uri.parse(pdfUrl));
     var response = await request.close();
     var bytes = await consolidateHttpClientResponseBytes(response);
-    String path = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
-   // String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = new File('$path/$filename');
-    await file.writeAsBytes(bytes);
-    return file;
-  }
-
-  Future<String> downloadFile(String url, String fileName, String dir) async {
-    HttpClient httpClient = new HttpClient();
-    File file;
-    String filePath = '';
-    String myUrl = '';
-
-    try {
-      myUrl = url+'/'+fileName;
-      var request = await httpClient.getUrl(Uri.parse(myUrl));
-      var response = await request.close();
-      if(response.statusCode == 200) {
-        var bytes = await consolidateHttpClientResponseBytes(response);
-        filePath = '$dir/$fileName';
-        file = File(filePath);
-        await file.writeAsBytes(bytes);
-      }
-      else
-        filePath = 'Error code: '+response.statusCode.toString();
+    var status = await Permission.storage.status;
+    if (status.isGranted) {
+      String path = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
+      File file = new File('$path/$filename');
+      ToastUtils.showToast(context, "Your file save at "+file.toString()+" location", Colors.green);
+      await file.writeAsBytes(bytes);
+      return file;
+    } else {
+      Map<Permission, PermissionStatus> status = await [
+        Permission.storage,
+      ].request();
+      print("Permission status :: $status");
     }
-    catch(ex){
-      filePath = 'Can not fetch url';
-    }
-
-    return filePath;
   }
 }

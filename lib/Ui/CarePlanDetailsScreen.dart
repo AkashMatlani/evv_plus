@@ -45,6 +45,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
   String _nurseId="", _nurseName="";
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   bool isVisitStarted = false;
+  String checkInTime = "00:00:00";
 
   @override
   void initState() {
@@ -137,7 +138,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                   children: [
                                     Text(LabelStr.lblCheckIn, style: AppTheme.regularSFTextStyle().copyWith(fontSize:14, color: Colors.white)),
                                     SizedBox(height: 3),
-                                    Text("00:00:00", style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
+                                    Text(checkInTime, style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
                                   ],
                                 ),
                               ),
@@ -428,16 +429,17 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
   void _nurseChexckInRequest(BuildContext context, String nurseId, int patientId) {
     DateFormat formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
     String formatted = formatter.format(DateTime.now());
-    String checkInDate = formatted.split("T")[0];
-    String checkInTime = formatted.split("T")[1];
+    String date = formatted.split("T")[0];
+    String time = formatted.split("T")[1];
 
     Utils.showLoader(true, context);
-    _scheduleViewModel.nurseCheckInAPICall(nurseId, patientId.toString(), checkInDate, checkInTime, (isSuccess, message) {
+    _scheduleViewModel.nurseCheckInAPICall(nurseId, patientId.toString(), date, time, (isSuccess, message) {
       Utils.showLoader(false, context);
       Navigator.of(context).pop();
       if(isSuccess){
         setState(() {
           isVisitStarted = true;
+          checkInTime = Utils.convertTime(time);
         });
       } else{
         setState(() {
