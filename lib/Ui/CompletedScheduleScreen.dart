@@ -25,7 +25,9 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
 
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   List<ScheduleInfoResponse> _completedVisitList = [];
+  List<ScheduleInfoResponse> _filterList = [];
   bool isLoading = true;
+  var searchController = TextEditingController();
 
   @override
   void initState() {
@@ -50,11 +52,77 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _completedVisitList.length == 0 ? emptyListView() : ListView.builder(
-        itemCount: _completedVisitList.length,
-        itemBuilder: (context, position) {
-          return listRowItems(context, position);
-        },
+      body: _completedVisitList.length == 0 ? emptyListView() : Column(
+        children: [
+          Container(
+            height: 50,
+            alignment: Alignment.centerLeft,
+            margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: HexColor("#eaeff2")),
+            child: Stack(
+              children: [
+                Container(
+                    padding: EdgeInsets.only(left: 10, right: 50),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Search patient name/care plan",
+                      ),
+                      keyboardType: TextInputType.text,
+                      controller: searchController,
+                        onChanged: (value){
+                          setState(() {
+                            if(value.isEmpty){
+                              _filterList = [];
+                              _filterList = _completedVisitList;
+                            }
+                          });
+                        }
+                    )
+                ),
+                Positioned(
+                  child: InkWell(
+                    onTap: (){
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      String filterKey = searchController.text.toString();
+                      if(filterKey.isNotEmpty){
+                        _filterList = [];
+                        for(var i=0; i< _completedVisitList.length; i++){
+                          String name = _completedVisitList[i].firstName+" "+_completedVisitList[i].lastName;
+                          if(name.contains(filterKey) || _completedVisitList[i].carePlanName.contains(filterKey)){
+                            _filterList.add(_completedVisitList[i]);
+                          }
+                        }
+                      } else {
+                        _filterList = [];
+                        _filterList = _completedVisitList;
+                      }
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(5),
+                      child: SvgPicture.asset(MyImage.ic_search),
+                    ),
+                  ),
+                  right: 5,
+                  top: 10,
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: _filterList.length,
+            itemBuilder: (context, position) {
+              return listRowItems(context, position);
+            },
+          )
+        ],
       ),
     );
   }
@@ -69,7 +137,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
   listRowItems(BuildContext context, int position) {
     return InkWell(
       onTap: (){
-        Utils.navigateToScreen(context, CarePlanDetailsScreen(_completedVisitList[position], false));
+        Utils.navigateToScreen(context, CarePlanDetailsScreen(_filterList[position], false));
       },
       child: Card(
         elevation: 2,
@@ -100,11 +168,11 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(_completedVisitList[position].firstName+" "+_completedVisitList[position].lastName, style: AppTheme.boldSFTextStyle().copyWith(fontSize: 16)),
+                        Text(_filterList[position].firstName+" "+_filterList[position].lastName, style: AppTheme.boldSFTextStyle().copyWith(fontSize: 16)),
                         SizedBox(height: 3),
-                        Text(Utils.convertDate(_completedVisitList[position].visitDate, DateFormat('dd/MM/yyyy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
+                        Text(Utils.convertDate(_filterList[position].visitDate, DateFormat('dd/MM/yyyy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
                         SizedBox(height: 3),
-                        Text(Utils.convertTime(_completedVisitList[position].timeFrom.substring(0, 5))+" - "+Utils.convertTime(_completedVisitList[position].timeTo.substring(0, 5)), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696")))
+                        Text(Utils.convertTime(_filterList[position].timeFrom.substring(0, 5))+" - "+Utils.convertTime(_filterList[position].timeTo.substring(0, 5)), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696")))
                       ],
                     ),
                   )
@@ -123,7 +191,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
                       child: SvgPicture.asset(MyImage.ic_fill_circle, color: HexColor("#2ab554")),
                     ),
                     SizedBox(width: 3),
-                    Text(_completedVisitList[position].carePlanName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
+                    Text(_filterList[position].carePlanName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
                   ],
                 ),
               )
@@ -141,12 +209,15 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
       isLoading = false;
       if(isSuccess){
         setState(() {
+          _filterList = [];
           _completedVisitList = [];
           _completedVisitList = _scheduleViewModel.completedScheduleList;
+          _filterList = _completedVisitList;
         });
       } else{
         setState(() {
           _completedVisitList = [];
+          _filterList = [];
         });
       }
     });
