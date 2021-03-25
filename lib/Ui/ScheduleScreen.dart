@@ -4,6 +4,7 @@ import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/ChangePwdScreen.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
@@ -39,6 +40,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "", searchKey="";
   String pastDueCount, upcommingCount, completeCount;
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
+  var searchController = TextEditingController();
 
   final List<String> _menuNameList = [
     LabelStr.lblHome,
@@ -470,4 +472,18 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         ),
       );
     }
+  void getFilterList() {
+    Utils.showLoader(true, context);
+    _scheduleViewModel.getScheduleFilterAPICall((activeTabIndex+1).toString(), searchKey, (isSuccess, message) {
+      Utils.showLoader(false, context);
+      if(isSuccess){
+        //_updateTabUI(searchKey, _scheduleViewModel.filterScheduleList);
+        ToastUtils.showToast(context, _scheduleViewModel.filterScheduleList.length.toString(), Colors.green);
+      } else {
+        //_updateTabUI(searchKey, _scheduleViewModel.filterScheduleList);
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
+  }
+
 }
