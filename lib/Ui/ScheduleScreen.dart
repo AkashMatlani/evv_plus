@@ -37,7 +37,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   int activeTabIndex = 0;
   int _selectedIndex = 0;
 
-  String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "";
+  String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "", searchKey="";
   String pastDueCount, upcommingCount, completeCount;
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   var searchController = TextEditingController();

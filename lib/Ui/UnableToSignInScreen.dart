@@ -17,6 +17,7 @@ class UnableToSignInScreen extends StatefulWidget {
 class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
   SingingCharacter _character = SingingCharacter.Physical;
 
+  String finalvalue=SingingCharacter.Physical.toString();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,6 +106,7 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                     onChanged: (SingingCharacter value) {
                                       setState(() {
                                         _character = value;
+                                        finalvalue=value.toString();
                                       });
                                     },
                                   ),
@@ -122,6 +124,7 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                     onChanged: (SingingCharacter value) {
                                       setState(() {
                                         _character = value;
+                                        finalvalue=value.toString();
                                       });
                                     },
                                   ),
@@ -139,6 +142,7 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                     onChanged: (SingingCharacter value) {
                                       setState(() {
                                         _character = value;
+                                        finalvalue=value.toString();
                                       });
                                     },
                                   ),
@@ -189,7 +193,8 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                                 .requestFocus(FocusNode());
                                             checkConnection()
                                                 .then((isConnected) {
-                                              Utils.navigateToScreen(context, VisitVerificationScreen());
+                                                  print("final value-->>"+finalvalue.toString());
+                                              Utils.navigateToScreen(context, VisitVerificationScreen(finalvalue));
                                             });
                                           },
                                         ),

@@ -1,10 +1,18 @@
+import 'dart:async';
+
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Ui/VerificationMenuScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:io' as io;
+
+import 'package:path_provider/path_provider.dart';
 
 class ClientPatientVoiceSignatureScreen extends StatefulWidget {
   @override
@@ -13,7 +21,55 @@ class ClientPatientVoiceSignatureScreen extends StatefulWidget {
 }
 
 class _ClientPatientVoiceSignatureScreenState
-    extends State<ClientPatientVoiceSignatureScreen> {
+    extends State<ClientPatientVoiceSignatureScreen> with TickerProviderStateMixin{
+  FlutterAudioRecorder _recorder;
+  Recording _current;
+  RecordingStatus _currentStatus = RecordingStatus.Unset;
+  Recording _recording;
+  Timer _t;
+  Widget _buttonIcon =
+      SvgPicture.asset(MyImage.mic_icon, height: 120, width: 120);
+  Widget _playIcon = SvgPicture.asset(MyImage.play_icon, height: 68, width: 68);
+  AudioPlayer audioPlayer;
+  String localFilePath;
+  AnimationController _animationIconController1;
+  bool issongplaying = false;
+  AudioCache audioCache;
+  Duration _duration = new Duration();
+  Duration _position = new Duration();
+  Duration _slider = new Duration(seconds: 0);
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.microtask(() {
+      _prepare();
+    });
+
+    _animationIconController1 = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 750),
+    );
+
+    audioPlayer = new AudioPlayer();
+    audioCache = new AudioCache(fixedPlayer: audioPlayer);
+    audioPlayer.durationHandler = (d) => setState(() {
+      print("duration"+_duration.inSeconds.toString());
+      _duration = d;
+
+      if(_duration.inSeconds==_recording?.duration?.inSeconds)
+        {
+         /* if (!issongplaying) {
+            audioPlayer.play(_recording.path);
+
+          } else {
+            audioPlayer.pause();
+          }*/
+        }
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,8 +105,7 @@ class _ClientPatientVoiceSignatureScreenState
                 icon: Icon(Icons.arrow_back, color: Colors.black),
                 onPressed: () {
                   Navigator.of(context).pop();
-                })
-        ),
+                })),
         body: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
           return SingleChildScrollView(
@@ -72,7 +127,11 @@ class _ClientPatientVoiceSignatureScreenState
                       SizedBox(
                         height: 20,
                       ),
-                      SvgPicture.asset(MyImage.mic_icon, height: 120, width: 120),
+                      InkWell(
+                          onTap: () {
+                            _opt();
+                          },
+                          child: _buttonIcon) /**/,
                       SizedBox(
                         height: 10,
                       ),
@@ -89,7 +148,7 @@ class _ClientPatientVoiceSignatureScreenState
                       SizedBox(
                         height: 10,
                       ),
-                      Text("00:10:00",
+                      Text("${_recording?.duration?.inSeconds}",
                           style: AppTheme.boldSFTextStyle().copyWith(
                             fontSize: 26,
                             color: HexColor("#3d3d3d"),
@@ -98,7 +157,7 @@ class _ClientPatientVoiceSignatureScreenState
                         height: 10,
                       ),
                       Text(
-                        "This will take 10 second voice recording and will be\n saved once click on done",
+                        "This will take 30 second voice recording and will be\n saved once click on done",
                         textAlign: TextAlign.center,
                         style: AppTheme.regularSFTextStyle().copyWith(
                           fontSize: 16,
@@ -108,7 +167,46 @@ class _ClientPatientVoiceSignatureScreenState
                       SizedBox(
                         height: 30,
                       ),
-                      SvgPicture.asset(MyImage.play_icon, height: 68, width: 68),
+
+                      GestureDetector(
+                        onTap: () {
+                          setState(
+                                  () {
+                                if (!issongplaying) {
+                                  audioPlayer.play(_recording.path);
+
+                                } else {
+                                  audioPlayer.pause();
+
+                                }
+                                issongplaying
+                                    ? _animationIconController1.reverse()
+                                    : _animationIconController1.forward();
+                                issongplaying = !issongplaying;
+                              });
+                        },
+                        child: ClipOval(
+                          child: Container(
+                            color: HexColor("#83cff2"),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: AnimatedIcon(
+                                icon: AnimatedIcons.play_pause,
+                                size: 55,
+                                progress: _animationIconController1,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      /*InkWell(
+                          onTap: () {
+                            _playType();
+                          },
+                          child: _playIcon),*/
+                      /*SvgPicture.asset(MyImage.play_icon,
+                              height: 68, width: 68)),*/
                       Expanded(
                         child: Align(
                             alignment: Alignment.bottomCenter,
@@ -131,8 +229,8 @@ class _ClientPatientVoiceSignatureScreenState
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
                                   checkConnection().then((isConnected) {
-
-                                    Utils.navigateToScreen(context, VerificationMenuScreen());
+                                    Utils.navigateToScreen(
+                                        context, VerificationMenuScreen());
                                   });
                                 },
                               ),
@@ -145,5 +243,189 @@ class _ClientPatientVoiceSignatureScreenState
             ),
           );
         }));
+  }
+
+  _init() async {
+    try {
+      if (await FlutterAudioRecorder.hasPermissions) {
+        String customPath = '/flutter_audio_recorder_';
+        io.Directory appDocDirectory;
+//        io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
+        if (io.Platform.isIOS) {
+          appDocDirectory = await getApplicationDocumentsDirectory();
+        } else {
+          appDocDirectory = await getExternalStorageDirectory();
+        }
+
+        // can add extension like ".mp4" ".wav" ".m4a" ".aac"
+        customPath = appDocDirectory.path +
+            customPath +
+            DateTime.now().millisecondsSinceEpoch.toString();
+
+        // .wav <---> AudioFormat.WAV
+        // .mp4 .m4a .aac <---> AudioFormat.AAC
+        // AudioFormat is optional, if given value, will overwrite path extension when there is conflicts.
+        _recorder =
+            FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
+
+        await _recorder.initialized;
+        // after initialization
+        var current = await _recorder.current(channel: 0);
+        print(current);
+
+        // should be "Initialized", if all working fine
+        setState(() {
+          _current = current;
+          _currentStatus = current.status;
+          print(_currentStatus);
+        });
+      } else {
+        Scaffold.of(context).showSnackBar(
+            new SnackBar(content: new Text("You must accept permissions")));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  _start() async {
+    try {
+      await _recorder.start();
+
+      var current = await _recorder.current();
+      setState(() {
+        _recording = current;
+
+      });
+
+      _t = Timer.periodic(Duration(milliseconds: 10), (Timer t) async {
+        var current = await _recorder.current();
+        setState(() {
+          if (_recording?.duration?.inSeconds ==30 ) {
+            _stopRecording();
+          }
+          _recording = current;
+          _t = t;
+        });
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future _stopRecording() async {
+    var result = await _recorder.stop();
+    _t.cancel();
+    print("path-->>" + _recording?.path.toString());
+    setState(() {
+      _recording = result;
+    });
+  }
+
+  Future _prepare() async {
+    await _init();
+    var result = await _recorder.current();
+    setState(() {
+      _recording = result;
+      //_buttonIcon = _playerIcon(_recording.status);
+      _buttonIcon = _playerIcon(_recording.status);
+    });
+  }
+
+  Widget _playerIcon(RecordingStatus status) {
+    switch (status) {
+      case RecordingStatus.Initialized:
+        {
+          return SvgPicture.asset(MyImage.mic_icon, height: 120, width: 120);
+        }
+      case RecordingStatus.Recording:
+        {
+          return Container(height: 120, width: 120, child: Icon(Icons.stop));
+        }
+    /*  case RecordingStatus.Stopped:
+        {
+          return Container(height: 120, width: 120, child: Icon(Icons.replay));
+        }*/
+      default:
+        return SvgPicture.asset(MyImage.mic_icon, height: 120, width: 120);
+    }
+  }
+
+  void _opt() async {
+    switch (_recording.status) {
+      case RecordingStatus.Initialized:
+        {
+          await _start();
+          break;
+        }
+      case RecordingStatus.Recording:
+        {
+          await _stopRecording();
+          break;
+        }
+      case RecordingStatus.Stopped:
+        {
+          await _prepare();
+          break;
+        }
+
+      default:
+        break;
+    }
+
+    setState(() {
+      _buttonIcon = _playerIcon(_recording.status);
+    });
+  }
+
+  void _play() {
+    AudioPlayer player = AudioPlayer();
+    player.play(_recording.path, isLocal: true);
+  }
+
+  void _stop() {
+    AudioPlayer player = AudioPlayer();
+    player.state = AudioPlayerState.PAUSED;
+    player.onPlayerStateChanged;
+    player.stop();
+  }
+
+  Widget _playerIconForPlaying(RecordingStatus status) {
+    switch (status) {
+      case RecordingStatus.Paused:
+        {
+          return SvgPicture.asset(MyImage.play_icon, height: 68, width: 68);
+        }
+      case RecordingStatus.Stopped:
+        {
+          return Container(height: 120, width: 120, child: Icon(Icons.stop));
+        }
+      default:
+        return SvgPicture.asset(MyImage.play_icon, height: 68, width: 68);
+    }
+  }
+
+  void _playType() async {
+    switch (_recording.status) {
+      case RecordingStatus.Stopped:
+        {
+          _play();
+          _playIcon = _playerIconForPlaying(RecordingStatus.Paused);
+          break;
+        }
+      case RecordingStatus.Initialized:
+        {
+          _stop();
+          break;
+        }
+
+      default:
+        _stop();
+        break;
+    }
+
+    setState(() {
+      _playIcon = _playerIconForPlaying(_recording.status);
+    });
   }
 }

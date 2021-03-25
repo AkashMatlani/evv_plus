@@ -6,7 +6,13 @@ import 'package:evv_plus/Ui/VerificationMenuScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+enum SingingCharacter { Physical, mental, other }
+
 class VisitVerificationScreen extends StatefulWidget {
+
+  var finalValue;
+
+  VisitVerificationScreen([this.finalValue]);
   @override
   _VisitVerificationScreenState createState() =>
       _VisitVerificationScreenState();
@@ -57,7 +63,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                       ),
                   Column(
                     children: [
-                      Container(
+                      widget.finalValue==SingingCharacter.other.toString()?Container():Container(
                         padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
                         color: Colors.white,
                         child: Container(
@@ -102,13 +108,13 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                         HexColor("#83cff2")
                                       ]),
                                       borderRadius:
-                                          BorderRadius.all(Radius.circular(5))),
+                                      BorderRadius.all(Radius.circular(5))),
                                   child: TextButton(
                                     child: Text(LabelStr.lblGetCaretakerSignature,
                                         style: AppTheme.boldSFTextStyle()
                                             .copyWith(
-                                                fontSize: 20,
-                                                color: Colors.white)),
+                                            fontSize: 20,
+                                            color: Colors.white)),
                                     onPressed: () {
                                       FocusScope.of(context)
                                           .requestFocus(FocusNode());
@@ -124,7 +130,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                           ),
                         ),
                       ),
-                      Container(
+                      widget.finalValue==SingingCharacter.other.toString()?Container(
                         padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
                         color: Colors.white,
                         child: Container(
@@ -199,7 +205,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                             ],
                           ),
                         ),
-                      ),
+                      ):Container(),
                     ],
                   ),
                 ]))));

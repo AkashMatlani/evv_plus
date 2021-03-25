@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
@@ -385,11 +386,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           width: MediaQuery.of(context).size.width,
                           height: 45,
-                          child: new DropdownButton(
+                          child:  stateList!=null && stateList.length > 0
+                        ? DropdownButton(
                             underline: SizedBox(),
                             isExpanded: true,
                             items: stateList.map((item) {
-                              return new DropdownMenuItem(
+                              return  DropdownMenuItem(
                                 child: Text(item.stateName),
                                 value: item.stateId.toString(),
                               );
@@ -407,7 +409,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               });
                             },
                             value: stateId,
-                          ),
+                          ):Container(),
                         ),
                       ),
                     ),
@@ -445,7 +447,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               width: MediaQuery.of(context).size.width * 0.42,
                               height: 45,
-                              child: cityList.length > 0
+                              child: cityList!=null && cityList.length > 0
                                   ? DropdownButton(
                                 underline: SizedBox(),
                                 isExpanded: true,
@@ -657,6 +659,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     setState(() {
       _image = image;
+      final bytes = _image.readAsBytesSync();
+      String _img64 = base64Encode(bytes);
+      print("base64Camera-->>"+_img64);
     });
   }
 
@@ -666,6 +671,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     setState(() {
       _image = image;
+      final bytes = _image.readAsBytesSync();
+      String _img64 = base64Encode(bytes);
+      print("base64Gallery-->>"+_img64);
     });
   }
 
