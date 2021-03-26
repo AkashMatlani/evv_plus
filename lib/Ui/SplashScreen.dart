@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/ScheduleViewModel.dart';
+import 'package:evv_plus/Ui/CustomVisitMenuScreen.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +19,9 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
+  ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
+
+  @override
   void initState() {
     super.initState();
     Timer(
@@ -24,7 +30,11 @@ class _SplashScreenState extends State<SplashScreen> {
         SharedPreferences.getInstance().then((prefs) async {
           PrefUtils.getNurseDataFromPref();
           if(prefs.containsKey(PrefUtils.isLoggedIn) && prefs.getBool(PrefUtils.isLoggedIn)){
-            Utils.navigateReplaceToScreen(context, ScheduleScreen());
+            if(prefs.containsKey(PrefUtils.visitId) && prefs.getInt(PrefUtils.visitId) == 0){
+              Utils.navigateReplaceToScreen(context, ScheduleScreen());
+            } else {
+              getVisitDetails(prefs.getInt(PrefUtils.visitId));
+            }
           } else {
             Utils.navigateReplaceToScreen(context, LoginScreen());
           }
@@ -51,5 +61,15 @@ class _SplashScreenState extends State<SplashScreen> {
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  getVisitDetails(int visitId) {
+    _scheduleViewModel.getVisitDetailsAPICall(visitId.toString(), (isSuccess, message){
+      if(isSuccess){
+        Utils.navigateReplaceToScreen(context, CustomVisitMenuScreen(_scheduleViewModel.schedulleDetails));
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
   }
 }

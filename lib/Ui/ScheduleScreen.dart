@@ -2,14 +2,17 @@ import 'dart:async';
 
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
+import 'package:evv_plus/GeneralUtils/FirebaseNotificationHandler.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/Models/CompletedNoteResponse.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/ChangePwdScreen.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:evv_plus/Ui/PastDueScheduleScreen.dart';
 import 'package:evv_plus/Ui/TaskWithDateDetailsScreen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -26,9 +29,6 @@ class ScheduleScreen extends StatefulWidget {
 
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
-
-  static _ScheduleScreenState of(BuildContext context) =>
-      context.findAncestorStateOfType<_ScheduleScreenState>();
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen>
@@ -37,14 +37,16 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   int activeTabIndex = 0;
   int _selectedIndex = 0;
 
-  String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "", searchKey="";
+  String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "";
   String pastDueCount, upcommingCount, completeCount;
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
-  var searchController = TextEditingController();
+
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  FirebaseNotificationHandler notificationHandler;
 
   final List<String> _menuNameList = [
     LabelStr.lblHome,
-    LabelStr.lblTask,
+    /*LabelStr.lblTask,*/
     LabelStr.lblIcident,
     LabelStr.lblNotification,
     LabelStr.lblProfile,
@@ -54,7 +56,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
   final List<String> menuIconsList = [
     MyImage.home_icon,
-    MyImage.task_icon,
+    /*MyImage.task_icon,*/
     MyImage.icident_icon,
     MyImage.notification_icon,
     MyImage.profile_icon,
@@ -66,9 +68,9 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     setState(() => _selectedIndex = index);
     if (index == 0) {
       Utils.navigateToScreen(context, ScheduleScreen());
-    } else if (index == 1) {
-      Utils.navigateToScreen(context, TaskWithDateDetailsScreen());
-    } else if (index == 3) {
+    } /*else if (index == 1) {
+      Utils.navigateToScreen(context, TaskWithDateDetailsScreen(CompletedNoteResponse()));
+    } */else if (index == 3) {
       Utils.navigateToScreen(context, NotificationScreen());
     } else if (index == 4) {
       Utils.navigateToScreen(context, ProfileScreen());
@@ -80,6 +82,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   @override
   void initState() {
     super.initState();
+
+    notificationHandler = FirebaseNotificationHandler(context);
+    notificationHandler.fireBaseInitialization((data){
+      print("Notification Data :: "+data);
+    });
+
     _tabController = TabController(
       length: 3,
       initialIndex: 0,
@@ -106,6 +114,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       upcommingCount="";
       completeCount="";
     });
+  }
+
+  @override
+  void dispose() {
+    notificationHandler.dispose();
+    super.dispose();
   }
 
   @override
@@ -236,62 +250,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         height: MediaQuery.of(context).size.height,
         child: Column(
           children: <Widget>[
-            Container(
-              height: 50,
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: HexColor("#eaeff2")),
-              child: Stack(
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(left: 10, right: 50),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Search patient name/care plan",
-                        ),
-                        keyboardType: TextInputType.text,
-                        controller: searchController,
-                      )
-                  ),
-                  Positioned(
-                    child: InkWell(
-                      onTap: (){
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        if(searchKey.isNotEmpty){
-                         getFilterList();
-                         // _scheduleViewModel.filterScheduleList.length!=null?
-
-
-                          //SearchScreen("test"):Container();
-                          /*Expanded(
-                            child:ListView.builder(
-                              itemCount: _scheduleViewModel.filterScheduleList.length,
-                              itemBuilder: (context, position)
-                          {
-                            return listRowItems(context, position);
-                          })):Container();*/
-
-                        } else {
-                          ToastUtils.showToast(context, "No Keyword found", Colors.red);
-                        }
-                      },
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(5),
-                        child: SvgPicture.asset(MyImage.ic_search),
-                      ),
-                    ),
-                    right: 5,
-                    top: 10,
-                  )
-                ],
-              ),
-            ),
             TabBar(
               indicatorColor: Colors.transparent,
               isScrollable: true,
@@ -395,6 +353,74 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     );
   }
 
+  listRowItems(BuildContext context, int position) {
+    return InkWell(
+      onTap: (){
+        // Utils.navigateToScreen(context, CarePlanDetailsScreen(_pastVisitList[position], false));
+      },
+      child: Card(
+        elevation: 2,
+        margin: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            side: BorderSide(
+              color: HexColor("#E9E9E9"),
+              width: 0.5,
+            )
+        ),
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Row(
+            children: [
+              Container(
+                height: 80,
+                width: 80,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(MyImage.noImagePlaceholder),
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                  child:Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(_scheduleViewModel.filterScheduleList[position].firstName, style: AppTheme.boldSFTextStyle().copyWith(fontSize: 16)),
+                        SizedBox(height: 3),
+                        // Text(Utils.convertDate(_pastVisitList[position].visitDate, DateFormat('dd/MM/yyyy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
+                        SizedBox(height: 3),
+                        //Text(Utils.convertTime(_pastVisitList[position].timeFrom.substring(0, 5))+" - "+Utils.convertTime(_pastVisitList[position].timeTo.substring(0, 5)), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696")))
+                      ],
+                    ),
+                  )
+              ),
+              SizedBox(width: 10),
+              Container(
+                height: MediaQuery.of(context).size.height*0.09,
+                padding: EdgeInsets.all(5),
+                alignment: Alignment.topRight,
+                child: Row(
+                  children: [
+                    Container(
+                      height: 7,
+                      width: 7,
+                      margin: EdgeInsets.only(top: 3),
+                      child: SvgPicture.asset(MyImage.ic_fill_circle, color: HexColor("#2ab554")),
+                    ),
+                    SizedBox(width: 3),
+                    //Text(_pastVisitList[position].carePlanName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   _getScheduleCount(){
     _scheduleViewModel.getScheduleCountAPICall(nurseId, (isSuccess, response) {
       setState(() {
@@ -403,87 +429,17 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         completeCount = _scheduleViewModel.completedVisitCount.toString();
       });
     });
+
+    _firebaseMessaging.getToken().then((token){
+      updateDeviceTokenApi(token);
+    });
   }
 
-   listRowItems(BuildContext context, int position) {
-      return InkWell(
-        onTap: (){
-         // Utils.navigateToScreen(context, CarePlanDetailsScreen(_pastVisitList[position], false));
-        },
-        child: Card(
-          elevation: 2,
-          margin: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5.0),
-              side: BorderSide(
-                color: HexColor("#E9E9E9"),
-                width: 0.5,
-              )
-          ),
-          child: Container(
-            padding: EdgeInsets.all(10),
-            child: Row(
-              children: [
-                Container(
-                  height: 80,
-                  width: 80,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(MyImage.noImagePlaceholder),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                    child:Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(_scheduleViewModel.filterScheduleList[position].firstName, style: AppTheme.boldSFTextStyle().copyWith(fontSize: 16)),
-                          SizedBox(height: 3),
-                         // Text(Utils.convertDate(_pastVisitList[position].visitDate, DateFormat('dd/MM/yyyy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
-                          SizedBox(height: 3),
-                          //Text(Utils.convertTime(_pastVisitList[position].timeFrom.substring(0, 5))+" - "+Utils.convertTime(_pastVisitList[position].timeTo.substring(0, 5)), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696")))
-                        ],
-                      ),
-                    )
-                ),
-                SizedBox(width: 10),
-                Container(
-                  height: MediaQuery.of(context).size.height*0.09,
-                  padding: EdgeInsets.all(5),
-                  alignment: Alignment.topRight,
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 7,
-                        width: 7,
-                        margin: EdgeInsets.only(top: 3),
-                        child: SvgPicture.asset(MyImage.ic_fill_circle, color: HexColor("#2ab554")),
-                      ),
-                      SizedBox(width: 3),
-                      //Text(_pastVisitList[position].carePlanName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-  void getFilterList() {
-    Utils.showLoader(true, context);
-    _scheduleViewModel.getScheduleFilterAPICall((activeTabIndex+1).toString(), searchKey, (isSuccess, message) {
-      Utils.showLoader(false, context);
-      if(isSuccess){
-        //_updateTabUI(searchKey, _scheduleViewModel.filterScheduleList);
-        ToastUtils.showToast(context, _scheduleViewModel.filterScheduleList.length.toString(), Colors.green);
-      } else {
-        //_updateTabUI(searchKey, _scheduleViewModel.filterScheduleList);
+  void updateDeviceTokenApi(String token) {
+    _scheduleViewModel.updateDeviceTokenAPICall(nurseId, token, (isSuccess, message){
+      if(!isSuccess){
         ToastUtils.showToast(context, message, Colors.red);
       }
     });
   }
-
 }

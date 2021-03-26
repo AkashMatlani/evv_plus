@@ -706,4 +706,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           );
         });
   }
+
+  @override
+  void dispose() {
+    _addressLineOneController.dispose();
+    _addressLineTwoController.dispose();
+    _phoneController.dispose();
+    _zipController.dispose();
+    super.dispose();
+  }
 }

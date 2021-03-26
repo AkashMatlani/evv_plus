@@ -89,13 +89,15 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
                             child: InkWell(
                               onTap: () {
                                 FocusScope.of(context).requestFocus(FocusNode());
-                                checkConnection().then((isConnected) {
-                                  if(isConnected){
-                                    _getFilterItemList(context, _searchController.text.toString());
-                                  } else {
-                                    ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
-                                  }
-                                });
+                                if(_searchController.text.trim().toString().isNotEmpty){
+                                  checkConnection().then((isConnected) {
+                                    if(isConnected){
+                                      _getFilterItemList(context, _searchController.text.toString());
+                                    } else {
+                                      ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
+                                    }
+                                  });
+                                }
                               },
                               child: Container(
                                 height: 30,
@@ -259,5 +261,12 @@ class _CarePlanCommentScreenState extends State<CarePlanCommentScreen> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    _searchController.dispose();
+    super.dispose();
   }
 }

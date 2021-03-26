@@ -111,7 +111,6 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
   listRowItems(BuildContext context, int position) {
     return InkWell(
       onTap: () {
-        // ToastUtils.showToast(context, menuNameList[position], Colors.blueAccent);
         if (position == 0) {
           Utils.navigateToScreen(context, ClientPatientSignScreen());
         } else if (position == 1) {

@@ -25,11 +25,12 @@ class DailyLivingTask extends StatefulWidget {
 
 class _DailyLivingTaskState extends State<DailyLivingTask> {
 
-  var _commentController = TextEditingController();
   NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
   String nurseId="", visitId="";
-  int expanedBtiClick=0, prevPos=0;
+  int expanedBtnClick=0, prevPos=0;
   bool isRowExpaned = true;
+  List<TextEditingController> _commentController = [];
+
 
 
   @override
@@ -92,6 +93,7 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
   }
 
   _listViewItems(BuildContext context, int position){
+    _commentController.add(TextEditingController());
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
       decoration: BoxDecoration(
@@ -113,10 +115,10 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
                   onTap: (){
                     if(position != prevPos){
                       prevPos = position;
-                      expanedBtiClick=0;
+                      expanedBtnClick=0;
                     }
-                    expanedBtiClick++;
-                    if(expanedBtiClick%2 == 0){
+                    expanedBtnClick++;
+                    if(expanedBtnClick%2 == 0){
                       setState(() {
                         isRowExpaned = false;
                       });
@@ -134,7 +136,7 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
                     ),
                     child: Container(
                       padding: EdgeInsets.only(left: 8, right: 8, top: 10, bottom: 10),
-                      child: SvgPicture.asset(MyImage.ic_up_arrow),
+                      child: (position == prevPos && isRowExpaned) ? SvgPicture.asset(MyImage.ic_down_arrow) : SvgPicture.asset(MyImage.ic_up_arrow),
                     ),
                   ),
                 )
@@ -157,7 +159,7 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
                     SizedBox(height: 5),
                     multilineTextFieldFor(
                         "Comment here...",
-                        _commentController,
+                        _commentController[position],
                         100.0
                     ),
                     SizedBox(height: 10),
@@ -177,7 +179,7 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
                           FocusScope.of(context).requestFocus(FocusNode());
                           checkConnection().then((isConnected) {
                             if (isConnected) {
-                              submitDetails(Utils.answer);
+                              submitDetails(Utils.answer, _commentController[position].text.toString());
                             } else {
                               ToastUtils.showToast(context,
                                   LabelStr.connectionError, Colors.red);
@@ -196,11 +198,11 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
     );
   }
 
-  void submitDetails(String answer) {
+  void submitDetails(String answer, String comment) {
     String date = DateFormat("yyyy-MM-dd'T'hh:mm:ss").format(DateTime.now());
     Utils.showLoader(true, context);
     _nurseVisitViewModel.dailyLivingTaskApiCall(widget._scheduleDetailInfo.patientId.toString(),
-        "Did you completed the task?", answer, _commentController.text.toString(), date, nurseId, visitId, (isSuccess, message) {
+        "Did you completed the task?", answer, comment, date, nurseId, visitId, (isSuccess, message) {
       Utils.showLoader(false, context);
       if(isSuccess){
         ToastUtils.showToast(context, message, Colors.green);

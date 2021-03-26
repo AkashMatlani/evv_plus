@@ -22,6 +22,9 @@ class WebService {
   static const carePlanPdf = "NurseVisit/CarePlanPdf";
   static const dailyLivingTask = "NurseVisit/DailyLivingTaskQuestion";
   static const scheduleFilter = "NurseVisit/SearchPastDueScreenAndCareplan";
+  static const getVisitDetails = "NurseVisit/GetVisitDetails";
+  static const updateDeviceId = "NurseVisit/UpdateDeviceId";
+  static const updateVisitCompleteNote = "NurseVisit/UpdateNurseVisitCompleteNote";
 
   static const nurseDetail = "Nurse/ViewNurse";
   static const nurseUpdateProfile = "Nurse/UpdatenurseProfile";

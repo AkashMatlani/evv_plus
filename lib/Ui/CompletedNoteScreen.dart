@@ -1,10 +1,14 @@
 
+import 'dart:async';
+
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/NurseVisitViewModel.dart';
 import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
 import 'package:evv_plus/Ui/CustomVisitMenuScreen.dart';
 import 'package:evv_plus/Ui/TaskWithDateDetailsScreen.dart';
@@ -13,8 +17,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CompletedNoteScreen extends StatefulWidget {
+  CompletedNoteScreen(this._scheduleDetailInfo);
+  ScheduleInfoResponse _scheduleDetailInfo;
+
   @override
   _CompletedNoteScreenState createState() => _CompletedNoteScreenState();
 }
@@ -25,6 +33,20 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
   var _signatureDateController = TextEditingController();
 
   DateTime _selectedDate = DateTime.now();
+  NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
+  String visitId, nurseId;
+
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(milliseconds: 100), (){
+      SharedPreferences.getInstance().then((prefs) async {
+        PrefUtils.getNurseDataFromPref();
+        nurseId = prefs.getInt(PrefUtils.nurseId).toString();
+        visitId = prefs.getInt(PrefUtils.visitId).toString();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +86,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                       width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.all(5),
                       alignment: Alignment.center,
-                      child: Text("Care Plan 1: 09/12/2020",
+                      child: Text(widget._scheduleDetailInfo.carePlanName+":"+Utils.convertDate(widget._scheduleDetailInfo.visitDate, DateFormat('dd/MM/yyyy')),
                           style: AppTheme.semiBoldSFTextStyle()
                               .copyWith(color: HexColor("#2ab554"))),
                     ),
@@ -96,7 +118,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                 child: Row(
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
+                      width: MediaQuery.of(context).size.width*0.86,
                       height: 45,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(colors: [
@@ -113,7 +135,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                         },
                       ),
                     ),
-                    SizedBox(width: 30),
+                    /*SizedBox(width: 30),
                     Expanded(
                       flex: 1,
                       child: Container(
@@ -140,7 +162,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                           },
                         ),
                       ),
-                    )
+                    )*/
                   ],
                 ),
               )
@@ -177,11 +199,38 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
       FocusScope.of(context).requestFocus(FocusNode());
       checkConnection().then((isConnected) {
         if (isConnected) {
-          Utils.navigateToScreen(context, TaskWithDateDetailsScreen());
+          submitDetails();
         } else {
           ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
         }
       });
     }
+  }
+
+  void submitDetails() {
+    Utils.showLoader(true, context);
+    List<String> tempDate = _signatureDateController.text.toString().split("/");
+    String formattedDate = tempDate[2]+"-"+tempDate[1]+"-"+tempDate[0];_nurseVisitViewModel.completeVisitNoteApiCall(visitId, nurseId, widget._scheduleDetailInfo.patientId.toString(),
+        _clientNameController.text.toString(), _clinicianNameController.text.toString(),
+        formattedDate, (isSuccess, message){
+      Utils.showLoader(false, context);
+      if(isSuccess){
+        ToastUtils.showToast(context, message, Colors.green);
+        PrefUtils.setIntValue(PrefUtils.visitId, 0);
+        Timer(Duration(seconds: 2), (){
+          Utils.navigateToScreen(context, TaskWithDateDetailsScreen(_nurseVisitViewModel.completedNoteResponse));
+        });
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _clientNameController.dispose();
+    _clinicianNameController.dispose();
+    _signatureDateController.dispose();
+    super.dispose();
   }
 }

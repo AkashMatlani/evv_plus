@@ -223,4 +223,10 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
       }
     });
   }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 }

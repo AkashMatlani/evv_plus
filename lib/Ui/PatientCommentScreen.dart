@@ -35,7 +35,6 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
   void initState() {
     super.initState();
     patientName = widget.scheduleDetailInfo.firstName+" "+
-        widget.scheduleDetailInfo.middleName+" "+
         widget.scheduleDetailInfo.lastName;
     patientId = widget.scheduleDetailInfo.patientId.toString();
 
@@ -92,13 +91,15 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
                             child: InkWell(
                               onTap: () {
                                 FocusScope.of(context).requestFocus(FocusNode());
-                                checkConnection().then((isConnected) {
-                                  if(isConnected){
-                                    _getFilterItemList(context, _searchController.text.toString());
-                                  } else {
-                                    ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
-                                  }
-                                });
+                                if(_searchController.text.trim().toString().isNotEmpty){
+                                  checkConnection().then((isConnected) {
+                                    if(isConnected){
+                                      _getFilterItemList(context, _searchController.text.toString());
+                                    } else {
+                                      ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
+                                    }
+                                  });
+                                }
                               },
                               child: Container(
                                 height: 30,
@@ -198,7 +199,7 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
         nurseId, _commentController.text, widget.scheduleDetailInfo.carePlanName, (isSuccess, message){
           Utils.showLoader(false, context);
           if(isSuccess){
-            ToastUtils.showToast(context, "Data saved successfully", Colors.green);
+            ToastUtils.showToast(context, message, Colors.green);
             Timer(
               Duration(seconds: 2),
                   () => Navigator.of(context).pop(),
@@ -220,7 +221,6 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
       } else {
         setState(() {
           patientName = widget.scheduleDetailInfo.firstName+" "+
-              widget.scheduleDetailInfo.middleName+" "+
               widget.scheduleDetailInfo.lastName;
         });
         ToastUtils.showToast(context, message, Colors.red);
@@ -262,5 +262,12 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _commentController.dispose();
+    super.dispose();
   }
 }

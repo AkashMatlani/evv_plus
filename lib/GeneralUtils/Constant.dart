@@ -101,6 +101,7 @@ class MyImage {
   static const equalizer_icon = "assets/icons/equalizer.svg";
   static const play_icon = "assets/icons/play.svg";
   static const ic_up_arrow = "assets/icons/ic_up_arrow.svg";
+  static const ic_down_arrow = "assets/icons/ic_down_arrow.svg";
   static const ic_calender = "assets/icons/ic_calender.svg";
   static const ic_clock = "assets/icons/ic_clock.svg";
   static const ic_thumbUp = "assets/icons/ic_thumb_up.svg";

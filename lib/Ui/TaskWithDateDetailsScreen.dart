@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/CompletedNoteResponse.dart';
 import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:evv_plus/Ui/VerificationMenuScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,9 +16,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 class TaskWithDateDetailsScreen extends StatefulWidget {
+  TaskWithDateDetailsScreen(this._visitNoteDetails);
+  CompletedNoteResponse _visitNoteDetails;
+
   @override
-  _TaskWithDateDetailsScreenState createState() =>
-      _TaskWithDateDetailsScreenState();
+  _TaskWithDateDetailsScreenState createState() => _TaskWithDateDetailsScreenState();
 }
 
 class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
@@ -29,6 +35,33 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
   TimeOfDay _selectedTime = TimeOfDay(hour: 00, minute: 00);
 
   @override
+  void initState() {
+    super.initState();
+    _clientNameController.addListener(_handleText(1));
+    _clinicianNameController.addListener(_handleText(2));
+    _checkInTimeController.addListener(_handleText(3));
+    _checkInDateController.addListener(_handleText(4));
+    _checkOutTimeController.addListener(_handleText(5));
+    _checkOutDateController.addListener(_handleText(6));
+  }
+
+  _handleText(int flag){
+    if(flag == 1){
+      _clientNameController.text = widget._visitNoteDetails.clientName;
+    } else if(flag == 2){
+      _clinicianNameController.text = widget._visitNoteDetails.clinicianName;
+    } else if(flag == 3){
+      _checkInTimeController.text = Utils.convertTime(widget._visitNoteDetails.checkInTime.substring(0, 5));
+    } else if(flag == 4){
+      _checkInDateController.text = Utils.convertDate(widget._visitNoteDetails.checkInDate, DateFormat("dd/MM/yyyy"));
+    } else if(flag == 5){
+      _checkOutTimeController.text = Utils.convertTime(widget._visitNoteDetails.checkOutTime.substring(0, 5));
+    } else {
+      _checkOutDateController.text = Utils.convertDate(widget._visitNoteDetails.checkOutDate, DateFormat("dd/MM/yyyy"));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +69,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
           title: Container(
             alignment: Alignment.center,
             margin: EdgeInsets.only(right: 30),
-            child: Text("Task 09/12/2020",
+            child: Text("Task ",
                 style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
           ),
           backgroundColor: Colors.white10,
@@ -61,10 +94,16 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  textFieldFor(LabelStr.lblClientName, _clientNameController),
+                  textFieldFor(
+                      LabelStr.lblClientName,
+                      _clientNameController,
+                      readOnly: true,
+                  onEditingComplete: (){
+                    _clientNameController.text = _clientNameController.text = widget._visitNoteDetails.clientName;
+                  }),
                   SizedBox(height: 12),
                   textFieldFor(
-                      LabelStr.lblClinicianName, _clinicianNameController),
+                      LabelStr.lblClinicianName, _clinicianNameController, readOnly: true),
                   SizedBox(height: 12),
                   Text(LabelStr.lblDateNote,
                       style: AppTheme.semiBoldSFTextStyle()),
@@ -94,20 +133,14 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                               width: MediaQuery.of(context).size.width * 0.42,
                               child: textFieldFor(
                                   "09/03/2020", _checkInDateController,
-                                  suffixIcon: InkWell(
-                                    onTap: () {
-                                      _selectDate(
-                                          context, _checkInDateController);
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                          top: 15,
-                                          bottom: 15,
-                                          left: 5,
-                                          right: 5),
-                                      child:
-                                          SvgPicture.asset(MyImage.ic_calender),
-                                    ),
+                                  suffixIcon: Container(
+                                    padding: EdgeInsets.only(
+                                        top: 15,
+                                        bottom: 15,
+                                        left: 5,
+                                        right: 5),
+                                    child:
+                                    SvgPicture.asset(MyImage.ic_calender),
                                   ),
                                   readOnly: true),
                             )),
@@ -118,19 +151,13 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                               width: MediaQuery.of(context).size.width * 0.4,
                               child: textFieldFor(
                                   "11:30 am", _checkInTimeController,
-                                  suffixIcon: InkWell(
-                                    onTap: () {
-                                      _selectTime(
-                                          context, _checkInTimeController);
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.only(
-                                          top: 15,
-                                          bottom: 15,
-                                          left: 5,
-                                          right: 5),
-                                      child: SvgPicture.asset(MyImage.ic_clock),
-                                    ),
+                                  suffixIcon: Container(
+                                    padding: EdgeInsets.only(
+                                        top: 15,
+                                        bottom: 15,
+                                        left: 5,
+                                        right: 5),
+                                    child: SvgPicture.asset(MyImage.ic_clock),
                                   ),
                                   readOnly: true),
                             )
@@ -163,20 +190,14 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                                 width: MediaQuery.of(context).size.width * 0.25,
                                 child: textFieldFor(
                                     "09/03/2020", _checkOutDateController,
-                                    suffixIcon: InkWell(
-                                      onTap: () {
-                                        _selectDate(
-                                            context, _checkOutDateController);
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.only(
-                                            top: 15,
-                                            bottom: 15,
-                                            left: 5,
-                                            right: 5),
-                                        child:
-                                            SvgPicture.asset(MyImage.ic_calender),
-                                      ),
+                                    suffixIcon: Container(
+                                      padding: EdgeInsets.only(
+                                          top: 15,
+                                          bottom: 15,
+                                          left: 5,
+                                          right: 5),
+                                      child:
+                                      SvgPicture.asset(MyImage.ic_calender),
                                     ),
                                     readOnly: true),
                               ),
@@ -188,20 +209,14 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                               width: MediaQuery.of(context).size.width * 0.4,
                               child: textFieldFor(
                                   "11:30 am", _checkOutTimeController,
-                                  suffixIcon: InkWell(
-                                    onTap: () {
-                                      _selectTime(
-                                          context, _checkOutTimeController);
-                                    },
-                                    child: Container(
-                                        padding: EdgeInsets.only(
-                                            top: 15,
-                                            bottom: 15,
-                                            left: 5,
-                                            right: 5),
-                                        child:
-                                            SvgPicture.asset(MyImage.ic_clock)),
-                                  ),
+                                  suffixIcon: Container(
+                                      padding: EdgeInsets.only(
+                                          top: 15,
+                                          bottom: 15,
+                                          left: 5,
+                                          right: 5),
+                                      child:
+                                      SvgPicture.asset(MyImage.ic_clock)),
                                   readOnly: true),
                             )
                           ],
@@ -225,9 +240,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                         FocusScope.of(context).requestFocus(FocusNode());
                         checkConnection().then((isConnected) {
                           if (isConnected) {
-                            /*ToastUtils.showToast(context,
-                                        "Client sign collection clicked", Colors.green);*/
-                            validationForCollectClientSignature();
+                            Utils.navigateToScreen(context, VerificationMenuScreen());
                           } else {
                             ToastUtils.showToast(
                                 context, LabelStr.connectionError, Colors.red);
@@ -249,17 +262,8 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                               fontSize: 18, color: HexColor("#2b91eb"))),
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
-                        checkConnection().then((isConnected) {
-                          if (isConnected) {
-                            /*   ToastUtils.showToast(context,
-                                        "Client sign collection clicked", Colors.green);*/
-                            Utils.navigateReplaceToScreen(
-                                context, ScheduleScreen());
-                          } else {
-                            ToastUtils.showToast(
-                                context, LabelStr.connectionError, Colors.red);
-                          }
-                        });
+                        PrefUtils.setIntValue(PrefUtils.visitId, 0);
+                        Utils.logoutFromApp(context, ScheduleScreen());
                       },
                     ),
                   ),
@@ -307,13 +311,14 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
     return format.format(dt);
   }
 
-  void validationForCollectClientSignature() {
-    if (_clientNameController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterClientName, Colors.red);
-    } else if (_clinicianNameController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterClinicianName, Colors.red);
-    } else {
-      Utils.navigateToScreen(context, VerificationMenuScreen());
-    }
+  @override
+  void dispose() {
+    _clientNameController.dispose();
+    _clinicianNameController.dispose();
+    _checkInDateController.dispose();
+    _checkInTimeController.dispose();
+    _checkOutTimeController.dispose();
+    _checkOutDateController.dispose();
+    super.dispose();
   }
 }

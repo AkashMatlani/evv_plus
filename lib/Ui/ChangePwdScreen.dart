@@ -165,4 +165,11 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
       }
     });
   }
+
+  @override
+  void dispose() {
+    _newPwdController.dispose();
+    _confirmPwdController.dispose();
+    super.dispose();
+  }
 }
