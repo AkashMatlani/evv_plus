@@ -195,7 +195,9 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
                       child: SvgPicture.asset(MyImage.ic_fill_circle, color: HexColor("#2ab554")),
                     ),
                     SizedBox(width: 3),
+                    _filterList[position].carePlanName != null?
                     Text(_filterList[position].carePlanName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
+                       :Text("",style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
                   ],
                 ),
               )

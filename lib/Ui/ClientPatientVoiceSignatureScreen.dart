@@ -1,11 +1,17 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/AuthViewModel.dart';
+import 'package:evv_plus/Models/CompletedNoteResponse.dart';
 import 'package:evv_plus/Ui/VerificationMenuScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
@@ -13,8 +19,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io' as io;
 
 import 'package:path_provider/path_provider.dart';
-
+enum visitVerification { patient, voice }
 class ClientPatientVoiceSignatureScreen extends StatefulWidget {
+  CompletedNoteResponse completedNoteResponse;
+  var finalValue;
+  bool clientPatientVoiceSignature;
+  ClientPatientVoiceSignatureScreen(this.completedNoteResponse,[this.clientPatientVoiceSignature,this.finalValue]);
+
   @override
   _ClientPatientVoiceSignatureScreenState createState() =>
       _ClientPatientVoiceSignatureScreenState();
@@ -37,8 +48,7 @@ class _ClientPatientVoiceSignatureScreenState
   bool issongplaying = false;
   AudioCache audioCache;
   Duration _duration = new Duration();
-  Duration _position = new Duration();
-  Duration _slider = new Duration(seconds: 0);
+  AuthViewModel _nurseViewModel = AuthViewModel();
 
   @override
   void initState() {
@@ -215,8 +225,9 @@ class _ClientPatientVoiceSignatureScreenState
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
                                   checkConnection().then((isConnected) {
-                                    Utils.navigateToScreen(
-                                        context, VerificationMenuScreen());
+
+                                    submitCall();
+
                                   });
                                 },
                               ),
@@ -298,6 +309,8 @@ class _ClientPatientVoiceSignatureScreenState
     var result = await _recorder.stop();
     _t.cancel();
     print("path-->>" + _recording?.path.toString());
+
+
     setState(() {
       _recording = result;
     });
@@ -351,6 +364,40 @@ class _ClientPatientVoiceSignatureScreenState
 
     setState(() {
       _buttonIcon = _playerIcon(_recording.status);
+    });
+  }
+
+  void submitCall()
+  {
+    File file = File(_recording?.path);
+    Uint8List bytes = file.readAsBytesSync();
+    String base64Image = base64Encode(bytes);
+    print(base64Image);
+    validationForCollectClientSignature(base64Image);
+  }
+
+  void validationForCollectClientSignature(String img64) {
+    Utils.showLoader(true, context);
+    _nurseViewModel.getPatientSignature(
+        "1",
+        null,
+        img64,
+        widget.completedNoteResponse.nurseId.toString(),
+        widget.completedNoteResponse.patientId.toString(),
+        widget.completedNoteResponse.id.toString(), (isSuccess, message) {
+      Utils.showLoader(false, context);
+      if (isSuccess) {
+        setState(() {
+          widget.clientPatientVoiceSignature=true;
+          widget.finalValue=visitVerification.voice;
+          Utils.isPatientVoiceCompleted=true;
+          Utils.navigateToScreen(
+              context, VerificationMenuScreen(widget.completedNoteResponse));
+
+        });
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
     });
   }
 }

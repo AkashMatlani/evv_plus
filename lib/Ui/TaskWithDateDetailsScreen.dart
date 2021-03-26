@@ -240,7 +240,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                         FocusScope.of(context).requestFocus(FocusNode());
                         checkConnection().then((isConnected) {
                           if (isConnected) {
-                            Utils.navigateToScreen(context, VerificationMenuScreen());
+                            Utils.navigateToScreen(context, VerificationMenuScreen(widget._visitNoteDetails));
                           } else {
                             ToastUtils.showToast(
                                 context, LabelStr.connectionError, Colors.red);
@@ -275,40 +275,6 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
         ],
       ),
     );
-  }
-
-  _selectDate(BuildContext context, TextEditingController controller) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate, // Refer step 1
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked != _selectedDate)
-      setState(() {
-        _selectedDate = picked;
-        String formattedDate = DateFormat('dd/MM/yyyy').format(picked);
-        controller.text = formattedDate;
-      });
-  }
-
-  _selectTime(BuildContext context, TextEditingController controller) async {
-    final TimeOfDay picked = await showTimePicker(
-      context: context,
-      initialTime: _selectedTime,
-    );
-    if (picked != null && picked != _selectedTime)
-      setState(() {
-        _selectedTime = picked;
-        controller.text = _formatTimeOfDay(_selectedTime);
-      });
-  }
-
-  _formatTimeOfDay(TimeOfDay tod) {
-    final now = new DateTime.now();
-    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
-    final format = DateFormat.jm(); //"6:00 AM"
-    return format.format(dt);
   }
 
   @override

@@ -4,6 +4,10 @@ import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/AuthViewModel.dart';
+import 'package:evv_plus/Models/CompletedNoteResponse.dart';
+import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
+import 'package:evv_plus/Ui/CarePlanDetailsScreen.dart';
 import 'package:evv_plus/Ui/ClientPatientSignScreen.dart';
 import 'package:evv_plus/Ui/ClientPatientVoiceSignatureScreen.dart';
 import 'package:evv_plus/Ui/ScheduleScreen.dart';
@@ -14,7 +18,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../GeneralUtils/ColorExtension.dart';
 
+enum visitVerification { patient, voice }
+
+
 class VerificationMenuScreen extends StatefulWidget {
+  CompletedNoteResponse completedNoteResponse;
+
+  VerificationMenuScreen(this.completedNoteResponse);
+
   @override
   _VerificationMenuScreenState createState() => _VerificationMenuScreenState();
 }
@@ -22,6 +33,10 @@ class VerificationMenuScreen extends StatefulWidget {
 class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
   List<String> menuNameList;
   List<String> menuIconList;
+
+  bool clientPatientSignature;
+  bool clientPatientVoiceSignature;
+  AuthViewModel _nurseViewModel = AuthViewModel();
 
   @override
   void initState() {
@@ -57,7 +72,7 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-                Navigator.of(context).pop();
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -94,7 +109,9 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
                 FocusScope.of(context).requestFocus(FocusNode());
                 checkConnection().then((isConnected) {
                   if (isConnected) {
-                    _showDialog(context);
+                    if ( Utils.isPatientSignCompleted &&  Utils.isPatientVoiceCompleted) {
+                      visitUpdateTRue(context);
+                    }
                   } else {
                     ToastUtils.showToast(
                         context, LabelStr.connectionError, Colors.red);
@@ -112,11 +129,18 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
     return InkWell(
       onTap: () {
         if (position == 0) {
-          Utils.navigateToScreen(context, ClientPatientSignScreen());
+          Utils.navigateToScreen(
+              context,
+              ClientPatientSignScreen(
+                  widget.completedNoteResponse, clientPatientSignature,visitVerification.patient));
         } else if (position == 1) {
-          Utils.navigateToScreen(context, ClientPatientVoiceSignatureScreen());
+          Utils.navigateToScreen(
+              context,
+              ClientPatientVoiceSignatureScreen(
+                  widget.completedNoteResponse, clientPatientVoiceSignature,visitVerification.voice));
         } else if (position == 2) {
-          Utils.navigateToScreen(context, UnableToSignInScreen());
+          Utils.navigateToScreen(
+              context, UnableToSignInScreen(widget.completedNoteResponse));
         }
       },
       child: Card(
@@ -176,7 +200,7 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
     );
   }
 
- /* _showDialog(BuildContext context) {
+  /* _showDialog(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -224,7 +248,6 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
         });
   }*/
 
-
   _showDialog(BuildContext context) {
     CupertinoAlertDialog alert = CupertinoAlertDialog(
       content: Container(
@@ -237,8 +260,8 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
             ),
             SizedBox(height: 10),
             Text(LabelStr.lblSuccess,
-                style: AppTheme.mediumSFTextStyle().copyWith(
-                    color: HexColor("#3d3d3d"), fontSize: 20)),
+                style: AppTheme.mediumSFTextStyle()
+                    .copyWith(color: HexColor("#3d3d3d"), fontSize: 20)),
             Text(LabelStr.lblCompleteEvv,
                 style: AppTheme.regularSFTextStyle()
                     .copyWith(color: HexColor("#3d3d3d"))),
@@ -247,12 +270,15 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
       ),
       actions: [
         CupertinoDialogAction(
-          child: Text(LabelStr.lblOk, style: AppTheme.boldSFTextStyle().copyWith(color: Colors.blue, fontSize: 18)),
+          child: Text(LabelStr.lblOk,
+              style: AppTheme.boldSFTextStyle()
+                  .copyWith(color: Colors.blue, fontSize: 18)),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop("Discard");
             Timer(
                 Duration(milliseconds: 500),
-                    () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  ScheduleScreen())));
+                () => Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => CarePlanDetailsScreen(ScheduleInfoResponse(), false))));
           },
         ),
       ],
@@ -265,8 +291,28 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
         return Theme(
             data: ThemeData(
                 dialogBackgroundColor: Colors.white,
-                dialogTheme: DialogTheme(backgroundColor: Colors.black)),child: alert);
+                dialogTheme: DialogTheme(backgroundColor: Colors.black)),
+            child: alert);
       },
     );
+  }
+
+  void visitUpdateTRue(BuildContext context) {
+    Utils.showLoader(true, context);
+    _nurseViewModel.getUpdatedVisitTrue(
+        widget.completedNoteResponse.nurseId.toString(),
+        widget.completedNoteResponse.patientId.toString(),
+        widget.completedNoteResponse.id.toString(), (isSuccess, message) {
+      Utils.showLoader(false, context);
+      if (isSuccess) {
+        setState(() {
+          Utils.isPatientVoiceCompleted=false;
+          Utils.isPatientSignCompleted=false;
+          _showDialog(context);
+        });
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
   }
 }

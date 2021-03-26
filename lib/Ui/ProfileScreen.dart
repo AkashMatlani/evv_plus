@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
@@ -31,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   var _addressLineTwoController = TextEditingController();
   var _zipController = TextEditingController();
   var _phoneController = TextEditingController();
-
+  String _img64;
   final Widget svg = new SvgPicture.asset(MyImage.profileHeaderBgImage);
   MediaQueryData _mediaQueryData;
   double screenWidth;
@@ -166,16 +167,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       child: CircleAvatar(
                                         radius: 55,
                                         backgroundColor: Color(0xffFDCF09),
-                                        child: _image != null
+                                       /* child: nurseImage != null
                                             ? ClipRRect(
                                           borderRadius: BorderRadius.circular(50),
-                                          child: Image.file(
-                                            _image,
-                                            width: 100,
-                                            height: 100,
-                                            fit: BoxFit.fitHeight,
-                                          ),
+                                          child: (nurseImage),
                                         )
+*/
+
+                                          child: nurseImage != null? ClipRRect(
+                                            borderRadius: BorderRadius.circular(50),child:CachedNetworkImage(
+                                          imageUrl: nurseImage,
+                                          placeholder: (context, url) => CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) => Icon(Icons.error),
+                                        ))
                                             : Container(
                                           decoration: BoxDecoration(
                                               color: Colors.grey[200],
@@ -233,7 +237,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: 5,
                               ),
                               Text(
-                                "123-23-3434",
+                                "xxx xx xxx",
                                 style: AppTheme.regularSFTextStyle().copyWith(
                                     fontSize: 16, color: Color(0xff868686)),
                               )
@@ -539,7 +543,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ToastUtils.showToast(context, LabelStr.enterZip, Colors.red);
     } else if (_phoneController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterPhoneNumber, Colors.red);
-    } else {
+    }
+    else {
       Utils.showLoader(true, context);
       _nurseViewModel.getUpdateProfileAPICall(
           nurseId,
@@ -555,7 +560,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           gender,
           apiDateString,
           email,
-          nurseImage, (isSuccess, message) {
+          _img64, (isSuccess, message) {
         Utils.showLoader(false, context);
         if (isSuccess) {
           setState(() {
@@ -568,7 +573,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               PrefUtils.setStringValue(PrefUtils.cityName, cityName);
             }
             ToastUtils.showToast(
-                context, "NurseProfile Updated Successfully.", Colors.green);
+                context, "Nurse profile updated successfully.", Colors.green);
             Timer(
               Duration(milliseconds: 200),
                   () => Navigator.of(context).pop(),
@@ -603,6 +608,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           cityId = _nurseViewModel.nurseResponse.cityId.toString();
           stateId = _nurseViewModel.nurseResponse.stateId.toString();
           dateOfBirth = _nurseViewModel.nurseResponse.dateOfBirth;
+          nurseImage=_nurseViewModel.nurseResponse.nurseImage;
           DateTime tempDate =
           new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
           print("tenpdate" + tempDate.toString());
@@ -660,7 +666,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       _image = image;
       final bytes = _image.readAsBytesSync();
-      String _img64 = base64Encode(bytes);
+       _img64 = base64Encode(bytes);
       print("base64Camera-->>"+_img64);
     });
   }
@@ -672,7 +678,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       _image = image;
       final bytes = _image.readAsBytesSync();
-      String _img64 = base64Encode(bytes);
+       _img64 = base64Encode(bytes);
       print("base64Gallery-->>"+_img64);
     });
   }

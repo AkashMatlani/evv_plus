@@ -6,6 +6,10 @@ import 'package:intl/intl.dart';
 class Utils {
   static String answer = "Yes";
 
+  static bool isPatientSignCompleted=false;
+  static bool isPatientVoiceCompleted=false;
+  static bool unableToSignReason=false;
+
   static void showLoader(bool show, BuildContext context) {
     if (show) {
       showDialog(

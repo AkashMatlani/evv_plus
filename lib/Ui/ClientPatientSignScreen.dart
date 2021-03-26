@@ -7,6 +7,7 @@ import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
+import 'package:evv_plus/Models/CompletedNoteResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -14,7 +15,14 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:signature/signature.dart';
 import 'VerificationMenuScreen.dart';
 
+
+enum visitVerification { patient, voice }
 class ClientPatientSignScreen extends StatefulWidget {
+  CompletedNoteResponse completedNoteResponse;
+  var finalValue;
+  bool clientPatient;
+  ClientPatientSignScreen(this.completedNoteResponse,[this.clientPatient,this.finalValue]);
+
   @override
   _ClientPatientSignatureScreenState createState() =>
       _ClientPatientSignatureScreenState();
@@ -242,26 +250,30 @@ class _ClientPatientSignatureScreenState
     String _img64 = base64Encode(bytes);
     print("base64Camera-->>" + _img64);
     validationForCollectClientSignature(_img64);
-    return result;
   }
 
   void validationForCollectClientSignature(String img64) {
-      Utils.showLoader(true, context);
-      _nurseViewModel.getPatientSignature(
-          "nurseId",
-          img64,
-          "_addressLineTwoController.text",
-          "_zipController.text",
-          "cityId",
-         (isSuccess, message) {
-        Utils.showLoader(false, context);
-        if (isSuccess) {
-          setState(() {
-            Utils.navigateToScreen(context, VerificationMenuScreen());
-          });
-        } else {
-          ToastUtils.showToast(context, message, Colors.red);
-        }
-      });
-    }
+    Utils.showLoader(true, context);
+    _nurseViewModel.getPatientSignature(
+        "1",
+        img64,
+        null,
+        widget.completedNoteResponse.nurseId.toString(),
+        widget.completedNoteResponse.patientId.toString(),
+        widget.completedNoteResponse.id.toString(), (isSuccess, message) {
+      Utils.showLoader(false, context);
+      if (isSuccess) {
+        setState(() {
+          widget.finalValue=visitVerification.patient;
+
+          Utils.isPatientSignCompleted=true;
+          Utils.navigateToScreen(
+              context, VerificationMenuScreen(widget.completedNoteResponse));
+        });
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+
+    });
+  }
 }

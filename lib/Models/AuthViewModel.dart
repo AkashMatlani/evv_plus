@@ -4,21 +4,21 @@ import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/NurseResponse.dart';
 import 'package:evv_plus/Models/SIgnatureResponse.dart';
+import 'package:evv_plus/Models/SigninVisitVerificationModel.dart';
+import 'package:evv_plus/Models/UpdatedVisitTrueModel.dart';
 import 'package:evv_plus/WebService/WebService.dart';
 
 import 'CityListResponse.dart';
 import 'StateListResponse.dart';
 import 'UpdateNurseProfile.dart';
 
-
-class AuthViewModel{
-
+class AuthViewModel {
   ValidationResult validateLogIn(String email, String password) {
     if (email.isEmpty) {
       return ValidationResult(false, LabelStr.enterUserEmail);
-    } else if(!email.startsWith(RegExp(r'^[a-zA-Z]'))){
+    } else if (!email.startsWith(RegExp(r'^[a-zA-Z]'))) {
       return ValidationResult(false, LabelStr.enterValidEmail);
-    } else if(!Utils.isValidEmail(email)){
+    } else if (!Utils.isValidEmail(email)) {
       return ValidationResult(false, LabelStr.enterValidEmail);
     }
 
@@ -30,17 +30,17 @@ class AuthViewModel{
     return ValidationResult(true, "success");
   }
 
-  void logInResult(String email, String password, ResponseCallback callback, {Function onInactiveAccount}) {
-    var params = {
-      "Email": email,
-      "Password": password};
+  void logInResult(String email, String password, ResponseCallback callback,
+      {Function onInactiveAccount}) {
+    var params = {"Email": email, "Password": password};
 
     var validateResult = validateLogIn(email, password);
-    if(validateResult.isValid){
+    if (validateResult.isValid) {
       WebService.postAPICall(WebService.nurseLogin, params).then((response) {
         if (response.statusCode == 1) {
           if (response.body != null) {
-            PrefUtils.saveUserDataToPref(NurseResponse.fromJson(response.body),password);
+            PrefUtils.saveUserDataToPref(
+                NurseResponse.fromJson(response.body), password);
             callback(true, "");
           }
         } else {
@@ -58,7 +58,7 @@ class AuthViewModel{
   ValidationResult validateUpdatePwd(String newPwd, String confirmPwd) {
     if (newPwd.isEmpty) {
       return ValidationResult(false, LabelStr.enterNewPwd);
-    } else if(!Utils.isValidPassword(newPwd)){
+    } else if (!Utils.isValidPassword(newPwd)) {
       return ValidationResult(false, LabelStr.enterValidPwd);
     }
     if (confirmPwd.isEmpty) {
@@ -69,9 +69,11 @@ class AuthViewModel{
     return ValidationResult(true, "success");
   }
 
-  void updatePwdResult(String nurseId, String currentPwd, String newPwd, String confirmPwd, ResponseCallback callback, {Function onInactiveAccount}) {
+  void updatePwdResult(String nurseId, String currentPwd, String newPwd,
+      String confirmPwd, ResponseCallback callback,
+      {Function onInactiveAccount}) {
     var validateResult = validateUpdatePwd(newPwd, confirmPwd);
-    if(validateResult.isValid){
+    if (validateResult.isValid) {
       var params = {
         "Nurseid": nurseId,
         "CurrentPassword": currentPwd,
@@ -99,18 +101,19 @@ class AuthViewModel{
   ValidationResult validateForgotPwd(String email) {
     if (email.isEmpty) {
       return ValidationResult(false, LabelStr.enterUserEmail);
-    } else if(!email.startsWith(RegExp(r'^[a-zA-Z]'))){
+    } else if (!email.startsWith(RegExp(r'^[a-zA-Z]'))) {
       return ValidationResult(false, LabelStr.enterValidEmail);
-    } else if(!Utils.isValidEmail(email)){
+    } else if (!Utils.isValidEmail(email)) {
       return ValidationResult(false, LabelStr.enterValidEmail);
     }
     return ValidationResult(true, "success");
   }
 
-  void forgotPwdResult(String email, ResponseCallback callback, {Function onInactiveAccount}) {
+  void forgotPwdResult(String email, ResponseCallback callback,
+      {Function onInactiveAccount}) {
     var params = {"Email": email};
     var validateResult = validateForgotPwd(email);
-    if(validateResult.isValid){
+    if (validateResult.isValid) {
       WebService.postAPICall(WebService.forgotPwd, params).then((response) {
         if (response.statusCode == 1) {
           PrefUtils.setStringValue(PrefUtils.password, "");
@@ -129,15 +132,15 @@ class AuthViewModel{
   }
 
   NurseResponse nurseResponse;
+
   void getProfileAPICall(String nurseId, ResponseCallback callback) {
     var params = {
-      "NurseId":nurseId,
-
+      "NurseId": nurseId,
     };
     WebService.getAPICall(WebService.nurseDetail, params).then((response) {
       if (response.statusCode == 1) {
-        if (response.body!=null) {
-          nurseResponse= NurseResponse.fromJson(response.body);
+        if (response.body != null) {
+          nurseResponse = NurseResponse.fromJson(response.body);
         }
         callback(true, "");
       } else {
@@ -149,29 +152,47 @@ class AuthViewModel{
     });
   }
 
-
   UpdateNurseProfile updateNurseProfile;
-  void getUpdateProfileAPICall(String nurseId, String addressOne,String addressTwo,String zipCode,String city,String state,String phoneNumber,String firstName,String middleName,String lastName,String gender,String dateOfBirth,String email,String nurseImage,ResponseCallback callback) {
-    var params = {"NurseId":nurseId,
-      "Address1":addressOne,
-      "Address2":addressTwo,
-      "ZipCode":zipCode,
-      "FKcityID":city,
-      "FKstateID":state,
-      "PhoneNumber":phoneNumber,
-      "FirstName":firstName,
-      "MiddleName":middleName,
-      "LastName":lastName,
-      "Gender":gender,
-      "DateOfBirth":dateOfBirth,
-      "Email":email,
-      "NurseImage":nurseImage
+
+  void getUpdateProfileAPICall(
+      String nurseId,
+      String addressOne,
+      String addressTwo,
+      String zipCode,
+      String city,
+      String state,
+      String phoneNumber,
+      String firstName,
+      String middleName,
+      String lastName,
+      String gender,
+      String dateOfBirth,
+      String email,
+      String nurseImage,
+      ResponseCallback callback) {
+    var params = {
+      "NurseId": nurseId,
+      "Address1": addressOne,
+      "Address2": addressTwo,
+      "ZipCode": zipCode,
+      "FKcityID": city,
+      "FKstateID": state,
+      "PhoneNumber": phoneNumber,
+      "FirstName": firstName,
+      "MiddleName": middleName,
+      "LastName": lastName,
+      "Gender": gender,
+      "DateOfBirth": dateOfBirth,
+      "Email": email,
+      if(nurseImage!=null)
+      "NurseImage": nurseImage
     };
 
-    WebService.postAPICall(WebService.nurseUpdateProfile, params).then((response) {
+    WebService.postAPICall(WebService.nurseUpdateProfile, params)
+        .then((response) {
       if (response.statusCode == 1) {
-        if (response.body!=null) {
-          updateNurseProfile= UpdateNurseProfile.fromJson(response.body);
+        if (response.body != null) {
+          updateNurseProfile = UpdateNurseProfile.fromJson(response.body);
         }
         callback(true, updateNurseProfile);
       } else {
@@ -204,7 +225,7 @@ class AuthViewModel{
   List<CityData> cityDataList = [];
 
   void getCityList(String stateId, ResponseCallback callback) {
-    var params = {"StateId":stateId};
+    var params = {"StateId": stateId};
     WebService.getAPICall(WebService.getCity, params).then((response) {
       if (response.statusCode == 1) {
         for (var data in response.body) {
@@ -220,20 +241,33 @@ class AuthViewModel{
     });
   }
 
-
   SignatureResponseModel signatureResponseModel;
-  void getPatientSignature(String flag, String PatientSignature,String nurseId,String patientId,String visitId,ResponseCallback callback) {
-    var params = {"flag":flag,
-      "PatientSignature":PatientSignature,
-      "NurseId":nurseId,
-      "PatientId":patientId,
-      "VisitId":visitId
+
+  void getPatientSignature(
+      String flag,
+      String PatientSignature,
+      String patientVoiceSign,
+      String nurseId,
+      String patientId,
+      String visitId,
+      ResponseCallback callback) {
+    var params = {
+      "flag": flag,
+      if(PatientSignature!=null)
+      "PatientSignature": PatientSignature,
+      if(patientVoiceSign!=null)
+      "patientVoiceSign": patientVoiceSign,
+      "NurseId": nurseId,
+      "PatientId": patientId,
+      "VisitId": visitId
     };
 
-    WebService.postAPICall(WebService.patientSignatureVoiceRecording, params).then((response) {
+    WebService.postAPICall(WebService.patientSignatureVoiceRecording, params)
+        .then((response) {
       if (response.statusCode == 1) {
-        if (response.body!=null) {
-          signatureResponseModel= SignatureResponseModel.fromJson(response.body);
+        if (response.body != null) {
+          signatureResponseModel =
+              SignatureResponseModel.fromJson(response.body);
         }
         callback(true, signatureResponseModel);
       } else {
@@ -244,5 +278,71 @@ class AuthViewModel{
       callback(false, LabelStr.serverError);
     });
   }
+
+
+  SigninVisitVerificationModel signinVisitVerificationModel;
+
+  void getSignInReason(
+      String flag,
+      String careTakerSignature,
+      String careTakerReason,
+      String nurseId,
+      String patientId,
+      String visitId,
+      ResponseCallback callback) {
+    var params = {
+      "flag": flag,
+      "CareTakerSignature": careTakerSignature,
+      "CareTakerReason": careTakerReason,
+      "NurseId": nurseId,
+      "PatientId": patientId,
+      "VisitId": visitId
+    };
+
+    WebService.postAPICall(WebService.signReasonVisitVerification, params)
+        .then((response) {
+      if (response.statusCode == 1) {
+        if (response.body != null) {
+          signinVisitVerificationModel =
+              SigninVisitVerificationModel.fromJson(response.body);
+        }
+        callback(true, signatureResponseModel);
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+
+  VisitCompleteModel visitCompleteModel;
+  void getUpdatedVisitTrue(
+      String nurseId,
+      String patientId,
+      String visitId,
+      ResponseCallback callback) {
+    var params = {
+      "NurseId": 3.toString(),
+      "PatientId": 3.toString(),
+      "VisitId": 3.toString()
+    };
+
+    WebService.postAPICall(WebService.updateVisitTrue, params)
+        .then((response) {
+      if (response.statusCode == 1) {
+        callback(true,"");
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+
+
 
 }

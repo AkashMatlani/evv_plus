@@ -192,7 +192,9 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
                       child: SvgPicture.asset(MyImage.ic_fill_circle, color: HexColor("#2ab554")),
                     ),
                     SizedBox(width: 3),
-                    Text(_filterList[position].carePlanName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
+                    _filterList[position].carePlanName != null?
+                    Text(_filterList[position].carePlanName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554"))):
+                    Text("", style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
                   ],
                 ),
               )

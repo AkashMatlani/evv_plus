@@ -21,6 +21,7 @@ class CarePlanDetailsScreen extends StatefulWidget {
 
   CarePlanDetailsScreen(this._scheduleDetailInfo, this.isUpcommingVisit);
   ScheduleInfoResponse _scheduleDetailInfo;
+
   bool isUpcommingVisit;
 
   @override

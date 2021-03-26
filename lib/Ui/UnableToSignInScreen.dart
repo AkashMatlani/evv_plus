@@ -2,6 +2,7 @@ import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/CompletedNoteResponse.dart';
 import 'package:evv_plus/Ui/VisitVerificationScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,10 @@ import 'VerificationMenuScreen.dart';
 enum SingingCharacter { Physical, mental, other }
 
 class UnableToSignInScreen extends StatefulWidget {
+  CompletedNoteResponse completedNoteResponse;
+
+  UnableToSignInScreen(this.completedNoteResponse);
+
   @override
   _UnableToSignInScreenState createState() => _UnableToSignInScreenState();
 }
@@ -17,7 +22,8 @@ class UnableToSignInScreen extends StatefulWidget {
 class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
   SingingCharacter _character = SingingCharacter.Physical;
 
-  String finalvalue=SingingCharacter.Physical.toString();
+  String finalvalue = SingingCharacter.Physical.toString();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,11 +61,11 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                   ),
                   child: IntrinsicHeight(
                       child: Column(children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 1,
-                          color: HexColor("#efefef"),
-                        ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 1,
+                      color: HexColor("#efefef"),
+                    ),
                     Container(
                       padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
                       color: Colors.white,
@@ -106,7 +112,7 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                     onChanged: (SingingCharacter value) {
                                       setState(() {
                                         _character = value;
-                                        finalvalue=value.toString();
+                                        finalvalue = value.toString();
                                       });
                                     },
                                   ),
@@ -124,7 +130,7 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                     onChanged: (SingingCharacter value) {
                                       setState(() {
                                         _character = value;
-                                        finalvalue=value.toString();
+                                        finalvalue = value.toString();
                                       });
                                     },
                                   ),
@@ -142,7 +148,7 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                     onChanged: (SingingCharacter value) {
                                       setState(() {
                                         _character = value;
-                                        finalvalue=value.toString();
+                                        finalvalue = value.toString();
                                       });
                                     },
                                   ),
@@ -168,7 +174,7 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                     child: InkWell(
                                       onTap: () {
                                         Utils.navigateToScreen(
-                                            context, VisitVerificationScreen());
+                                            context, VisitVerificationScreen(widget.completedNoteResponse));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.all(5),
@@ -193,8 +199,12 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                                 .requestFocus(FocusNode());
                                             checkConnection()
                                                 .then((isConnected) {
-                                                  print("final value-->>"+finalvalue.toString());
-                                              Utils.navigateToScreen(context, VisitVerificationScreen(finalvalue));
+                                              print("final value-->>" +
+                                                  finalvalue.toString());
+                                              Utils.navigateToScreen(
+                                                  context,
+                                                  VisitVerificationScreen(
+                                                     widget.completedNoteResponse, finalvalue));
                                             });
                                           },
                                         ),
@@ -225,9 +235,9 @@ class _UnableToSignInScreenState extends State<UnableToSignInScreen> {
                                         onPressed: () {
                                           FocusScope.of(context)
                                               .requestFocus(FocusNode());
-                                          checkConnection()
-                                              .then((isConnected) {
-                                            Utils.navigateToScreen(context, VerificationMenuScreen());
+                                          checkConnection().then((isConnected) {
+                                            Utils.navigateToScreen(context,
+                                                VerificationMenuScreen(widget.completedNoteResponse));
                                           });
                                         },
                                       ),

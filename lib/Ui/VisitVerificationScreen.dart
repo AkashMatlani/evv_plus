@@ -2,6 +2,7 @@ import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/CompletedNoteResponse.dart';
 import 'package:evv_plus/Ui/VerificationMenuScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +11,11 @@ enum SingingCharacter { Physical, mental, other }
 
 class VisitVerificationScreen extends StatefulWidget {
 
+  CompletedNoteResponse completedNoteResponse;
+
+  VisitVerificationScreen(this.completedNoteResponse,[this.finalValue]);
   var finalValue;
 
-  VisitVerificationScreen([this.finalValue]);
   @override
   _VisitVerificationScreenState createState() =>
       _VisitVerificationScreenState();
@@ -95,7 +98,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                               ),
                               InkWell(
                                 onTap: (){
-                                  Utils.navigateToScreen(context, VerificationMenuScreen());
+                                  Utils.navigateToScreen(context, VerificationMenuScreen(widget.completedNoteResponse));
                                 },
                                 child: Container(
                                   margin: EdgeInsets.only(
@@ -120,7 +123,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                           .requestFocus(FocusNode());
                                       checkConnection().then((isConnected) {
 
-                                        Utils.navigateToScreen(context, VerificationMenuScreen());
+                                        Utils.navigateToScreen(context, VerificationMenuScreen(widget.completedNoteResponse));
                                       });
                                     },
                                   ),
@@ -172,7 +175,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                               ),
                               InkWell(
                                 onTap: (){
-                                  Utils.navigateToScreen(context, VerificationMenuScreen());
+                                  Utils.navigateToScreen(context, VerificationMenuScreen(widget.completedNoteResponse));
                                 },
                                 child: Container(
                                   margin: EdgeInsets.only(
@@ -196,7 +199,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                       FocusScope.of(context)
                                           .requestFocus(FocusNode());
                                       checkConnection().then((isConnected) {
-                                        Utils.navigateToScreen(context, VerificationMenuScreen());
+                                        Utils.navigateToScreen(context, VerificationMenuScreen(widget.completedNoteResponse));
                                       });
                                     },
                                   ),
