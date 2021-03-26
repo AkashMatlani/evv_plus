@@ -81,7 +81,7 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.45,
+                  width: MediaQuery.of(context).size.width*0.9,
                   height: 45,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -95,7 +95,7 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
                       FocusScope.of(context).requestFocus(FocusNode());
                       checkConnection().then((isConnected) {
                         if (isConnected) {
-                          Utils.navigateToScreen(context, CompletedNoteScreen());
+                          Utils.navigateToScreen(context, CompletedNoteScreen(widget.scheduleDetailInfo));
                         } else {
                           ToastUtils.showToast(
                               context, LabelStr.connectionError, Colors.red);
@@ -104,7 +104,7 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
                     },
                   ),
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.03),
+                /*SizedBox(width: MediaQuery.of(context).size.width * 0.03),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.45,
                   height: 45,
@@ -128,7 +128,7 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
                       });
                     },
                   ),
-                )
+                )*/
               ],
             ),
           ),

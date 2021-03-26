@@ -226,4 +226,10 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
       }
     });
   }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 }

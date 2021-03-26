@@ -176,7 +176,6 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                         SizedBox(height: 40,),
                         Container(
                           child: Text(widget._scheduleDetailInfo.firstName+" " +
-                              widget._scheduleDetailInfo.middleName+" " +
                               widget._scheduleDetailInfo.lastName,
                               style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 34)),
                         ),

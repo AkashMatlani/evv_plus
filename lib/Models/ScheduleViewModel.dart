@@ -11,6 +11,7 @@ class ScheduleViewModel{
   List<ScheduleInfoResponse> upCommingScheduleList = [];
   List<ScheduleInfoResponse> completedScheduleList = [];
   List<ScheduleInfoResponse> filterScheduleList = [];
+  ScheduleInfoResponse schedulleDetails = ScheduleInfoResponse();
 
   int pastDueVisitCount=0, upcommingVisitCount=0, completedVisitCount=0;
 
@@ -128,4 +129,32 @@ class ScheduleViewModel{
     });
   }
 
+  void getVisitDetailsAPICall(String visitId, ResponseCallback callback) {
+    var params = {"visitId":visitId};
+    WebService.getAPICall(WebService.getVisitDetails, params).then((response) {
+      if (response.statusCode == 1) {
+        schedulleDetails = ScheduleInfoResponse.fromJson(response.body);
+        callback(true, "");
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+  void updateDeviceTokenAPICall(String nurseId, String token, ResponseCallback callback) {
+    var params = {"NurseId":nurseId, "DeviceId":token};
+    WebService.postAPICall(WebService.updateDeviceId, params).then((response) {
+      if (response.statusCode == 1) {
+        callback(true, response.message);
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
 }

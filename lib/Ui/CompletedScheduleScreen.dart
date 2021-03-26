@@ -222,4 +222,10 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
       }
     });
   }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 }

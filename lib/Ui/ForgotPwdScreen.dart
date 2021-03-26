@@ -211,4 +211,10 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
           );
         });
   }*/
+
+  @override
+  void dispose() {
+  _emailController.dispose();
+    super.dispose();
+  }
 }

@@ -60,7 +60,7 @@ class PrefUtils {
     PrefUtils.setStringValue(PrefUtils.MiddleName, nurseDetails.middleName);
     PrefUtils.setStringValue(PrefUtils.lastName, nurseDetails.lastName);
 
-    String nurseName = nurseDetails.firstName + " "+nurseDetails.middleName+" "+nurseDetails.lastName;
+    String nurseName = nurseDetails.firstName + " "+nurseDetails.lastName;
     PrefUtils.setStringValue(PrefUtils.fullName, nurseName);
 
     PrefUtils.setStringValue(PrefUtils.NurseImage, nurseDetails.nurseImage);
@@ -75,6 +75,7 @@ class PrefUtils {
     PrefUtils.setStringValue(PrefUtils.cityName, nurseDetails.cityName);
     PrefUtils.setStringValue(PrefUtils.stateName, nurseDetails.stateName);
     PrefUtils.setBoolValue(PrefUtils.isFirstTimeLogin, nurseDetails.isFirstTimeLogin);
+    PrefUtils.setIntValue(PrefUtils.visitId, 0);
     PrefUtils.setBoolValue(PrefUtils.isLoggedIn, true);
   }
 
