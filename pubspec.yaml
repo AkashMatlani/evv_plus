@@ -41,10 +41,12 @@ dependencies:
   esys_flutter_share: ^1.0.2
   ext_storage: ^1.0.3
   image_picker: ^0.6.6+5
-  hand_signature: ^0.6.3
   path_provider: ^1.1.0
   flutter_audio_recorder: ^0.5.5
   audioplayers:
+  permission_handler: ^5.1.0
+  signature: ^3.2.0
+  image_gallery_saver: '^1.6.0'
 
 
 dev_dependencies:

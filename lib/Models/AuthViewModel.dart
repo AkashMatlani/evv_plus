@@ -3,6 +3,7 @@ import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/NurseResponse.dart';
+import 'package:evv_plus/Models/SIgnatureResponse.dart';
 import 'package:evv_plus/WebService/WebService.dart';
 
 import 'CityListResponse.dart';
@@ -148,6 +149,7 @@ class AuthViewModel{
     });
   }
 
+
   UpdateNurseProfile updateNurseProfile;
   void getUpdateProfileAPICall(String nurseId, String addressOne,String addressTwo,String zipCode,String city,String state,String phoneNumber,String firstName,String middleName,String lastName,String gender,String dateOfBirth,String email,String nurseImage,ResponseCallback callback) {
     var params = {"NurseId":nurseId,
@@ -209,6 +211,31 @@ class AuthViewModel{
           cityDataList.add(CityData.fromJson(data));
         }
         callback(true, "");
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+
+  SignatureResponseModel signatureResponseModel;
+  void getPatientSignature(String flag, String PatientSignature,String nurseId,String patientId,String visitId,ResponseCallback callback) {
+    var params = {"flag":flag,
+      "PatientSignature":PatientSignature,
+      "NurseId":nurseId,
+      "PatientId":patientId,
+      "VisitId":visitId
+    };
+
+    WebService.postAPICall(WebService.patientSignatureVoiceRecording, params).then((response) {
+      if (response.statusCode == 1) {
+        if (response.body!=null) {
+          signatureResponseModel= SignatureResponseModel.fromJson(response.body);
+        }
+        callback(true, signatureResponseModel);
       } else {
         callback(false, response.message);
       }

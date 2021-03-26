@@ -16,7 +16,6 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="EVVPLUS"
         android:usesCleartextTraffic="true"
-        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher"
         tools:targetApi="m"
         android:requestLegacyExternalStorage="true">

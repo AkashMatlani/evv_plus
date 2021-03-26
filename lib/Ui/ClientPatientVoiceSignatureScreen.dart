@@ -21,7 +21,8 @@ class ClientPatientVoiceSignatureScreen extends StatefulWidget {
 }
 
 class _ClientPatientVoiceSignatureScreenState
-    extends State<ClientPatientVoiceSignatureScreen> with TickerProviderStateMixin{
+    extends State<ClientPatientVoiceSignatureScreen>
+    with TickerProviderStateMixin {
   FlutterAudioRecorder _recorder;
   Recording _current;
   RecordingStatus _currentStatus = RecordingStatus.Unset;
@@ -38,6 +39,7 @@ class _ClientPatientVoiceSignatureScreenState
   Duration _duration = new Duration();
   Duration _position = new Duration();
   Duration _slider = new Duration(seconds: 0);
+
   @override
   void initState() {
     // TODO: implement initState
@@ -45,7 +47,6 @@ class _ClientPatientVoiceSignatureScreenState
     Future.microtask(() {
       _prepare();
     });
-
     _animationIconController1 = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 750),
@@ -54,20 +55,9 @@ class _ClientPatientVoiceSignatureScreenState
     audioPlayer = new AudioPlayer();
     audioCache = new AudioCache(fixedPlayer: audioPlayer);
     audioPlayer.durationHandler = (d) => setState(() {
-      print("duration"+_duration.inSeconds.toString());
-      _duration = d;
-
-      if(_duration.inSeconds==_recording?.duration?.inSeconds)
-        {
-         /* if (!issongplaying) {
-            audioPlayer.play(_recording.path);
-
-          } else {
-            audioPlayer.pause();
-          }*/
-        }
-    });
-
+          print("duration" + _duration.inSeconds.toString());
+          _duration = d;
+        });
   }
 
   @override
@@ -167,23 +157,19 @@ class _ClientPatientVoiceSignatureScreenState
                       SizedBox(
                         height: 30,
                       ),
-
                       GestureDetector(
                         onTap: () {
-                          setState(
-                                  () {
-                                if (!issongplaying) {
-                                  audioPlayer.play(_recording.path);
-
-                                } else {
-                                  audioPlayer.pause();
-
-                                }
-                                issongplaying
-                                    ? _animationIconController1.reverse()
-                                    : _animationIconController1.forward();
-                                issongplaying = !issongplaying;
-                              });
+                          setState(() {
+                            if (!issongplaying) {
+                              audioPlayer.play(_recording.path);
+                            } else {
+                              audioPlayer.pause();
+                            }
+                            issongplaying
+                                ? _animationIconController1.reverse()
+                                : _animationIconController1.forward();
+                            issongplaying = !issongplaying;
+                          });
                         },
                         child: ClipOval(
                           child: Container(
@@ -272,8 +258,6 @@ class _ClientPatientVoiceSignatureScreenState
         // after initialization
         var current = await _recorder.current(channel: 0);
         print(current);
-
-        // should be "Initialized", if all working fine
         setState(() {
           _current = current;
           _currentStatus = current.status;
@@ -291,17 +275,14 @@ class _ClientPatientVoiceSignatureScreenState
   _start() async {
     try {
       await _recorder.start();
-
       var current = await _recorder.current();
       setState(() {
         _recording = current;
-
       });
-
       _t = Timer.periodic(Duration(milliseconds: 10), (Timer t) async {
         var current = await _recorder.current();
         setState(() {
-          if (_recording?.duration?.inSeconds ==30 ) {
+          if (_recording?.duration?.inSeconds == 30) {
             _stopRecording();
           }
           _recording = current;
@@ -327,7 +308,6 @@ class _ClientPatientVoiceSignatureScreenState
     var result = await _recorder.current();
     setState(() {
       _recording = result;
-      //_buttonIcon = _playerIcon(_recording.status);
       _buttonIcon = _playerIcon(_recording.status);
     });
   }
@@ -342,10 +322,6 @@ class _ClientPatientVoiceSignatureScreenState
         {
           return Container(height: 120, width: 120, child: Icon(Icons.stop));
         }
-    /*  case RecordingStatus.Stopped:
-        {
-          return Container(height: 120, width: 120, child: Icon(Icons.replay));
-        }*/
       default:
         return SvgPicture.asset(MyImage.mic_icon, height: 120, width: 120);
     }
@@ -375,57 +351,6 @@ class _ClientPatientVoiceSignatureScreenState
 
     setState(() {
       _buttonIcon = _playerIcon(_recording.status);
-    });
-  }
-
-  void _play() {
-    AudioPlayer player = AudioPlayer();
-    player.play(_recording.path, isLocal: true);
-  }
-
-  void _stop() {
-    AudioPlayer player = AudioPlayer();
-    player.state = AudioPlayerState.PAUSED;
-    player.onPlayerStateChanged;
-    player.stop();
-  }
-
-  Widget _playerIconForPlaying(RecordingStatus status) {
-    switch (status) {
-      case RecordingStatus.Paused:
-        {
-          return SvgPicture.asset(MyImage.play_icon, height: 68, width: 68);
-        }
-      case RecordingStatus.Stopped:
-        {
-          return Container(height: 120, width: 120, child: Icon(Icons.stop));
-        }
-      default:
-        return SvgPicture.asset(MyImage.play_icon, height: 68, width: 68);
-    }
-  }
-
-  void _playType() async {
-    switch (_recording.status) {
-      case RecordingStatus.Stopped:
-        {
-          _play();
-          _playIcon = _playerIconForPlaying(RecordingStatus.Paused);
-          break;
-        }
-      case RecordingStatus.Initialized:
-        {
-          _stop();
-          break;
-        }
-
-      default:
-        _stop();
-        break;
-    }
-
-    setState(() {
-      _playIcon = _playerIconForPlaying(_recording.status);
     });
   }
 }
