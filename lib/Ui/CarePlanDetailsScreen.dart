@@ -8,6 +8,7 @@ import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
+import 'package:evv_plus/Ui/CarePlanPdfScreen.dart';
 import 'package:evv_plus/Ui/CustomVisitMenuScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +20,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CarePlanDetailsScreen extends StatefulWidget {
 
-  CarePlanDetailsScreen(this._scheduleDetailInfo, this.isUpcommingVisit);
+  CarePlanDetailsScreen(this._scheduleDetailInfo, this.isUpcommingVisit, this.fromScreen);
   ScheduleInfoResponse _scheduleDetailInfo;
-
   bool isUpcommingVisit;
+  String fromScreen;
 
   @override
   _CarePlanDetailsScreenState createState() => _CarePlanDetailsScreenState();
@@ -47,6 +48,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   bool isVisitStarted = false;
   String checkInTime = "00:00:00";
+  String checkOutTime = "00:00:00";
 
   @override
   void initState() {
@@ -56,6 +58,8 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
       setState(() {
         _nurseId = prefs.getInt(PrefUtils.nurseId).toString();
         _nurseName = prefs.getString(PrefUtils.fullName);
+        checkInTime = Utils.convertTime(widget._scheduleDetailInfo.checkInTime.substring(0, 5));
+        checkOutTime = Utils.convertTime(widget._scheduleDetailInfo.checkOutTime.substring(0, 5));
       });
     });
   }
@@ -156,7 +160,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                   children: [
                                     Text(LabelStr.lblCheckout, style: AppTheme.regularSFTextStyle().copyWith(fontSize:14, color: Colors.white)),
                                     SizedBox(height: 3),
-                                    Text("00:00:00", style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
+                                    Text(checkOutTime, style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
                                   ],
                                 ),
                               )
@@ -242,7 +246,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                     ]),
                                     borderRadius: BorderRadius.all(Radius.circular(5))),
                                 child: TextButton(
-                                  child: Text(isVisitStarted ? LabelStr.lbVisitNote : LabelStr.lbStartVisit,
+                                  child: Text(isVisitStarted ? LabelStr.lblVisitNote : LabelStr.lbStartVisit,
                                       style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
                                   onPressed: () {
                                     FocusScope.of(context).requestFocus(FocusNode());
@@ -262,7 +266,30 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                 ),
                               )
                           ),
-                        ) : Container(),
+                        ) : Expanded(
+                          flex: 0,
+                          child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: widget.fromScreen.compareTo("VisitComplete") == 0 ? Container(
+                                margin: EdgeInsets.only(bottom: blockSizeVertical*10),
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(colors: [
+                                      HexColor("#1785e9"),
+                                      HexColor("#83cff2")
+                                    ]),
+                                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                                child: TextButton(
+                                  child: Text(LabelStr.lblViewDocument,
+                                      style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                                  onPressed: () {
+                                    FocusScope.of(context).requestFocus(FocusNode());
+                                    Utils.navigateToScreen(context, CarePlanPdfScreen());
+                                  },
+                                ),
+                              ) : Container()
+                          ),
+                        ),
                       ],
                     ),
                   ),

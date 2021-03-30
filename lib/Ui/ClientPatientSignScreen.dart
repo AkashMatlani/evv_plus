@@ -20,8 +20,7 @@ enum visitVerification { patient, voice }
 class ClientPatientSignScreen extends StatefulWidget {
   CompletedNoteResponse completedNoteResponse;
   var finalValue;
-  bool clientPatient;
-  ClientPatientSignScreen(this.completedNoteResponse,[this.clientPatient,this.finalValue]);
+  ClientPatientSignScreen(this.completedNoteResponse,this.finalValue);
 
   @override
   _ClientPatientSignatureScreenState createState() =>

@@ -7,10 +7,10 @@ import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
 import 'package:evv_plus/Models/CompletedNoteResponse.dart';
 import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
+import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/CarePlanDetailsScreen.dart';
 import 'package:evv_plus/Ui/ClientPatientSignScreen.dart';
 import 'package:evv_plus/Ui/ClientPatientVoiceSignatureScreen.dart';
-import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:evv_plus/Ui/UnableToSignInScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +34,8 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
   List<String> menuNameList;
   List<String> menuIconList;
 
-  bool clientPatientSignature;
-  bool clientPatientVoiceSignature;
   AuthViewModel _nurseViewModel = AuthViewModel();
+  ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
 
   @override
   void initState() {
@@ -132,12 +131,12 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
           Utils.navigateToScreen(
               context,
               ClientPatientSignScreen(
-                  widget.completedNoteResponse, clientPatientSignature,visitVerification.patient));
+                  widget.completedNoteResponse,visitVerification.patient));
         } else if (position == 1) {
           Utils.navigateToScreen(
               context,
               ClientPatientVoiceSignatureScreen(
-                  widget.completedNoteResponse, clientPatientVoiceSignature,visitVerification.voice));
+                  widget.completedNoteResponse, visitVerification.voice));
         } else if (position == 2) {
           Utils.navigateToScreen(
               context, UnableToSignInScreen(widget.completedNoteResponse));
@@ -275,10 +274,7 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
                   .copyWith(color: Colors.blue, fontSize: 18)),
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop("Discard");
-            Timer(
-                Duration(milliseconds: 500),
-                () => Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => CarePlanDetailsScreen(ScheduleInfoResponse(), false))));
+            getVisitDetails(widget.completedNoteResponse.id.toString());
           },
         ),
       ],
@@ -310,6 +306,16 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
           Utils.isPatientSignCompleted=false;
           _showDialog(context);
         });
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
+  }
+
+  getVisitDetails(String visitId) {
+    _scheduleViewModel.getVisitDetailsAPICall(visitId, (isSuccess, message){
+      if(isSuccess){
+        Utils.navigateToScreen(context, CarePlanDetailsScreen(_scheduleViewModel.schedulleDetails, false, "VisitComplete"));
       } else {
         ToastUtils.showToast(context, message, Colors.red);
       }

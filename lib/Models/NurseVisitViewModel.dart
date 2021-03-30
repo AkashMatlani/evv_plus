@@ -3,6 +3,7 @@ import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/CommentFilterResponse.dart';
 import 'package:evv_plus/Models/CompletedNoteResponse.dart';
+import 'package:evv_plus/Models/NotificationResponse.dart';
 import 'package:evv_plus/WebService/WebService.dart';
 
 
@@ -10,6 +11,7 @@ import 'package:evv_plus/WebService/WebService.dart';
 class NurseVisitViewModel{
 
   List<CommentFilterResponse> commentFilterList = [];
+  List<NotificationResponse> notificationList = [];
   String carePlanPdfPath = "";
   CompletedNoteResponse completedNoteResponse = CompletedNoteResponse();
 
@@ -45,7 +47,6 @@ class NurseVisitViewModel{
   }
 
   void commentApiCall(String flag, String patientId, String nurseId, String comment, String careplane, ResponseCallback callback, {Function onInactiveAccount}) {
-
     var validateResult = validateCommentField(comment);
     if(validateResult.isValid){
       var params = {
@@ -118,6 +119,42 @@ class NurseVisitViewModel{
     WebService.postAPICall(WebService.updateVisitCompleteNote, params).then((response) {
       if (response.statusCode == 1) {
         completedNoteResponse = CompletedNoteResponse.fromJson(response.body);
+        callback(true, response.message);
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+  void cancelRunningVisitApiCall(String visitId, ResponseCallback callback, {Function onInactiveAccount}) {
+    var params = {
+      "VisitId": visitId
+    };
+    WebService.getAPICall(WebService.cancelVisit, params).then((response) {
+      if (response.statusCode == 1) {
+        callback(true, response.message);
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+  void notificationListApiCall(String nurseId, ResponseCallback callback, {Function onInactiveAccount}) {
+    var params = {
+      "NurseId": nurseId
+    };
+    WebService.getAPICall(WebService.getNotification, params).then((response) {
+      if (response.statusCode == 1) {
+        notificationList = [];
+        for (var data in response.body) {
+          notificationList.add(NotificationResponse.fromJson(data));
+        }
         callback(true, response.message);
       } else {
         callback(false, response.message);

@@ -23,8 +23,7 @@ enum visitVerification { patient, voice }
 class ClientPatientVoiceSignatureScreen extends StatefulWidget {
   CompletedNoteResponse completedNoteResponse;
   var finalValue;
-  bool clientPatientVoiceSignature;
-  ClientPatientVoiceSignatureScreen(this.completedNoteResponse,[this.clientPatientVoiceSignature,this.finalValue]);
+  ClientPatientVoiceSignatureScreen(this.completedNoteResponse,this.finalValue);
 
   @override
   _ClientPatientVoiceSignatureScreenState createState() =>
@@ -388,7 +387,6 @@ class _ClientPatientVoiceSignatureScreenState
       Utils.showLoader(false, context);
       if (isSuccess) {
         setState(() {
-          widget.clientPatientVoiceSignature=true;
           widget.finalValue=visitVerification.voice;
           Utils.isPatientVoiceCompleted=true;
           Utils.navigateToScreen(

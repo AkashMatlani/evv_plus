@@ -53,7 +53,7 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _upcommingVisitList.length == 0 ? emptyListView() : Column(
+      body: _upcommingVisitList.length == 0 ? emptyListView() : SingleChildScrollView(child:Column(
         children: [
           Container(
             height: 50,
@@ -67,12 +67,12 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
                 Container(
                     padding: EdgeInsets.only(left: 10, right: 50),
                     child: TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Search patient name/care plan",
-                      ),
-                      keyboardType: TextInputType.text,
-                      controller: searchController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Search patient name/care plan",
+                        ),
+                        keyboardType: TextInputType.text,
+                        controller: searchController,
                         onChanged: (value){
                           setState(() {
                             if(value.isEmpty){
@@ -124,7 +124,7 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
             },
           )
         ],
-      ),
+      ))
     );
   }
 
@@ -138,7 +138,7 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
   listRowItems(BuildContext context, int position) {
     return InkWell(
       onTap: (){
-        Utils.navigateToScreen(context, CarePlanDetailsScreen(_filterList[position], true));
+        Utils.navigateToScreen(context, CarePlanDetailsScreen(_filterList[position], true, "ScheduleUpcomming"));
       },
       child: Card(
         elevation: 2,

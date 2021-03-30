@@ -317,16 +317,15 @@ class AuthViewModel {
   }
 
 
-  VisitCompleteModel visitCompleteModel;
   void getUpdatedVisitTrue(
       String nurseId,
       String patientId,
       String visitId,
       ResponseCallback callback) {
     var params = {
-      "NurseId": 3.toString(),
-      "PatientId": 3.toString(),
-      "VisitId": 3.toString()
+      "NurseId": nurseId,
+      "PatientId": patientId,
+      "VisitId": visitId
     };
 
     WebService.postAPICall(WebService.updateVisitTrue, params)

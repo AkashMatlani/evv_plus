@@ -1,16 +1,20 @@
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/NurseVisitViewModel.dart';
 import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
 import 'package:evv_plus/Ui/CarePlanPdfScreen.dart';
 import 'package:evv_plus/Ui/CommentScreen.dart';
 import 'package:evv_plus/Ui/CompletedNoteScreen.dart';
 import 'package:evv_plus/Ui/DailyLivingTask.dart';
+import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:evv_plus/Ui/VisitHistoryListScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../GeneralUtils/ColorExtension.dart';
 
@@ -24,6 +28,11 @@ class CustomVisitMenuScreen extends StatefulWidget {
 
 class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
   List<String> menuList = [];
+  double blockSizeVertical;
+  double screenHeight;
+  int visitId;
+
+  NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
 
   @override
   void initState() {
@@ -35,10 +44,17 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
       LabelStr.lblDailyLivingTasks,
       LabelStr.lblComments
     ];
+    getVisitId();
+  }
+
+  void getVisitId() async {
+    visitId = await PrefUtils.getValueFor(PrefUtils.visitId);
   }
 
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    blockSizeVertical = screenHeight / 100;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
@@ -53,7 +69,7 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.of(context).pop();
+            _showDialog(context);
           },
         ),
       ),
@@ -138,6 +154,85 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
     );
   }
 
+  _showDialog(BuildContext context){
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(20.0)), //this right here
+            child: Container(
+                height:blockSizeVertical*20,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      alignment: Alignment.center,
+                      child: Text(LabelStr.lbStartVisit, style: AppTheme.headerTextStyle().copyWith(fontSize: 20)),
+                    ),
+                    Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 20, right: 10, bottom: 0, top: 10),
+                          child: Text(
+                            LabelStr.lblCancelVisit,
+                            style: AppTheme.mediumSFTextStyle().copyWith(color: HexColor("#3d3d3d")),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                    ),
+                    Container(
+                      height: 1,
+                      width: MediaQuery.of(context).size.width,
+                      color: HexColor("#f5f5f5"),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 51,
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 51,
+                              alignment: Alignment.center,
+                              width: MediaQuery.of(context).size.width*0.4,
+                              child: TextButton(
+                                  child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                            ),
+                            SizedBox(width: 1),
+                            Container(
+                              width: 1,
+                              height: 51,
+                              color: HexColor("#f5f5f5"),
+                            ),
+                            Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 51,
+                                  alignment: Alignment.center,
+                                  width: MediaQuery.of(context).size.width*0.4,
+                                  child: TextButton(
+                                      child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
+                                      onPressed: () {
+                                        cancelVisit();
+                                      }),
+                                )),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                )
+            ),
+          );
+        });
+  }
+
   listRowItems(BuildContext context, int position) {
     return InkWell(
       onTap: () {
@@ -208,5 +303,19 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
         ),
       ),
     );
+  }
+
+  void cancelVisit() {
+    Utils.showLoader(true, context);
+    _nurseVisitViewModel.cancelRunningVisitApiCall(visitId.toString(), (isSuccess, message){
+      Utils.showLoader(false, context);
+      if(isSuccess){
+        Navigator.of(context).pop();
+        PrefUtils.setIntValue(PrefUtils.visitId, 0);
+        Utils.navigateWithClearState(context, ScheduleScreen());
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
   }
 }

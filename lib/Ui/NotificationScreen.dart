@@ -1,9 +1,14 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/NotificationResponse.dart';
+import 'package:evv_plus/Models/NurseVisitViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 class NotificationScreen extends StatefulWidget {
   @override
@@ -11,6 +16,23 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+
+  int nurseId;
+  List<NotificationResponse> _notificationList = [];
+  NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getNurseid();
+  }
+
+  getNurseid() async{
+    nurseId = await PrefUtils.getValueFor(PrefUtils.nurseId);
+    getNotificationList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,12 +67,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
               height: 1,
               color: HexColor("#efefef"),
             ),
-            Expanded(
+            _notificationList.length == 0 ? emptyListView() : Expanded(
               child: Container(
                 color: Colors.white,
                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                 child: ListView.separated(
-                  itemCount: 100,
+                  itemCount: _notificationList.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Column(
@@ -59,18 +81,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         children: [
                           Container(
                               child: Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipisc.trttretertrtett',
-                            style: AppTheme.semiBoldSFTextStyle().copyWith(
-                                fontSize: 16, color: HexColor("#3d3d3d")),
-                          )),
-                          Container(
-                              padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                              child: Text(
-                                'Curabitur magna augue, rutrum non nisl…',
-                                style: AppTheme.regularSFTextStyle().copyWith(
-                                    fontSize: 14, color: HexColor("#838383")),
-                                maxLines: 50,
-                              )),
+                                _notificationList[index].notificationMessage,
+                                style: AppTheme.semiBoldSFTextStyle().copyWith(
+                                    fontSize: 16, color: HexColor("#3d3d3d")),
+                              )
+                          ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -78,11 +93,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               Container(
                                   padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                                   child: Text(
-                                    '02 Feb 2021',
+                                    Utils.convertDate(_notificationList[index].visitDate, DateFormat("dd MMM yyyy")),
                                     style: AppTheme.mediumSFTextStyle()
                                         .copyWith(
-                                            fontSize: 12,
-                                            color: HexColor("#838383")),
+                                        fontSize: 12,
+                                        color: HexColor("#838383")),
                                   )),
                               Container(
                                 height: 7,
@@ -93,11 +108,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               Container(
                                   padding: EdgeInsets.fromLTRB(5, 15, 0, 0),
                                   child: Text(
-                                    '07:45 am',
+                                    Utils.convertTime(_notificationList[index].fromTime.substring(0, 5)),
                                     style: AppTheme.mediumSFTextStyle()
                                         .copyWith(
-                                            fontSize: 12,
-                                            color: HexColor("#838383")),
+                                        fontSize: 12,
+                                        color: HexColor("#838383")),
                                   )),
                             ],
                           )
@@ -118,7 +133,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ),
             ),
           ],
-        )); //
+        )
+    ); //
   }
 
   final Color textUnreadGreenColor = Color.fromARGB(255, 8, 211, 111);
@@ -135,5 +151,33 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ),
       ),
     );
+  }
+
+  emptyListView() {
+    return Expanded(
+      child: Container(
+        alignment: Alignment.center,
+        child: isLoading ? Container() : Text(LabelStr.lblNoData, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 18, color: Colors.red)),
+      ),
+    );
+  }
+
+  void getNotificationList() {
+    Utils.showLoader(true, context);
+    _nurseVisitViewModel.notificationListApiCall(nurseId.toString(), (isSuccess, message){
+      Utils.showLoader(false, context);
+      isLoading = false;
+      if(isSuccess){
+        setState(() {
+          _notificationList = [];
+          _notificationList = _nurseVisitViewModel.notificationList;
+        });
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+        setState(() {
+          _notificationList = [];
+        });
+      }
+    });
   }
 }

@@ -263,7 +263,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         PrefUtils.setIntValue(PrefUtils.visitId, 0);
-                        Utils.logoutFromApp(context, ScheduleScreen());
+                        Utils.navigateWithClearState(context, ScheduleScreen());
                       },
                     ),
                   ),

@@ -52,7 +52,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _completedVisitList.length == 0 ? emptyListView() : Column(
+      body: _completedVisitList.length == 0 ? emptyListView() : SingleChildScrollView(child: Column(
         children: [
           Container(
             height: 50,
@@ -66,12 +66,12 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
                 Container(
                     padding: EdgeInsets.only(left: 10, right: 50),
                     child: TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Search patient name/care plan",
-                      ),
-                      keyboardType: TextInputType.text,
-                      controller: searchController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Search patient name/care plan",
+                        ),
+                        keyboardType: TextInputType.text,
+                        controller: searchController,
                         onChanged: (value){
                           setState(() {
                             if(value.isEmpty){
@@ -123,7 +123,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
             },
           )
         ],
-      ),
+      ))
     );
   }
 
@@ -137,7 +137,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
   listRowItems(BuildContext context, int position) {
     return InkWell(
       onTap: (){
-        Utils.navigateToScreen(context, CarePlanDetailsScreen(_filterList[position], false));
+        Utils.navigateToScreen(context, CarePlanDetailsScreen(_filterList[position], false, "ScheduleComplete"));
       },
       child: Card(
         elevation: 2,

@@ -39,7 +39,7 @@ class Utils {
         context, MaterialPageRoute(builder: (context) => screen));
   }
 
-  static logoutFromApp(BuildContext context, Widget screen) {
+  static navigateWithClearState(BuildContext context, Widget screen) {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(

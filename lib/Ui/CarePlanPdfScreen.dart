@@ -151,7 +151,6 @@ class _CarePlanPdfScreenState extends State<CarePlanPdfScreen> {
     _nurseVisitViewModel.getCarePlanPdf((isSuccess, message) {
       Utils.showLoader(false, context);
       if(isSuccess){
-        ToastUtils.showToast(context, message, Colors.green);
         setState(() {
           pdfUrl = _nurseVisitViewModel.carePlanPdfPath;
           print("My Path => $pdfUrl");

@@ -12,25 +12,34 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CarePlanDetailsScreen.dart';
 
-
 class PastDueScheduleScreen extends StatefulWidget {
-
   @override
   _PastDueScheduleScreenState createState() => _PastDueScheduleScreenState();
 }
 
 class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
-
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   List<ScheduleInfoResponse> _pastVisitList = [];
   List<ScheduleInfoResponse> _filterList = [];
   bool isLoading = true;
   var searchController = TextEditingController();
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
+  void _onRefresh() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async {
+    await Future.delayed(Duration(milliseconds: 1000));
+    if (mounted) _refreshController.loadComplete();
+  }
 
   @override
   void initState() {
@@ -39,24 +48,27 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
       PrefUtils.getNurseDataFromPref();
       String nurseId = prefs.getInt(PrefUtils.nurseId).toString();
       Timer(
-        Duration(milliseconds: 100), (){
-        checkConnection().then((isConnected) {
-          if(isConnected){
-            _getPastDueList(nurseId);
-          } else {
-            ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
-          }
-        });
-      },
+        Duration(milliseconds: 100),
+        () {
+          checkConnection().then((isConnected) {
+            if (isConnected) {
+              _getPastDueList(nurseId);
+            } else {
+              ToastUtils.showToast(
+                  context, LabelStr.connectionError, Colors.red);
+            }
+          });
+        },
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      body: _pastVisitList.length == 0 ? emptyListView() : Column(
+      body: _pastVisitList.length == 0
+          ? emptyListView()
+          : SingleChildScrollView(child: Column(
         children: [
           Container(
             height: 50,
@@ -76,26 +88,30 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
                       ),
                       keyboardType: TextInputType.text,
                       controller: searchController,
-                      onChanged: (value){
+                      onChanged: (value) {
                         setState(() {
-                          if(value.isEmpty){
+                          if (value.isEmpty) {
                             _filterList = [];
                             _filterList = _pastVisitList;
                           }
                         });
                       },
-                    )
-                ),
+                    )),
                 Positioned(
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       FocusScope.of(context).requestFocus(FocusNode());
                       String filterKey = searchController.text.toString();
-                      if(filterKey.isNotEmpty){
+                      if (filterKey.isNotEmpty) {
                         _filterList = [];
-                        for(var i=0; i< _pastVisitList.length; i++){
-                          String name = _pastVisitList[i].firstName+" "+_pastVisitList[i].lastName;
-                          if(name.contains(filterKey) || _pastVisitList[i].carePlanName.contains(filterKey)){
+                        for (var i = 0; i < _pastVisitList.length; i++) {
+                          String name = _pastVisitList[i].firstName +
+                              " " +
+                              _pastVisitList[i].lastName;
+                          if (name.contains(filterKey) ||
+                              _pastVisitList[i]
+                                  .carePlanName
+                                  .contains(filterKey)) {
                             _filterList.add(_pastVisitList[i]);
                           }
                         }
@@ -127,21 +143,26 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
             },
           )
         ],
-      ),
+      )),
     );
   }
 
   emptyListView() {
     return Container(
       alignment: Alignment.center,
-      child: isLoading ? Container() : Text(LabelStr.lblNoData, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 18, color: Colors.red)),
+      child: isLoading
+          ? Container()
+          : Text(LabelStr.lblNoData,
+              style: AppTheme.semiBoldSFTextStyle()
+                  .copyWith(fontSize: 18, color: Colors.red)),
     );
   }
 
   listRowItems(BuildContext context, int position) {
     return InkWell(
-      onTap: (){
-        Utils.navigateToScreen(context, CarePlanDetailsScreen(_filterList[position], false));
+      onTap: () {
+        Utils.navigateToScreen(
+            context, CarePlanDetailsScreen(_filterList[position], false, "SchedulePastDue"));
       },
       child: Card(
         elevation: 2,
@@ -151,8 +172,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
             side: BorderSide(
               color: HexColor("#E9E9E9"),
               width: 0.5,
-            )
-        ),
+            )),
         child: Container(
           padding: EdgeInsets.all(10),
           child: Row(
@@ -167,23 +187,39 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
               ),
               SizedBox(width: 10),
               Expanded(
-                  child:Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(_filterList[position].firstName+" "+_filterList[position].lastName, style: AppTheme.boldSFTextStyle().copyWith(fontSize: 16)),
-                        SizedBox(height: 3),
-                        Text(Utils.convertDate(_filterList[position].visitDate, DateFormat('dd/MM/yyyy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
-                        SizedBox(height: 3),
-                        Text(Utils.convertTime(_filterList[position].timeFrom.substring(0, 5))+" - "+Utils.convertTime(_filterList[position].timeTo.substring(0, 5)), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696")))
-                      ],
-                    ),
-                  )
-              ),
+                  child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        _filterList[position].firstName +
+                            " " +
+                            _filterList[position].lastName,
+                        style:
+                            AppTheme.boldSFTextStyle().copyWith(fontSize: 16)),
+                    SizedBox(height: 3),
+                    Text(
+                        Utils.convertDate(_filterList[position].visitDate,
+                            DateFormat('dd/MM/yyyy')),
+                        style: AppTheme.regularSFTextStyle().copyWith(
+                            fontSize: 14, color: HexColor("#969696"))),
+                    SizedBox(height: 3),
+                    Text(
+                        Utils.convertTime(_filterList[position]
+                                .timeFrom
+                                .substring(0, 5)) +
+                            " - " +
+                            Utils.convertTime(
+                                _filterList[position].timeTo.substring(0, 5)),
+                        style: AppTheme.regularSFTextStyle()
+                            .copyWith(fontSize: 14, color: HexColor("#969696")))
+                  ],
+                ),
+              )),
               SizedBox(width: 10),
               Container(
-                height: MediaQuery.of(context).size.height*0.09,
+                height: MediaQuery.of(context).size.height * 0.09,
                 padding: EdgeInsets.all(5),
                 alignment: Alignment.topRight,
                 child: Row(
@@ -192,12 +228,13 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
                       height: 7,
                       width: 7,
                       margin: EdgeInsets.only(top: 3),
-                      child: SvgPicture.asset(MyImage.ic_fill_circle, color: HexColor("#2ab554")),
+                      child: SvgPicture.asset(MyImage.ic_fill_circle,
+                          color: HexColor("#2ab554")),
                     ),
                     SizedBox(width: 3),
-                    _filterList[position].carePlanName != null?
-                    Text(_filterList[position].carePlanName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
-                       :Text("",style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
+                    Text(_filterList[position].carePlanName,
+                        style: AppTheme.semiBoldSFTextStyle()
+                            .copyWith(fontSize: 14, color: HexColor("#2ab554")))
                   ],
                 ),
               )
@@ -210,17 +247,17 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
 
   void _getPastDueList(String nurseId) {
     Utils.showLoader(true, context);
-    _scheduleViewModel.getPastDueListAPICall(nurseId, (isSuccess, response){
+    _scheduleViewModel.getPastDueListAPICall(nurseId, (isSuccess, response) {
       Utils.showLoader(false, context);
       isLoading = false;
-      if(isSuccess){
+      if (isSuccess) {
         setState(() {
           _pastVisitList = [];
           _filterList = [];
           _pastVisitList = _scheduleViewModel.pastDueScheduleList;
           _filterList = _pastVisitList;
         });
-      } else{
+      } else {
         setState(() {
           _pastVisitList = [];
           _filterList = [];

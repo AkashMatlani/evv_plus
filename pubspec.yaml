@@ -49,6 +49,7 @@ dependencies:
   image_gallery_saver: '^1.6.0'
   firebase_messaging: ^6.0.16
   flutter_local_notifications: ^1.4.4+2
+  pull_to_refresh: ^1.6.4
   cached_network_image: ^2.5.1
 
 
