@@ -58,7 +58,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     MyImage.icident_icon,
     MyImage.notification_icon,
     MyImage.profile_icon,
-    MyImage.ic_password,
+    MyImage.password_icon,
     MyImage.about_us_icon
   ];
 
@@ -68,11 +68,11 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       Utils.navigateToScreen(context, ScheduleScreen());
     } /*else if (index == 1) {
       Utils.navigateToScreen(context, TaskWithDateDetailsScreen(CompletedNoteResponse()));
-    } */else if (index == 3) {
+    } */else if (index == 2) {
       Utils.navigateToScreen(context, NotificationScreen());
-    } else if (index == 4) {
+    } else if (index == 3) {
       Utils.navigateToScreen(context, ProfileScreen());
-    } else if (index == 5) {
+    } else if (index == 4) {
       Utils.navigateToScreen(context, ChangePwdScreen(LabelStr.lblChangePwd));
     }
   }

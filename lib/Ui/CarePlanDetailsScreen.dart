@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -49,7 +50,17 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
   bool isVisitStarted = false;
   String checkInTime = "00:00:00";
   String checkOutTime = "00:00:00";
+  static double latitude_current = 31.9414246;
+  static double longitude_current = 35.8880857;
+  Map<PolylineId, Polyline> _mapPolylines = {};
+  int _polylineIdCounter = 1;
 
+
+  static final CameraPosition _kLake = CameraPosition(
+      bearing: 60.8334901395799,
+      target: LatLng(latitude_current, longitude_current),
+      tilt: 80.440717697143555,
+      zoom: 18.151926040649414);
   @override
   void initState() {
     super.initState();
@@ -223,12 +234,30 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                       ),*/
                         Container(
                           height: 240,
-                          child: GoogleMap(
+                          child: /*GoogleMap(
                             mapType: MapType.normal,
                             initialCameraPosition: _kGooglePlex,
                             onMapCreated: (GoogleMapController controller) {
+                            //  _controller.complete(controller);
+
+                              _GetDeviceLocation();
                               _controller.complete(controller);
                             },
+                            myLocationEnabled: true,
+                            polylines: Set<Polyline>.of(_mapPolylines.values),
+                          ),*/
+                          GoogleMap(
+                            mapType: MapType.normal,
+                            initialCameraPosition: CameraPosition(
+                              target: LatLng(latitude_current, longitude_current),
+                              zoom: 14.4746,
+                            ),
+                            onMapCreated: (GoogleMapController controller) async {
+                              _GetDeviceLocation();
+                              _controller.complete(controller);
+                            },
+                            myLocationEnabled: true,
+                            polylines: Set<Polyline>.of(_mapPolylines.values),
                           ),
                         ),
                         SizedBox(height: 20),
@@ -475,5 +504,27 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
         ToastUtils.showToast(context, message, Colors.red);
       }
     });
+  }
+
+  void _GetDeviceLocation() async {
+    var location = new Location();
+    location.changeSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 0,
+      interval: 100,
+    );
+    location.onLocationChanged.listen((LocationData currentLocation) {
+      latitude_current = currentLocation.latitude;
+      longitude_current = currentLocation.longitude;
+      _goToTheLake();
+    });
+  }
+
+
+  Future<void> _goToTheLake() async {
+    _GetDeviceLocation();
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+
   }
 }

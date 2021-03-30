@@ -80,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       gender = prefs.getString(PrefUtils.Gender);
       dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
       print("dateofbirth" + dateOfBirth);
-      nurseImage = prefs.getString(PrefUtils.NurseImage);
+      //nurseImage = prefs.getString(PrefUtils.NurseImage);
       stateId = prefs.getInt(PrefUtils.stateId).toString();
        setState(() {
         stateName = prefs.getString(PrefUtils.stateName);
@@ -176,6 +176,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                                           child: nurseImage != null? ClipRRect(
                                             borderRadius: BorderRadius.circular(50),child:CachedNetworkImage(
+                                            useOldImageOnUrlChange: false,
                                           imageUrl: nurseImage,
                                           placeholder: (context, url) => CircularProgressIndicator(),
                                           errorWidget: (context, url, error) => Icon(Icons.error),

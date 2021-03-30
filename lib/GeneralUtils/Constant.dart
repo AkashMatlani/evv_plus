@@ -95,6 +95,7 @@ class MyImage {
   static const icident_icon = "assets/icons/ic_menu_icident.svg";
   static const notification_icon = "assets/icons/ic_menu_notification.svg";
   static const profile_icon = "assets/icons/ic_menu_profile.svg";
+  static const password_icon = "assets/icons/menu_password.svg";
   static const about_us_icon = "assets/icons/ic_menu_aboutUs.svg";
   static const logout_icon = "assets/icons/ic_menu_logout.svg";
   static const mic_icon = "assets/icons/mic.svg";
