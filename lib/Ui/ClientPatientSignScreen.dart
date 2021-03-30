@@ -15,12 +15,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:signature/signature.dart';
 import 'VerificationMenuScreen.dart';
 
-
 enum visitVerification { patient, voice }
+
 class ClientPatientSignScreen extends StatefulWidget {
   CompletedNoteResponse completedNoteResponse;
   var finalValue;
-  ClientPatientSignScreen(this.completedNoteResponse,this.finalValue);
+
+  ClientPatientSignScreen(this.completedNoteResponse, this.finalValue);
 
   @override
   _ClientPatientSignatureScreenState createState() =>
@@ -189,7 +190,7 @@ class _ClientPatientSignatureScreenState
                         ),
                       ),
                     ),
-                    Container(
+                   /* Container(
                       height: MediaQuery.of(context).size.height * 0.10,
                       padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
                       width: MediaQuery.of(context).size.width,
@@ -201,7 +202,7 @@ class _ClientPatientSignatureScreenState
                               color: Colors.white,
                             )),
                       ),
-                    ),
+                    ),*/
                     Expanded(
                       flex: 1,
                       child: Align(
@@ -218,7 +219,7 @@ class _ClientPatientSignatureScreenState
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5))),
                             child: TextButton(
-                              child: Text(LabelStr.lblSubmit,
+                              child: Text("Clear",
                                   style: AppTheme.boldSFTextStyle().copyWith(
                                       fontSize: 18, color: Colors.white)),
                               onPressed: () {
@@ -226,12 +227,7 @@ class _ClientPatientSignatureScreenState
                                     .requestFocus(FocusNode());
                                 checkConnection().then((isConnected) async {
                                   if (_controller.isNotEmpty) {
-                                    var data = await _controller.toPngBytes();
-                                    if (await Permission.storage
-                                        .request()
-                                        .isGranted) {
-                                      await _createFile(data);
-                                    }
+                                    _controller.clear;
                                   }
                                 });
                               },
@@ -248,7 +244,15 @@ class _ClientPatientSignatureScreenState
     print(result);
     String _img64 = base64Encode(bytes);
     print("base64Camera-->>" + _img64);
-    validationForCollectClientSignature(_img64);
+    print("final valueeee-->>"+widget.finalValue);
+
+    if (widget.finalValue != null) {
+      print("if called");
+      signReasonVisitVerification(_img64);
+    } else {
+      print("else called");
+      validationForCollectClientSignature(_img64);
+    }
   }
 
   void validationForCollectClientSignature(String img64) {
@@ -263,16 +267,37 @@ class _ClientPatientSignatureScreenState
       Utils.showLoader(false, context);
       if (isSuccess) {
         setState(() {
-          widget.finalValue=visitVerification.patient;
+          widget.finalValue = visitVerification.patient;
 
-          Utils.isPatientSignCompleted=true;
+          Utils.isPatientSignCompleted = true;
           Utils.navigateToScreen(
               context, VerificationMenuScreen(widget.completedNoteResponse));
         });
       } else {
         ToastUtils.showToast(context, message, Colors.red);
       }
+    });
+  }
 
+  void signReasonVisitVerification(String img64) {
+    Utils.showLoader(true, context);
+    _nurseViewModel.getSignInReason(
+        "3",
+        img64,
+        widget.finalValue,
+        widget.completedNoteResponse.nurseId.toString(),
+        widget.completedNoteResponse.patientId.toString(),
+        widget.completedNoteResponse.id.toString(), (isSuccess, message) {
+      Utils.showLoader(false, context);
+      if (isSuccess) {
+        setState(() {
+          Utils.unableToSignReason=true;
+          Utils.navigateToScreen(
+              context, VerificationMenuScreen(widget.completedNoteResponse));
+        });
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
     });
   }
 }

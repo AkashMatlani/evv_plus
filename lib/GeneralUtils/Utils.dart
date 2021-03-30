@@ -10,6 +10,7 @@ class Utils {
   static bool isPatientVoiceCompleted=false;
   static bool unableToSignReason=false;
 
+
   static void showLoader(bool show, BuildContext context) {
     if (show) {
       showDialog(

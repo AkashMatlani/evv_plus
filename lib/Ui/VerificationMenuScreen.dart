@@ -108,7 +108,7 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
                 FocusScope.of(context).requestFocus(FocusNode());
                 checkConnection().then((isConnected) {
                   if (isConnected) {
-                    if ( Utils.isPatientSignCompleted &&  Utils.isPatientVoiceCompleted) {
+                    if (( Utils.isPatientSignCompleted &&  Utils.isPatientVoiceCompleted) ||Utils.unableToSignReason) {
                       visitUpdateTRue(context);
                     }
                   } else {
@@ -304,6 +304,7 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
         setState(() {
           Utils.isPatientVoiceCompleted=false;
           Utils.isPatientSignCompleted=false;
+          Utils.unableToSignReason=false;
           _showDialog(context);
         });
       } else {
