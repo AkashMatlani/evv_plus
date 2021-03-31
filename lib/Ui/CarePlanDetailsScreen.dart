@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
@@ -10,9 +11,11 @@ import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/CarePlanPdfScreen.dart';
 import 'package:evv_plus/Ui/CustomVisitMenuScreen.dart';
+import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
@@ -114,7 +117,13 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                         Row(
                           children: [
                             InkWell(
-                              onTap: (){ Navigator.of(context).pop();},
+                              onTap: (){
+                                if(widget.fromScreen.compareTo("VisitComplete") == 0){
+                                  Utils.navigateWithClearState(context, ScheduleScreen());
+                                } else {
+                                  Navigator.of(context).pop();
+                                }
+                                },
                               child: Container(
                                 child: Icon(Icons.arrow_back, color: Colors.white),
                                 margin: EdgeInsets.only(left: 10),
@@ -313,7 +322,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                       style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
                                   onPressed: () {
                                     FocusScope.of(context).requestFocus(FocusNode());
-                                    Utils.navigateToScreen(context, CarePlanPdfScreen());
+                                    Utils.navigateToScreen(context, CarePlanPdfScreen("View Document"));
                                   },
                                 ),
                               ) : Container()
@@ -334,19 +343,23 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image(image: AssetImage(MyImage.ic_rectangle,),height: 160,width: 160,),
-                      /* Container(
-                      height: ic_rectangle,
-                      width: blockSizeHorizontal*25,
-                      margin: EdgeInsets.all(10),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(40),
-                        child: Image(
-                          image: NetworkImage(
-                              'https://www.tutorialkart.com/img/hummingbird.png'),
-                        ),
+                      Container(
+                        height: 140,
+                        width: 140,
+                        padding: EdgeInsets.all(5),
+                        margin: EdgeInsets.only(top: 15),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.fill,
+                            useOldImageOnUrlChange: false,
+                            imageUrl: widget._scheduleDetailInfo.profilePhotoPath,
+                            placeholder: (context, url) => Container(height: 60, width: 60, alignment: Alignment.center, child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Image.asset(MyImage.user_placeholder),
+                          )
+                        )
                       ),
-                    ),       */             InkWell(
+                      InkWell(
                         onTap:() {
                           _makingPhoneCall(widget._scheduleDetailInfo.phoneNumber);
                         },
@@ -415,7 +428,11 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                               child: TextButton(
                                   child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
                                   onPressed: () {
-                                    Navigator.of(context).pop();
+                                    if(widget.fromScreen.compareTo("VisitComplete") == 0){
+                                      Utils.navigateWithClearState(context, ScheduleScreen());
+                                    } else {
+                                      Navigator.of(context).pop();
+                                    }
                                   }),
                             ),
                             SizedBox(width: 1),

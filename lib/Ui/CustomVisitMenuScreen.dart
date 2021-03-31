@@ -170,13 +170,13 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
                     Container(
                       margin: EdgeInsets.only(top: 20),
                       alignment: Alignment.center,
-                      child: Text(LabelStr.lbStartVisit, style: AppTheme.headerTextStyle().copyWith(fontSize: 20)),
+                      child: Text(LabelStr.lbCancelVisit, style: AppTheme.headerTextStyle().copyWith(fontSize: 20)),
                     ),
                     Expanded(
                         child: Padding(
                           padding: EdgeInsets.only(left: 20, right: 10, bottom: 0, top: 10),
                           child: Text(
-                            LabelStr.lblCancelVisit,
+                            LabelStr.lblAskForCancel,
                             style: AppTheme.mediumSFTextStyle().copyWith(color: HexColor("#3d3d3d")),
                             textAlign: TextAlign.center,
                           ),
@@ -237,7 +237,7 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
     return InkWell(
       onTap: () {
         if (position == 0) {
-          Utils.navigateToScreen(context, CarePlanPdfScreen());
+          Utils.navigateToScreen(context, CarePlanPdfScreen("Care Plan"));
         } else if (position == 1) {
           Utils.navigateToScreen(context, VisitHistoryListScreen());
         } else if (position == 2) {

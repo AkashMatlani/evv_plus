@@ -8,6 +8,7 @@ import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/CompletedNoteResponse.dart';
+import 'package:evv_plus/Models/NurseVisitViewModel.dart';
 import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:evv_plus/Ui/VerificationMenuScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,6 +35,12 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay(hour: 00, minute: 00);
 
+  double blockSizeVertical;
+  double screenHeight;
+  int visitId;
+
+  NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
+
   @override
   void initState() {
     super.initState();
@@ -43,6 +50,12 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
     _checkInDateController.addListener(_handleText(4));
     _checkOutTimeController.addListener(_handleText(5));
     _checkOutDateController.addListener(_handleText(6));
+
+    getVisitId();
+  }
+
+  void getVisitId() async {
+    visitId = await PrefUtils.getValueFor(PrefUtils.visitId);
   }
 
   _handleText(int flag){
@@ -69,7 +82,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
           title: Container(
             alignment: Alignment.center,
             margin: EdgeInsets.only(right: 30),
-            child: Text("Task ",
+            child: Text("Task "+Utils.convertDate(widget._visitNoteDetails.checkInDate, DateFormat("dd/MM/yyyy")),
                 style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
           ),
           backgroundColor: Colors.white10,
@@ -77,7 +90,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              Navigator.of(context).pop();
+              cancelVisit(false);
             },
           )),
       body: Column(
@@ -262,8 +275,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                               fontSize: 18, color: HexColor("#2b91eb"))),
                       onPressed: () {
                         FocusScope.of(context).requestFocus(FocusNode());
-                        PrefUtils.setIntValue(PrefUtils.visitId, 0);
-                        Utils.navigateWithClearState(context, ScheduleScreen());
+                        _showDialog(context);
                       },
                     ),
                   ),
@@ -275,6 +287,101 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
         ],
       ),
     );
+  }
+
+  _showDialog(BuildContext context){
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(20.0)), //this right here
+            child: Container(
+                height:blockSizeVertical*20,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      alignment: Alignment.center,
+                      child: Text(LabelStr.lbCancelVisit, style: AppTheme.headerTextStyle().copyWith(fontSize: 20)),
+                    ),
+                    Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 20, right: 10, bottom: 0, top: 10),
+                          child: Text(
+                            LabelStr.lblAskForCancel,
+                            style: AppTheme.mediumSFTextStyle().copyWith(color: HexColor("#3d3d3d")),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                    ),
+                    Container(
+                      height: 1,
+                      width: MediaQuery.of(context).size.width,
+                      color: HexColor("#f5f5f5"),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 51,
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 51,
+                              alignment: Alignment.center,
+                              width: MediaQuery.of(context).size.width*0.4,
+                              child: TextButton(
+                                  child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                            ),
+                            SizedBox(width: 1),
+                            Container(
+                              width: 1,
+                              height: 51,
+                              color: HexColor("#f5f5f5"),
+                            ),
+                            Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 51,
+                                  alignment: Alignment.center,
+                                  width: MediaQuery.of(context).size.width*0.4,
+                                  child: TextButton(
+                                      child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
+                                      onPressed: () {
+                                        cancelVisit(true);
+                                      }),
+                                )),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                )
+            ),
+          );
+        });
+  }
+
+  void cancelVisit(bool isFromDialog) {
+    Utils.showLoader(true, context);
+    _nurseVisitViewModel.cancelRunningVisitApiCall(visitId.toString(), (isSuccess, message){
+      Utils.showLoader(false, context);
+      if(isSuccess){
+        if(isFromDialog) {
+          Navigator.of(context).pop();
+        }
+        PrefUtils.setIntValue(PrefUtils.visitId, 0);
+        Utils.navigateWithClearState(context, ScheduleScreen());
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
   }
 
   @override

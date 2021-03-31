@@ -1,15 +1,16 @@
-/// patientId : 2
+/// patientId : 4
+/// profilePhotoPath : "http://35.231.45.54:70/AndroidNurseimg/User_28_20210326020256.jpg"
 /// staffId : 1
-/// firstName : "test"
-/// middleName : "b"
-/// lastName : "test"
+/// firstName : "test3"
+/// middleName : "test3"
+/// lastName : "test3"
 /// phoneNumber : "9879495852"
 /// addressLine1 : "36 West 5th Street"
 /// addressLine2 : "10th Floor"
 /// zipcode : "10017"
-/// visitDate : "2021-03-15T12:00:00"
-/// timeFrom : "11:00:00"
-/// timeTo : "12:30:00"
+/// visitDate : "2022-03-31T00:00:00"
+/// timeFrom : "22:30:00"
+/// timeTo : "23:30:00"
 /// birthdate : "1991-03-15T00:00:00"
 /// isActive : true
 /// isDelete : false
@@ -18,16 +19,17 @@
 /// createdBy : 1
 /// modifiedBy : null
 /// carePlanName : "Care Plan 1"
-/// isVisited : false
+/// isVisited : true
 /// latitude : 40.74310320
 /// longitude : -73.42287410
 /// checkInTime : "00:00:00"
-/// checkOutTime : "00:00:00"
+/// checkOutTime : "10:12:51"
 /// cityname : "Manhattan"
 /// state : "New York"
 
 class ScheduleInfoResponse {
   int _patientId;
+  String _profilePhotoPath;
   int _staffId;
   String _firstName;
   String _middleName;
@@ -56,6 +58,7 @@ class ScheduleInfoResponse {
   String _state;
 
   int get patientId => _patientId;
+  String get profilePhotoPath => _profilePhotoPath;
   int get staffId => _staffId;
   String get firstName => _firstName;
   String get middleName => _middleName;
@@ -85,6 +88,7 @@ class ScheduleInfoResponse {
 
   ScheduleInfoResponse({
       int patientId, 
+      String profilePhotoPath, 
       int staffId, 
       String firstName, 
       String middleName, 
@@ -112,6 +116,7 @@ class ScheduleInfoResponse {
       String cityname, 
       String state}){
     _patientId = patientId;
+    _profilePhotoPath = profilePhotoPath;
     _staffId = staffId;
     _firstName = firstName;
     _middleName = middleName;
@@ -142,6 +147,7 @@ class ScheduleInfoResponse {
 
   ScheduleInfoResponse.fromJson(dynamic json) {
     _patientId = json["patientId"];
+    _profilePhotoPath = json["profilePhotoPath"];
     _staffId = json["staffId"];
     _firstName = json["firstName"];
     _middleName = json["middleName"];
@@ -173,6 +179,7 @@ class ScheduleInfoResponse {
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     map["patientId"] = _patientId;
+    map["profilePhotoPath"] = _profilePhotoPath;
     map["staffId"] = _staffId;
     map["firstName"] = _firstName;
     map["middleName"] = _middleName;

@@ -68,9 +68,13 @@ class _ClientPatientVoiceSignatureScreenState
     audioPlayer = new AudioPlayer();
     audioCache = new AudioCache(fixedPlayer: audioPlayer);
     audioPlayer.durationHandler = (d) => setState(() {
-          print("duration" + _duration.inSeconds.toString());
+          print("duration : " + _duration.inSeconds.toString());
           _duration = d;
         });
+
+    audioPlayer.onPlayerCompletion.listen((event) {
+      _animationIconController1.reverse();
+    });
   }
 
   @override
@@ -314,6 +318,7 @@ class _ClientPatientVoiceSignatureScreenState
 
     setState(() {
       _recording = result;
+      _buttonIcon = SvgPicture.asset(MyImage.mic_icon, height: 120, width: 120);
     });
   }
 
@@ -344,22 +349,19 @@ class _ClientPatientVoiceSignatureScreenState
   void _opt() async {
     switch (_recording.status) {
       case RecordingStatus.Initialized:
-        {
-          await _start();
-          break;
-        }
+        await _start();
+        break;
+
       case RecordingStatus.Recording:
-        {
-          await _stopRecording();
-          break;
-        }
+        await _stopRecording();
+        break;
+
       case RecordingStatus.Stopped:
-        {
           await _prepare();
           break;
-        }
 
       default:
+        await _prepare();
         break;
     }
 

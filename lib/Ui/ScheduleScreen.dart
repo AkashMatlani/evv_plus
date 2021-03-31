@@ -44,7 +44,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
   final List<String> _menuNameList = [
     LabelStr.lblHome,
-    /*LabelStr.lblTask,*/
     LabelStr.lblIcident,
     LabelStr.lblNotification,
     LabelStr.lblProfile,
@@ -54,11 +53,10 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
   final List<String> menuIconsList = [
     MyImage.home_icon,
-    /*MyImage.task_icon,*/
     MyImage.icident_icon,
     MyImage.notification_icon,
     MyImage.profile_icon,
-    MyImage.password_icon,
+    MyImage.ic_password,
     MyImage.about_us_icon
   ];
 
@@ -66,9 +64,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     setState(() => _selectedIndex = index);
     if (index == 0) {
       Utils.navigateToScreen(context, ScheduleScreen());
-    } /*else if (index == 1) {
-      Utils.navigateToScreen(context, TaskWithDateDetailsScreen(CompletedNoteResponse()));
-    } */else if (index == 2) {
+    } else if (index == 2) {
       Utils.navigateToScreen(context, NotificationScreen());
     } else if (index == 3) {
       Utils.navigateToScreen(context, ProfileScreen());
@@ -122,7 +118,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
   @override
   Widget build(BuildContext context) {
-    var tabWidth = (MediaQuery.of(context).size.width-80) / 3;
+    var tabWidth = (MediaQuery.of(context).size.width-75) / 3;
     var tabHeight = MediaQuery.of(context).size.height * 0.1;
 
     return Scaffold(

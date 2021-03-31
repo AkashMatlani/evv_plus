@@ -19,6 +19,10 @@ import 'package:permission_handler/permission_handler.dart';
 
 
 class CarePlanPdfScreen extends StatefulWidget {
+
+  CarePlanPdfScreen(this.title);
+  String title;
+
   @override
   _CarePlanPdfScreenState createState() => _CarePlanPdfScreenState();
 }
@@ -51,7 +55,7 @@ class _CarePlanPdfScreenState extends State<CarePlanPdfScreen> {
         toolbarHeight: 100,
         title: Container(
           alignment: Alignment.center,
-          child: Text(LabelStr.lblCarePlan,
+          child: Text(widget.title,
               style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
         ),
         backgroundColor: Colors.white10,
