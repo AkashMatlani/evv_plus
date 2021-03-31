@@ -26,6 +26,8 @@ class VerificationMenuScreen extends StatefulWidget {
 
   VerificationMenuScreen(this.completedNoteResponse);
 
+  bool isbool=true;
+
   @override
   _VerificationMenuScreenState createState() => _VerificationMenuScreenState();
 }
@@ -128,10 +130,11 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
     return InkWell(
       onTap: () {
         if (position == 0) {
+
           Utils.navigateToScreen(
               context,
               ClientPatientSignScreen(
-                  widget.completedNoteResponse,visitVerification.patient));
+                  widget.completedNoteResponse,visitVerification.patient,widget.isbool));
         } else if (position == 1) {
           Utils.navigateToScreen(
               context,

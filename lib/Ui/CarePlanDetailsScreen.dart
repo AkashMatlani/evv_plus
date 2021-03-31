@@ -234,19 +234,19 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                       ),*/
                         Container(
                           height: 240,
-                          child: /*GoogleMap(
+                          child: GoogleMap(
                             mapType: MapType.normal,
                             initialCameraPosition: _kGooglePlex,
                             onMapCreated: (GoogleMapController controller) {
-                            //  _controller.complete(controller);
-
-                              _GetDeviceLocation();
                               _controller.complete(controller);
+
+                            //  _GetDeviceLocation();
+                             // _controller.complete(controller);
                             },
-                            myLocationEnabled: true,
-                            polylines: Set<Polyline>.of(_mapPolylines.values),
-                          ),*/
-                          GoogleMap(
+                            //myLocationEnabled: true,
+                            //polylines: Set<Polyline>.of(_mapPolylines.values),
+                          ),
+                       /*   GoogleMap(
                             mapType: MapType.normal,
                             initialCameraPosition: CameraPosition(
                               target: LatLng(latitude_current, longitude_current),
@@ -258,7 +258,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                             },
                             myLocationEnabled: true,
                             polylines: Set<Polyline>.of(_mapPolylines.values),
-                          ),
+                          ),*/
                         ),
                         SizedBox(height: 20),
                         widget.isUpcommingVisit ? Expanded(

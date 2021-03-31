@@ -166,7 +166,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       },
                                       child: CircleAvatar(
                                         radius: 55,
-                                        backgroundColor: Color(0xffFDCF09),
                                        /* child: nurseImage != null
                                             ? ClipRRect(
                                           borderRadius: BorderRadius.circular(50),
@@ -668,7 +667,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _image = image;
       final bytes = _image.readAsBytesSync();
        _img64 = base64Encode(bytes);
-      print("base64Camera-->>"+_img64);
     });
   }
 
@@ -680,7 +678,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _image = image;
       final bytes = _image.readAsBytesSync();
        _img64 = base64Encode(bytes);
-      print("base64Gallery-->>"+_img64);
     });
   }
 

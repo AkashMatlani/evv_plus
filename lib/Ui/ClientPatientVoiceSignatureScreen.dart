@@ -19,11 +19,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io' as io;
 
 import 'package:path_provider/path_provider.dart';
+
 enum visitVerification { patient, voice }
+
 class ClientPatientVoiceSignatureScreen extends StatefulWidget {
   CompletedNoteResponse completedNoteResponse;
   var finalValue;
-  ClientPatientVoiceSignatureScreen(this.completedNoteResponse,this.finalValue);
+
+  ClientPatientVoiceSignatureScreen(
+      this.completedNoteResponse, this.finalValue);
 
   @override
   _ClientPatientVoiceSignatureScreenState createState() =>
@@ -86,7 +90,7 @@ class _ClientPatientVoiceSignatureScreenState
               ),
             ),
             actions: <Widget>[
-              Container(
+              /*Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(right: 10),
                 padding: EdgeInsets.only(right: 10),
@@ -97,7 +101,7 @@ class _ClientPatientVoiceSignatureScreenState
                         color: HexColor("#1a87e9"),
                       )),
                 ),
-              )
+              )*/
             ],
             backgroundColor: Colors.white,
             leading: IconButton(
@@ -147,7 +151,8 @@ class _ClientPatientVoiceSignatureScreenState
                       SizedBox(
                         height: 10,
                       ),
-                      Text("${_recording?.duration?.inSeconds}",
+                      Text(
+                          "${_recording?.duration?.inSeconds.toString() + "Sec"}",
                           style: AppTheme.boldSFTextStyle().copyWith(
                             fontSize: 26,
                             color: HexColor("#3d3d3d"),
@@ -224,9 +229,7 @@ class _ClientPatientVoiceSignatureScreenState
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
                                   checkConnection().then((isConnected) {
-
                                     submitCall();
-
                                   });
                                 },
                               ),
@@ -309,7 +312,6 @@ class _ClientPatientVoiceSignatureScreenState
     _t.cancel();
     print("path-->>" + _recording?.path.toString());
 
-
     setState(() {
       _recording = result;
     });
@@ -366,8 +368,7 @@ class _ClientPatientVoiceSignatureScreenState
     });
   }
 
-  void submitCall()
-  {
+  void submitCall() {
     File file = File(_recording?.path);
     Uint8List bytes = file.readAsBytesSync();
     String base64Image = base64Encode(bytes);
@@ -387,11 +388,9 @@ class _ClientPatientVoiceSignatureScreenState
       Utils.showLoader(false, context);
       if (isSuccess) {
         setState(() {
-          widget.finalValue=visitVerification.voice;
-          Utils.isPatientVoiceCompleted=true;
+          Utils.isPatientVoiceCompleted = true;
           Utils.navigateToScreen(
               context, VerificationMenuScreen(widget.completedNoteResponse));
-
         });
       } else {
         ToastUtils.showToast(context, message, Colors.red);

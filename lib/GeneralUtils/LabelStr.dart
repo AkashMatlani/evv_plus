@@ -66,6 +66,7 @@ class LabelStr {
   static const lblGetReasonOther= "Reason : Other";
   static const checkMailLink = "Please check your email box";
   static const connectionError = "Please check you internet connectivity, Try again";
+  static const digitalSignatureError = "Please provide digital signature";
   static const serverError = "Server not responding, Try again";
   static const emptyFieldError = "Please fill required details";
   static const lblclientSignature = "Client Signature";

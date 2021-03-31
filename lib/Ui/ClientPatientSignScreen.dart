@@ -21,7 +21,8 @@ class ClientPatientSignScreen extends StatefulWidget {
   CompletedNoteResponse completedNoteResponse;
   var finalValue;
 
-  ClientPatientSignScreen(this.completedNoteResponse, this.finalValue);
+  bool is_true;
+  ClientPatientSignScreen(this.completedNoteResponse, this.finalValue, [this.is_true]);
 
   @override
   _ClientPatientSignatureScreenState createState() =>
@@ -79,6 +80,10 @@ class _ClientPatientSignatureScreenState
                     if (await Permission.storage.request().isGranted) {
                       await _createFile(data);
                     }
+                  }
+                  else{
+                    ToastUtils.showToast(
+                        context, LabelStr.digitalSignatureError, Colors.red);
                   }
                 },
                 child: Container(
@@ -227,7 +232,7 @@ class _ClientPatientSignatureScreenState
                                     .requestFocus(FocusNode());
                                 checkConnection().then((isConnected) async {
                                   if (_controller.isNotEmpty) {
-                                    _controller.clear;
+                                    _controller.clear();
                                   }
                                 });
                               },
@@ -241,18 +246,30 @@ class _ClientPatientSignatureScreenState
   Future<String> _createFile(var data) async {
     Uint8List bytes = data;
     final result = await ImageGallerySaver.saveImage(bytes);
-    print(result);
+   // print(result);
     String _img64 = base64Encode(bytes);
-    print("base64Camera-->>" + _img64);
-    print("final valueeee-->>"+widget.finalValue);
+   // print("base64Camera-->>" + _img64);
+   // print("final valueeee-->>"+widget.finalValue);
 
-    if (widget.finalValue != null) {
+
+
+    if(widget.is_true!=null && widget.is_true)
+      {
+        print("if called");
+        validationForCollectClientSignature(_img64);
+      }
+    else
+      {
+        print("else called");
+        signReasonVisitVerification(_img64);
+      }
+   /* if (widget.finalValue !=null) {
       print("if called");
       signReasonVisitVerification(_img64);
     } else {
       print("else called");
       validationForCollectClientSignature(_img64);
-    }
+    }*/
   }
 
   void validationForCollectClientSignature(String img64) {
@@ -267,8 +284,6 @@ class _ClientPatientSignatureScreenState
       Utils.showLoader(false, context);
       if (isSuccess) {
         setState(() {
-          widget.finalValue = visitVerification.patient;
-
           Utils.isPatientSignCompleted = true;
           Utils.navigateToScreen(
               context, VerificationMenuScreen(widget.completedNoteResponse));

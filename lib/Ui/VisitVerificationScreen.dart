@@ -4,8 +4,6 @@ import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
 import 'package:evv_plus/Models/CompletedNoteResponse.dart';
-import 'package:evv_plus/Ui/UnableToSignInScreen.dart';
-import 'package:evv_plus/Ui/VerificationMenuScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -261,10 +259,10 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
   }
 
   void reasonSelected() {
-    if (widget.finalValue == SingingCharacter.Physical) {
+    if (widget.finalValue.toString()==SingingCharacter.Physical.toString()) {
       careTakerReason = "physical impairment";
       print(careTakerReason);
-    } else if (widget.finalValue == SingingCharacter.mental) {
+    } else if (widget.finalValue.toString() == SingingCharacter.mental.toString()) {
       careTakerReason = "mental impairment";
       print(careTakerReason);
     } else {
