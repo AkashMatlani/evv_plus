@@ -31,10 +31,11 @@ class LabelStr {
   static const lbNurse = "Nurse:";
   static const lbPatientAddress = "Patient Address:";
   static const lbStartVisit = "Start Visit";
+  static const lbCancelVisit = "Cancel Visit";
   static const lblVisitNote = "Visit Note";
   static const lblViewDocument = "View Document";
   static const lblAskStartVisit = "Would you like to start visit?";
-  static const lblCancelVisit = "Would you like to cancel visit permanently?";
+  static const lblAskForCancel = "Would you like to cancel visit permanently?";
   static const lblYes = "Yes";
   static const lblNo = "No";
   static const lblHome = "Home";

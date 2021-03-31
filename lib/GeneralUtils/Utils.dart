@@ -69,10 +69,16 @@ class Utils {
   }
 
   static String convertTime(String time){
-    TimeOfDay releaseTime = TimeOfDay(hour: int.parse(time.split(":")[0]), minute: int.parse(time.split(":")[1]));
-    final now = new DateTime.now();
-    final dt = DateTime(now.year, now.month, now.day, releaseTime.hour, releaseTime.minute);
-    return DateFormat("hh:mm a").format(dt);
+    if(time.compareTo("00:00") == 0){
+      return "00:00:00";
+    } else {
+      TimeOfDay releaseTime = TimeOfDay(hour: int.parse(time.split(":")[0]),
+          minute: int.parse(time.split(":")[1]));
+      final now = new DateTime.now();
+      final dt = DateTime(
+          now.year, now.month, now.day, releaseTime.hour, releaseTime.minute);
+      return DateFormat("hh:mm a").format(dt);
+    }
   }
 }
 

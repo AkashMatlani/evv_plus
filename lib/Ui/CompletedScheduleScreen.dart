@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
@@ -116,6 +117,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
           ),
           SizedBox(height: 10),
           ListView.builder(
+            primary: false,
             shrinkWrap: true,
             itemCount: _filterList.length,
             itemBuilder: (context, position) {
@@ -158,7 +160,13 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
                 width: 80,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(MyImage.noImagePlaceholder),
+                  child: CachedNetworkImage(
+                    fit: BoxFit.fill,
+                    useOldImageOnUrlChange: false,
+                    imageUrl: _filterList[position].profilePhotoPath,
+                    placeholder: (context, url) => Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) => Image.asset(MyImage.noImagePlaceholder),
+                  ),
                 ),
               ),
               SizedBox(width: 10),

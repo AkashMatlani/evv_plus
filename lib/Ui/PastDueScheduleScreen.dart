@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
@@ -12,7 +13,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CarePlanDetailsScreen.dart';
@@ -28,18 +28,6 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
   List<ScheduleInfoResponse> _filterList = [];
   bool isLoading = true;
   var searchController = TextEditingController();
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-
-  void _onRefresh() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    _refreshController.refreshCompleted();
-  }
-
-  void _onLoading() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    if (mounted) _refreshController.loadComplete();
-  }
 
   @override
   void initState() {
@@ -136,6 +124,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
           ),
           SizedBox(height: 10),
           ListView.builder(
+            primary: false,
             shrinkWrap: true,
             itemCount: _filterList.length,
             itemBuilder: (context, position) {
@@ -182,7 +171,16 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
                 width: 80,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(MyImage.noImagePlaceholder),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.fill,
+                      useOldImageOnUrlChange: false,
+                      imageUrl: _filterList[position].profilePhotoPath,
+                      placeholder: (context, url) => Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => Image.asset(MyImage.noImagePlaceholder),
+                    ),
+                  ),
                 ),
               ),
               SizedBox(width: 10),
