@@ -184,8 +184,7 @@ class AuthViewModel {
       "Gender": gender,
       "DateOfBirth": dateOfBirth,
       "Email": email,
-      if(nurseImage!=null)
-      "NurseImage": nurseImage
+      if (nurseImage != null) "NurseImage": nurseImage else "NurseImage": "abcd"
     };
 
     WebService.postAPICall(WebService.nurseUpdateProfile, params)
@@ -253,10 +252,8 @@ class AuthViewModel {
       ResponseCallback callback) {
     var params = {
       "flag": flag,
-      if(PatientSignature!=null)
-      "PatientSignature": PatientSignature,
-      if(patientVoiceSign!=null)
-      "patientVoiceSign": patientVoiceSign,
+      if (PatientSignature != null) "PatientSignature": PatientSignature,
+      if (patientVoiceSign != null) "patientVoiceSign": patientVoiceSign,
       "NurseId": nurseId,
       "PatientId": patientId,
       "VisitId": visitId
@@ -278,7 +275,6 @@ class AuthViewModel {
       callback(false, LabelStr.serverError);
     });
   }
-
 
   SigninVisitVerificationModel signinVisitVerificationModel;
 
@@ -316,11 +312,7 @@ class AuthViewModel {
     });
   }
 
-
-  void getUpdatedVisitTrue(
-      String nurseId,
-      String patientId,
-      String visitId,
+  void getUpdatedVisitTrue(String nurseId, String patientId, String visitId,
       ResponseCallback callback) {
     var params = {
       "NurseId": nurseId,
@@ -328,10 +320,9 @@ class AuthViewModel {
       "VisitId": visitId
     };
 
-    WebService.postAPICall(WebService.updateVisitTrue, params)
-        .then((response) {
+    WebService.postAPICall(WebService.updateVisitTrue, params).then((response) {
       if (response.statusCode == 1) {
-        callback(true,"");
+        callback(true, "");
       } else {
         callback(false, response.message);
       }
@@ -340,8 +331,4 @@ class AuthViewModel {
       callback(false, LabelStr.serverError);
     });
   }
-
-
-
-
 }

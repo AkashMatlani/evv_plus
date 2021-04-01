@@ -1,6 +1,7 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
 import 'package:evv_plus/Models/CompletedNoteResponse.dart';
@@ -26,7 +27,15 @@ class VisitVerificationScreen extends StatefulWidget {
 class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
   var careTakerReason;
   var reasonController = new TextEditingController();
-  AuthViewModel _nurseViewModel = AuthViewModel();
+
+  bool submit = true;
+  bool caretaker = false;
+
+  @override
+  void initState() {
+    super.initState();
+    reasonSelected();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +51,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
           alignment: Alignment.center,
           margin: EdgeInsets.only(right: 30),
           child: Text(
-            LabelStr.lblVisitVerification,
+            careTakerReason == "" ? "Other" : careTakerReason,
             style: AppTheme.boldSFTextStyle().copyWith(fontSize: 22),
           ),
         ),
@@ -111,7 +120,8 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                         Utils.navigateToScreen(
                                             context,
                                             ClientPatientSignScreen(
-                                                widget.completedNoteResponse,careTakerReason));
+                                                widget.completedNoteResponse,
+                                                careTakerReason));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.only(
@@ -145,7 +155,9 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                               Utils.navigateToScreen(
                                                   context,
                                                   ClientPatientSignScreen(
-                                                      widget.completedNoteResponse,careTakerReason));
+                                                      widget
+                                                          .completedNoteResponse,
+                                                      careTakerReason));
                                             });
                                           },
                                         ),
@@ -190,6 +202,18 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                     ),
                                     TextFormField(
                                       controller: reasonController,
+                                      onChanged: (String text) {
+                                        setState(() {
+                                          if (reasonController.text.length ==
+                                                  0 ||
+                                              reasonController.text.length
+                                                  .toString()
+                                                  .isEmpty) {
+                                            submit = true;
+                                            caretaker = false;
+                                          }
+                                        });
+                                      },
                                       maxLines: 1,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
@@ -200,49 +224,101 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                         hintText: 'Broken arm',
                                       ),
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        reasonSelected();
-                                        Utils.navigateToScreen(
-                                            context,
-                                            ClientPatientSignScreen(
-                                                widget.completedNoteResponse,careTakerReason));
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.only(
-                                            top: 30,
-                                            right: 20,
-                                            left: 20,
-                                            bottom: 20),
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        height: 60,
-                                        decoration: BoxDecoration(
-                                            gradient: LinearGradient(colors: [
-                                              HexColor("#1785e9"),
-                                              HexColor("#83cff2")
-                                            ]),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5))),
-                                        child: TextButton(
-                                          child: Text(
-                                              LabelStr.lblGetCaretakerSignature,
-                                              style: AppTheme.boldSFTextStyle()
-                                                  .copyWith(
-                                                      fontSize: 20,
-                                                      color: Colors.white)),
-                                          onPressed: () {
-                                            FocusScope.of(context)
-                                                .requestFocus(FocusNode());
-                                            checkConnection()
-                                                .then((isConnected) {
-                                              reasonSelected();
-                                              Utils.navigateToScreen(
-                                                  context,
-                                                  ClientPatientSignScreen(
-                                                      widget.completedNoteResponse,careTakerReason));
-                                            });
-                                          },
+                                    Visibility(
+                                      visible: submit,
+                                      child: InkWell(
+                                        onTap: () {
+                                          //reasonSelected();
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              top: 30,
+                                              right: 20,
+                                              left: 20,
+                                              bottom: 20),
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                              gradient: LinearGradient(colors: [
+                                                HexColor("#1785e9"),
+                                                HexColor("#83cff2")
+                                              ]),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5))),
+                                          child: TextButton(
+                                            child: Text("Submit",
+                                                style:
+                                                    AppTheme.boldSFTextStyle()
+                                                        .copyWith(
+                                                            fontSize: 20,
+                                                            color:
+                                                                Colors.white)),
+                                            onPressed: () {
+                                              submit = false;
+                                              caretaker = true;
+                                              FocusScope.of(context)
+                                                  .requestFocus(FocusNode());
+                                              checkConnection()
+                                                  .then((isConnected) {});
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible: caretaker,
+                                      child: InkWell(
+                                        onTap: () {
+                                          reasonSelected();
+                                          Utils.navigateToScreen(
+                                              context,
+                                              ClientPatientSignScreen(
+                                                  widget.completedNoteResponse,
+                                                  careTakerReason));
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              top: 30,
+                                              right: 20,
+                                              left: 20,
+                                              bottom: 20),
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                              gradient: LinearGradient(colors: [
+                                                HexColor("#1785e9"),
+                                                HexColor("#83cff2")
+                                              ]),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5))),
+                                          child: TextButton(
+                                            child: Text(
+                                                LabelStr
+                                                    .lblGetCaretakerSignature,
+                                                style:
+                                                    AppTheme.boldSFTextStyle()
+                                                        .copyWith(
+                                                            fontSize: 20,
+                                                            color:
+                                                                Colors.white)),
+                                            onPressed: () {
+                                              caretaker = true;
+                                              FocusScope.of(context)
+                                                  .requestFocus(FocusNode());
+                                              checkConnection()
+                                                  .then((isConnected) {
+                                                reasonSelected();
+                                                Utils.navigateToScreen(
+                                                    context,
+                                                    ClientPatientSignScreen(
+                                                        widget
+                                                            .completedNoteResponse,
+                                                        careTakerReason));
+                                              });
+                                            },
+                                          ),
                                         ),
                                       ),
                                     )
@@ -259,11 +335,12 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
   }
 
   void reasonSelected() {
-    if (widget.finalValue.toString()==SingingCharacter.Physical.toString()) {
-      careTakerReason = "physical impairment";
+    if (widget.finalValue.toString() == SingingCharacter.Physical.toString()) {
+      careTakerReason = "Physical Impairment";
       print(careTakerReason);
-    } else if (widget.finalValue.toString() == SingingCharacter.mental.toString()) {
-      careTakerReason = "mental impairment";
+    } else if (widget.finalValue.toString() ==
+        SingingCharacter.mental.toString()) {
+      careTakerReason = "Mental Impairment";
       print(careTakerReason);
     } else {
       careTakerReason = reasonController.text;

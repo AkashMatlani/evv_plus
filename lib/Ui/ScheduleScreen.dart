@@ -56,7 +56,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     MyImage.icident_icon,
     MyImage.notification_icon,
     MyImage.profile_icon,
-    MyImage.ic_password,
+    MyImage.password_icon,
     MyImage.about_us_icon
   ];
 

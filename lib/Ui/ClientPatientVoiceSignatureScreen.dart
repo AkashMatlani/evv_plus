@@ -44,7 +44,7 @@ class _ClientPatientVoiceSignatureScreenState
   Timer _t;
   Widget _buttonIcon =
       SvgPicture.asset(MyImage.mic_icon, height: 120, width: 120);
-  Widget _playIcon = SvgPicture.asset(MyImage.play_icon, height: 68, width: 68);
+
   AudioPlayer audioPlayer;
   String localFilePath;
   AnimationController _animationIconController1;
@@ -136,6 +136,10 @@ class _ClientPatientVoiceSignatureScreenState
                       ),
                       InkWell(
                           onTap: () {
+                            if (_recording.status == RecordingStatus.Stopped) {
+                              ToastUtils.showToast(
+                                  context, "stoped", Colors.amber);
+                            }
                             _opt();
                           },
                           child: _buttonIcon) /**/,
@@ -165,7 +169,7 @@ class _ClientPatientVoiceSignatureScreenState
                         height: 10,
                       ),
                       Text(
-                        "This will take 30 second voice recording and will be\n saved once click on done",
+                        "This will take 30 second voice recording and will be\n saved once click on submit",
                         textAlign: TextAlign.center,
                         style: AppTheme.regularSFTextStyle().copyWith(
                           fontSize: 16,
@@ -177,17 +181,22 @@ class _ClientPatientVoiceSignatureScreenState
                       ),
                       GestureDetector(
                         onTap: () {
-                          setState(() {
-                            if (!issongplaying) {
-                              audioPlayer.play(_recording.path);
-                            } else {
-                              audioPlayer.pause();
-                            }
-                            issongplaying
-                                ? _animationIconController1.reverse()
-                                : _animationIconController1.forward();
-                            issongplaying = !issongplaying;
-                          });
+                          if (_recording?.duration?.inSeconds == 0) {
+                            ToastUtils.showToast(
+                                context, LabelStr.recordFirst, Colors.red);
+                          } else {
+                            setState(() {
+                              if (!issongplaying) {
+                                audioPlayer.play(_recording.path);
+                              } else {
+                                audioPlayer.pause();
+                              }
+                              issongplaying
+                                  ? _animationIconController1.reverse()
+                                  : _animationIconController1.forward();
+                              issongplaying = !issongplaying;
+                            });
+                          }
                         },
                         child: ClipOval(
                           child: Container(
@@ -233,7 +242,12 @@ class _ClientPatientVoiceSignatureScreenState
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
                                   checkConnection().then((isConnected) {
-                                    submitCall();
+                                    if (_recording?.duration?.inSeconds == 0) {
+                                      ToastUtils.showToast(context,
+                                          LabelStr.voiceError, Colors.red);
+                                    } else {
+                                      submitCall(context);
+                                    }
                                   });
                                 },
                               ),
@@ -357,8 +371,8 @@ class _ClientPatientVoiceSignatureScreenState
         break;
 
       case RecordingStatus.Stopped:
-          await _prepare();
-          break;
+        await _stopRecording();
+        break;
 
       default:
         await _prepare();
@@ -370,7 +384,7 @@ class _ClientPatientVoiceSignatureScreenState
     });
   }
 
-  void submitCall() {
+  void submitCall(BuildContext context) {
     File file = File(_recording?.path);
     Uint8List bytes = file.readAsBytesSync();
     String base64Image = base64Encode(bytes);

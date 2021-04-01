@@ -26,7 +26,6 @@ class WebService {
   static const getVisitDetails = "NurseVisit/GetVisitDetails";
   static const updateDeviceId = "NurseVisit/UpdateDeviceId";
   static const updateVisitCompleteNote = "NurseVisit/UpdateNurseVisitCompleteNote";
-
   static const nurseDetail = "Nurse/ViewNurse";
   static const nurseUpdateProfile = "Nurse/UpdatenurseProfile";
   static const getState = "Nurse/GetAllState";
@@ -35,7 +34,6 @@ class WebService {
   static const patientSignatureVoiceRecording = "NurseVisit/PatienSignatureAndVoiceRecording";
   static const signReasonVisitVerification = "NurseVisit/SignReasonVisitVerification";
   static const updateVisitTrue = "NurseVisit/UpdateVisitTrue";
-
 
   static Future<ServerResponse> getAPICall(String apiName, Map<String, dynamic> params) async {
     var url = baseUrl + apiName;

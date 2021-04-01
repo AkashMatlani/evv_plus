@@ -172,7 +172,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           child: (nurseImage),
                                         )
 */
-
                                           child: nurseImage != null? ClipRRect(
                                             borderRadius: BorderRadius.circular(50),child:CachedNetworkImage(
                                             useOldImageOnUrlChange: false,
@@ -451,7 +450,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               width: MediaQuery.of(context).size.width * 0.42,
                               height: 45,
-                              child: cityList!=null && cityList.length > 0
+                              child: cityList!=null && cityList.length>0
                                   ? DropdownButton(
                                 underline: SizedBox(),
                                 isExpanded: true,
