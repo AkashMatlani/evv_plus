@@ -76,7 +76,14 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+
+    screenHeight = MediaQuery.of(context).size.height;
+    blockSizeVertical = screenHeight / 100;
+
+    return WillPopScope(onWillPop: (){
+      _showDialog(context);
+    },
+    child: Scaffold(
       appBar: AppBar(
           toolbarHeight: 100,
           title: Container(
@@ -90,7 +97,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              cancelVisit(false);
+              _showDialog(context);
             },
           )),
       body: Column(
@@ -111,9 +118,9 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                       LabelStr.lblClientName,
                       _clientNameController,
                       readOnly: true,
-                  onEditingComplete: (){
-                    _clientNameController.text = _clientNameController.text = widget._visitNoteDetails.clientName;
-                  }),
+                      onEditingComplete: (){
+                        _clientNameController.text = _clientNameController.text = widget._visitNoteDetails.clientName;
+                      }),
                   SizedBox(height: 12),
                   textFieldFor(
                       LabelStr.lblClinicianName, _clinicianNameController, readOnly: true),
@@ -126,7 +133,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border:
-                            Border.all(color: HexColor("#d2d2d2"), width: 1),
+                        Border.all(color: HexColor("#d2d2d2"), width: 1),
                         color: Colors.white),
                     padding: EdgeInsets.all(10),
                     child: Column(
@@ -142,7 +149,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                           children: [
 
                             Expanded(
-                              flex: 1,child:Container(
+                                flex: 1,child:Container(
                               width: MediaQuery.of(context).size.width * 0.42,
                               child: textFieldFor(
                                   "09/03/2020", _checkInDateController,
@@ -159,7 +166,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                             )),
                             SizedBox(
                                 width:
-                                    MediaQuery.of(context).size.width * 0.02),
+                                MediaQuery.of(context).size.width * 0.02),
                             Container(
                               width: MediaQuery.of(context).size.width * 0.4,
                               child: textFieldFor(
@@ -185,7 +192,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border:
-                            Border.all(color: HexColor("#d2d2d2"), width: 1),
+                        Border.all(color: HexColor("#d2d2d2"), width: 1),
                         color: Colors.white),
                     padding: EdgeInsets.all(10),
                     child: Column(
@@ -217,7 +224,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                             ),
                             SizedBox(
                                 width:
-                                    MediaQuery.of(context).size.width * 0.02),
+                                MediaQuery.of(context).size.width * 0.02),
                             Container(
                               width: MediaQuery.of(context).size.width * 0.4,
                               child: textFieldFor(
@@ -286,7 +293,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
           )
         ],
       ),
-    );
+    ));
   }
 
   _showDialog(BuildContext context){

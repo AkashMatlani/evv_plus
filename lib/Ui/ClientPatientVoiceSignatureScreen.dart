@@ -160,7 +160,7 @@ class _ClientPatientVoiceSignatureScreenState
                         height: 10,
                       ),
                       Text(
-                          "${_recording?.duration?.inSeconds.toString() + "Sec"}",
+                          "${_recording?.duration?.inSeconds.toString() + " Sec"}",
                           style: AppTheme.boldSFTextStyle().copyWith(
                             fontSize: 26,
                             color: HexColor("#3d3d3d"),

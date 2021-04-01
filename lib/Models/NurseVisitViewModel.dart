@@ -13,6 +13,7 @@ class NurseVisitViewModel{
   List<CommentFilterResponse> commentFilterList = [];
   List<NotificationResponse> notificationList = [];
   String carePlanPdfPath = "";
+  int notificationCount = 0;
   CompletedNoteResponse completedNoteResponse = CompletedNoteResponse();
 
   void getFilterListAPICall(String flag, String patientName, String carePlan, ResponseCallback callback) {
@@ -155,6 +156,43 @@ class NurseVisitViewModel{
         for (var data in response.body) {
           notificationList.add(NotificationResponse.fromJson(data));
         }
+        callback(true, response.message);
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+  void getNotificationCountApiCall(String nurseId, ResponseCallback callback, {Function onInactiveAccount}) {
+    var params = {
+      "NurseId": nurseId
+    };
+    WebService.getAPICall(WebService.notificationCount, params).then((response) {
+      if (response.statusCode == 1) {
+        if(response.body != null){
+          notificationCount = response.body;
+        } else {
+          notificationCount = 0;
+        }
+        callback(true, response.message);
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+  void markAsReadNotificationApiCall(String nurseId, ResponseCallback callback, {Function onInactiveAccount}) {
+    var params = {
+      "NurseId": nurseId
+    };
+    WebService.getAPICall(WebService.markAsRead, params).then((response) {
+      if (response.statusCode == 1) {
         callback(true, response.message);
       } else {
         callback(false, response.message);

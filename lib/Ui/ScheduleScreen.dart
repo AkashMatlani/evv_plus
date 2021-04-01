@@ -1,13 +1,16 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/FirebaseNotificationHandler.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/Models/NurseVisitViewModel.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/ChangePwdScreen.dart';
+import 'package:evv_plus/Ui/IncidentFormScreen.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:evv_plus/Ui/PastDueScheduleScreen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -34,10 +37,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   TabController _tabController;
   int activeTabIndex = 0;
   int _selectedIndex = 0;
+  int notiCount = 0;
 
   String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "";
   String pastDueCount, upcommingCount, completeCount;
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
+  NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
 
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   FirebaseNotificationHandler notificationHandler;
@@ -64,6 +69,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     setState(() => _selectedIndex = index);
     if (index == 0) {
       Utils.navigateToScreen(context, ScheduleScreen());
+    } else if (index == 1) {
+      Utils.navigateToScreen(context, IncidentFormScreen());
     } else if (index == 2) {
       Utils.navigateToScreen(context, NotificationScreen());
     } else if (index == 3) {
@@ -101,6 +108,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       nurseId = prefs.getInt(PrefUtils.nurseId).toString();
 
       _getScheduleCount();
+      _getNotifiationCount();
     });
 
     setState(() {
@@ -118,7 +126,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
   @override
   Widget build(BuildContext context) {
-    var tabWidth = (MediaQuery.of(context).size.width-75) / 3;
+    var tabWidth = (MediaQuery.of(context).size.width-80) / 3;
     var tabHeight = MediaQuery.of(context).size.height * 0.1;
 
     return Scaffold(
@@ -131,11 +139,37 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         backgroundColor: Colors.white10,
         elevation: 0.0,
         actions: [
-          IconButton(
-            icon: SvgPicture.asset(MyImage.ic_notification),
-            onPressed: () {
+          InkWell(
+            onTap: (){
               Utils.navigateToScreen(context, NotificationScreen());
             },
+            child: Stack(
+              children: [
+                Center(
+                  child: IconButton(
+                    padding: EdgeInsets.only(right: 7),
+                    icon: SvgPicture.asset(MyImage.ic_notification, height: 30, width: 30),
+                    onPressed: () {
+                      Utils.navigateToScreen(context, NotificationScreen());
+                    },
+                  ),
+                ),
+                notiCount == 0 ? Container() : Positioned(
+                  right: 7,
+                  top: 50,
+                  child: Container(
+                    height: 25,
+                    width: 25,
+                    alignment: Alignment.center,
+                    decoration: new BoxDecoration(
+                      color: Colors.green,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(notiCount.toString(), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 8, color: Colors.white)),
+                  ),
+                )
+              ],
+            ),
           ),
         ],
         leading: Builder(
@@ -173,7 +207,20 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                         Container(
                           margin: EdgeInsets.only(left: 30),
                           alignment: Alignment.topLeft,
-                          child: SvgPicture.asset(MyImage.user_placeholder, height: 100, width: 100)),
+                          child: Container(
+                            height: 100,
+                            width: 100,
+                            child: ClipOval(
+                              child: CachedNetworkImage(
+                                useOldImageOnUrlChange: false,
+                                fit: BoxFit.cover,
+                                imageUrl: nurseProfile,
+                                placeholder: (context, url) => Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator()),
+                                errorWidget: (context, url, error) => SvgPicture.asset(MyImage.user_placeholder),
+                              ),
+                            ),
+                          )
+                        ),
                         SizedBox(height: 10),
                         Container(
                           margin: EdgeInsets.only(left: 32),
@@ -240,8 +287,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         ),
       ),
       body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
         child: Column(
           children: <Widget>[
             TabBar(
@@ -301,21 +346,16 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
-          child: Container(
-            child: Text(tabName, style: AppTheme.semiBoldSFTextStyle().copyWith(color: color)),
-          ),
-        ),
-        SizedBox(
-          height: 3,
+        Container(
+          child: Text(tabName, style: AppTheme.semiBoldSFTextStyle().copyWith(color: color, fontSize: 15)),
         ),
         flag
-            ? Container(height: 7)
-            : Container(
-                height: 7,
-                width: 7,
-                child: SvgPicture.asset(MyImage.ic_fill_circle),
-              )
+            ? Expanded(child: Container(height: 7))
+            : Expanded(child: Container(
+          height: 7,
+          width: 7,
+          child: SvgPicture.asset(MyImage.ic_fill_circle),
+        ))
       ],
     );
   }
@@ -371,7 +411,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
               width: 80,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.asset(MyImage.noImagePlaceholder),
+                child: Image.asset(MyImage.user_placeholder),
               ),
             ),
             SizedBox(width: 10),
@@ -432,6 +472,20 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     _scheduleViewModel.updateDeviceTokenAPICall(nurseId, token, (isSuccess, message){
       if(!isSuccess){
         ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
+  }
+
+  _getNotifiationCount() {
+    _nurseVisitViewModel.getNotificationCountApiCall(nurseId, (isSuccess, message) {
+      if(isSuccess){
+        setState(() {
+          notiCount = _nurseVisitViewModel.notificationCount;
+        });
+      } else {
+        setState(() {
+          notiCount = 0;
+        });
       }
     });
   }

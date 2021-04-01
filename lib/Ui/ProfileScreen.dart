@@ -57,7 +57,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String stateId;
   String cityId;
   String gender;
-  String city;
   String formattedStr;
   String apiDateString;
   File _image;
@@ -80,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       gender = prefs.getString(PrefUtils.Gender);
       dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
       print("dateofbirth" + dateOfBirth);
-      //nurseImage = prefs.getString(PrefUtils.NurseImage);
+      nurseImage = prefs.getString(PrefUtils.NurseImage);
       stateId = prefs.getInt(PrefUtils.stateId).toString();
        setState(() {
         stateName = prefs.getString(PrefUtils.stateName);
@@ -128,8 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Stack(
                       children: [
-                        SvgPicture.asset(MyImage.profileHeaderBgImage,
-                            fit: BoxFit.fill),
+                        SvgPicture.asset(MyImage.profileHeaderBgImage, fit: BoxFit.fill),
                         Container(
                             child: Column(
                               children: [
@@ -159,40 +157,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                                 SizedBox(height: 15),
-                                Center(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        _showPicker(context);
-                                      },
-                                      child: CircleAvatar(
-                                        radius: 55,
-                                       /* child: nurseImage != null
-                                            ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(50),
-                                          child: (nurseImage),
-                                        )
-*/
-                                          child: nurseImage != null? ClipRRect(
-                                            borderRadius: BorderRadius.circular(50),child:CachedNetworkImage(
-                                            useOldImageOnUrlChange: false,
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius:
+                                      BorderRadius.circular(50)),
+                                  width: 100,
+                                  height: 100,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _showPicker(context);
+                                    },
+                                    child: nurseImage != null ? (_image != null ? ClipOval(child: Image.file(
+                                      _image,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    )
+                                    ) : ClipOval(
+                                      child: CachedNetworkImage(useOldImageOnUrlChange: false,
+                                          fit: BoxFit.cover,
                                           imageUrl: nurseImage,
                                           placeholder: (context, url) => CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) => Icon(Icons.error),
-                                        ))
-                                            : Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey[200],
-                                              borderRadius:
-                                              BorderRadius.circular(50)),
-                                          width: 100,
-                                          height: 100,
-                                          child: Icon(
-                                            Icons.camera_alt,
-                                            color: Colors.grey[800],
-                                          ),
-                                        ),
+                                          errorWidget: (context, url, error) => SvgPicture.asset(MyImage.user_placeholder)),
+                                    )) : Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius:
+                                          BorderRadius.circular(50)),
+                                      width: 100,
+                                      height: 100,
+                                      child: Icon(
+                                        Icons.camera_alt,
+                                        color: Colors.grey[800],
                                       ),
-                                    )),
+                                    ),
+                                  ),
+                                ),
                                 SizedBox(height: 5),
                                 Container(
                                   width: MediaQuery.of(context).size.width,
@@ -562,22 +563,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _img64, (isSuccess, message) {
         Utils.showLoader(false, context);
         if (isSuccess) {
-          setState(() {
-            PrefUtils.setIntValue(PrefUtils.stateId, int.parse(stateId));
-            PrefUtils.setIntValue(PrefUtils.cityId, int.parse(cityId));
-            if (stateName != null) {
-              PrefUtils.setStringValue(PrefUtils.stateName, stateName);
-            }
-            if (cityName != null) {
-              PrefUtils.setStringValue(PrefUtils.cityName, cityName);
-            }
-            ToastUtils.showToast(
-                context, "Nurse profile updated successfully.", Colors.green);
-            Timer(
-              Duration(milliseconds: 200),
-                  () => Navigator.of(context).pop(),
-            );
-          });
+          ToastUtils.showToast(context, message, Colors.green);
+
+          PrefUtils.setIntValue(PrefUtils.stateId, int.parse(stateId));
+          PrefUtils.setIntValue(PrefUtils.cityId, int.parse(cityId));
+          if (stateName != null) {
+            PrefUtils.setStringValue(PrefUtils.stateName, stateName);
+          }
+          if (cityName != null) {
+            PrefUtils.setStringValue(PrefUtils.cityName, cityName);
+          }
+
+          Timer(
+            Duration(seconds: 2),
+                () => Navigator.of(context).pop(),
+          );
         } else {
           ToastUtils.showToast(context, message, Colors.red);
         }
@@ -608,8 +608,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           stateId = _nurseViewModel.nurseResponse.stateId.toString();
           dateOfBirth = _nurseViewModel.nurseResponse.dateOfBirth;
           nurseImage=_nurseViewModel.nurseResponse.nurseImage;
-          DateTime tempDate =
-          new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
+          PrefUtils.setStringValue(PrefUtils.NurseImage, nurseImage);
+          DateTime tempDate = new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
           print("tenpdate" + tempDate.toString());
           apiDateString = Utils.convertDate(
               dateOfBirth.toString(), DateFormat("yyyy-MM-dd"));

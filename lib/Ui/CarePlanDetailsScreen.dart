@@ -86,295 +86,304 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
     blockSizeHorizontal = screenWidth / 100;
     blockSizeVertical = screenHeight / 100;
     var boxWidth = MediaQuery.of(context).size.width*0.6/2;
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
-        child: Container(
-          color: HexColor("#f0f0f0"),
-          child: Stack(
-            children: <Widget>[
-              Column(
-                children: [
-                  Container(
-                    height: blockSizeVertical*40,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.zero,
-                            topLeft: Radius.zero,
-                            bottomLeft: Radius.zero,
-                            bottomRight: Radius.circular(100)
-                        ),
-                        gradient: LinearGradient(
-                            colors: [
-                              HexColor("#1785e9"),
-                              HexColor("#83cff2")
-                            ]
-                        )
-                    ),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 50),
-                        Row(
-                          children: [
-                            InkWell(
-                              onTap: (){
-                                if(widget.fromScreen.compareTo("VisitComplete") == 0){
-                                  Utils.navigateWithClearState(context, ScheduleScreen());
-                                } else {
-                                  Navigator.of(context).pop();
-                                }
-                                },
-                              child: Container(
-                                child: Icon(Icons.arrow_back, color: Colors.white),
-                                margin: EdgeInsets.only(left: 10),
-                              ),
-                            ),
-                            Expanded(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  margin: EdgeInsets.only(right: 20),
-                                  child: Text(widget._scheduleDetailInfo.carePlanName, style: AppTheme.mediumSFTextStyle().copyWith(fontSize:22, color: Colors.white)),
-                                )
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 15),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          alignment: Alignment.center,
-                          child: Text(Utils.convertDate(widget._scheduleDetailInfo.visitDate, DateFormat('MMMM dd, yyyy')), style: AppTheme.boldSFTextStyle().copyWith(fontSize: 30, color: Colors.white)),
-                        ),
-                        SizedBox(height: 10),
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.6,
-                          height: MediaQuery.of(context).size.height*0.1,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(width: 0.5, color: Colors.white)
+    return WillPopScope(
+      onWillPop: (){
+        if(widget.fromScreen.compareTo("VisitComplete") == 0){
+          Utils.navigateWithClearState(context, ScheduleScreen());
+        } else {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: SingleChildScrollView(
+          child: Container(
+            color: HexColor("#f0f0f0"),
+            child: Stack(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Container(
+                      height: blockSizeVertical*40,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.zero,
+                              topLeft: Radius.zero,
+                              bottomLeft: Radius.zero,
+                              bottomRight: Radius.circular(100)
                           ),
-                          alignment: Alignment.center,
-                          child: Row(
+                          gradient: LinearGradient(
+                              colors: [
+                                HexColor("#1785e9"),
+                                HexColor("#83cff2")
+                              ]
+                          )
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 50),
+                          Row(
                             children: [
-                              Container(
-                                width: boxWidth - 2,
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(LabelStr.lblCheckIn, style: AppTheme.regularSFTextStyle().copyWith(fontSize:14, color: Colors.white)),
-                                    SizedBox(height: 3),
-                                    Text(checkInTime, style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
-                                  ],
+                              InkWell(
+                                onTap: (){
+                                  if(widget.fromScreen.compareTo("VisitComplete") == 0){
+                                    Utils.navigateWithClearState(context, ScheduleScreen());
+                                  } else {
+                                    Navigator.of(context).pop();
+                                  }
+                                },
+                                child: Container(
+                                  child: Icon(Icons.arrow_back, color: Colors.white),
+                                  margin: EdgeInsets.only(left: 10),
                                 ),
                               ),
-                              Container(
-                                height: MediaQuery.of(context).size.height*0.1,
-                                width: 1,
-                                color: Colors.white,
-                              ),
-                              Container(
-                                width: boxWidth - 2,
-                                alignment: Alignment.center,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(LabelStr.lblCheckout, style: AppTheme.regularSFTextStyle().copyWith(fontSize:14, color: Colors.white)),
-                                    SizedBox(height: 3),
-                                    Text(checkOutTime, style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
-                                  ],
-                                ),
+                              Expanded(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.only(right: 20),
+                                    child: Text(widget._scheduleDetailInfo.carePlanName, style: AppTheme.mediumSFTextStyle().copyWith(fontSize:22, color: Colors.white)),
+                                  )
                               )
                             ],
                           ),
-                        )
-                      ],
+                          SizedBox(height: 15),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            alignment: Alignment.center,
+                            child: Text(Utils.convertDate(widget._scheduleDetailInfo.visitDate, DateFormat('MMMM dd, yyyy')), style: AppTheme.boldSFTextStyle().copyWith(fontSize: 30, color: Colors.white)),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: MediaQuery.of(context).size.width*0.6,
+                            height: MediaQuery.of(context).size.height*0.1,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(width: 0.5, color: Colors.white)
+                            ),
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: boxWidth - 2,
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(LabelStr.lblCheckIn, style: AppTheme.regularSFTextStyle().copyWith(fontSize:14, color: Colors.white)),
+                                      SizedBox(height: 3),
+                                      Text(checkInTime, style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  height: MediaQuery.of(context).size.height*0.1,
+                                  width: 1,
+                                  color: Colors.white,
+                                ),
+                                Container(
+                                  width: boxWidth - 2,
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(LabelStr.lblCheckout, style: AppTheme.regularSFTextStyle().copyWith(fontSize:14, color: Colors.white)),
+                                      SizedBox(height: 3),
+                                      Text(checkOutTime, style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.white))
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: blockSizeVertical*80,
-                    alignment: Alignment.topLeft,
-                    margin: EdgeInsets.only(left: 25, top: 50, right: 25),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                    Container(
+                      height: blockSizeVertical*80,
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.only(left: 25, top: 50, right: 25),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 40,),
+                          Container(
+                            child: Text(widget._scheduleDetailInfo.firstName+" " +
+                                widget._scheduleDetailInfo.lastName,
+                                style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 34)),
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(LabelStr.lblAge, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                                  SizedBox(height: 5),
+                                  Text(_getAgeOfPatient(widget._scheduleDetailInfo.birthdate), style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                                ],
+                              ),
+                              SizedBox(width: 30),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(LabelStr.lbNurse, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                                  SizedBox(height: 5),
+                                  Text(_nurseName, style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                                ],
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Text(LabelStr.lbPatientAddress, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                          SizedBox(height: 5),
+                          Text(widget._scheduleDetailInfo.addressLine1+", "+widget._scheduleDetailInfo.addressLine2,
+                              style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                          SizedBox(height: 10),
+                          /*Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(width: 1, color: Colors.black12)
+                          ),
+                          height: blockSizeVertical*30,
+                          alignment: Alignment.center,
+                          child: Text("Map view"),
+                        ),*/
+                          Container(
+                            height: 240,
+                            child: GoogleMap(
+                              mapType: MapType.normal,
+                              initialCameraPosition: _kGooglePlex,
+                              onMapCreated: (GoogleMapController controller) {
+                                _controller.complete(controller);
+
+                              //  _GetDeviceLocation();
+                               // _controller.complete(controller);
+                              },
+                              //myLocationEnabled: true,
+                              //polylines: Set<Polyline>.of(_mapPolylines.values),
+                            ),
+                         /*   GoogleMap(
+                              mapType: MapType.normal,
+                              initialCameraPosition: CameraPosition(
+                                target: LatLng(latitude_current, longitude_current),
+                                zoom: 14.4746,
+                              ),
+                              onMapCreated: (GoogleMapController controller) async {
+                                _GetDeviceLocation();
+                                _controller.complete(controller);
+                              },
+                              myLocationEnabled: true,
+                              polylines: Set<Polyline>.of(_mapPolylines.values),
+                            ),*/
+                          ),
+                          SizedBox(height: 20),
+                          widget.isUpcommingVisit ? Expanded(
+                            flex: 0,
+                            child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  margin: EdgeInsets.only(bottom: blockSizeVertical*10),
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(colors: [
+                                        HexColor("#1785e9"),
+                                        HexColor("#83cff2")
+                                      ]),
+                                      borderRadius: BorderRadius.all(Radius.circular(5))),
+                                  child: TextButton(
+                                    child: Text(isVisitStarted ? LabelStr.lblVisitNote : LabelStr.lbStartVisit,
+                                        style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                                    onPressed: () {
+                                      FocusScope.of(context).requestFocus(FocusNode());
+                                      if(isVisitStarted){
+                                        Utils.navigateReplaceToScreen(context, CustomVisitMenuScreen(widget._scheduleDetailInfo));
+                                      } else {
+                                        checkConnection().then((isConnected) {
+                                          if (isConnected) {
+                                            _showDialog(context);
+                                          } else {
+                                            ToastUtils.showToast(context,
+                                                LabelStr.connectionError, Colors.red);
+                                          }
+                                        });
+                                      }
+                                    },
+                                  ),
+                                )
+                            ),
+                          ) : Expanded(
+                            flex: 0,
+                            child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: widget.fromScreen.compareTo("VisitComplete") == 0 ? Container(
+                                  margin: EdgeInsets.only(bottom: blockSizeVertical*10),
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                      gradient: LinearGradient(colors: [
+                                        HexColor("#1785e9"),
+                                        HexColor("#83cff2")
+                                      ]),
+                                      borderRadius: BorderRadius.all(Radius.circular(5))),
+                                  child: TextButton(
+                                    child: Text(LabelStr.lblViewDocument,
+                                        style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
+                                    onPressed: () {
+                                      FocusScope.of(context).requestFocus(FocusNode());
+                                      Utils.navigateToScreen(context, CarePlanPdfScreen("View Document"));
+                                    },
+                                  ),
+                                ) : Container()
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  top: blockSizeVertical*30,
+                  left: 25,
+                  right: -50,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 40,),
                         Container(
-                          child: Text(widget._scheduleDetailInfo.firstName+" " +
-                              widget._scheduleDetailInfo.lastName,
-                              style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 34)),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(LabelStr.lblAge, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                                SizedBox(height: 5),
-                                Text(_getAgeOfPatient(widget._scheduleDetailInfo.birthdate), style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                              ],
-                            ),
-                            SizedBox(width: 30),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(LabelStr.lbNurse, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                                SizedBox(height: 5),
-                                Text(_nurseName, style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                              ],
+                          height: 140,
+                          width: 140,
+                          padding: EdgeInsets.all(5),
+                          margin: EdgeInsets.only(top: 15),
+                          child: widget._scheduleDetailInfo.profilePhotoPath.isNotEmpty ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              useOldImageOnUrlChange: false,
+                              imageUrl: widget._scheduleDetailInfo.profilePhotoPath,
+                              placeholder: (context, url) => Container(height: 60, width: 60, alignment: Alignment.center, child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) => SvgPicture.asset(MyImage.user_placeholder),
                             )
-                          ],
+                          ) : SvgPicture.asset(MyImage.user_placeholder)
                         ),
-                        SizedBox(height: 10),
-                        Text(LabelStr.lbPatientAddress, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                        SizedBox(height: 5),
-                        Text(widget._scheduleDetailInfo.addressLine1+", "+widget._scheduleDetailInfo.addressLine2,
-                            style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                        SizedBox(height: 10),
-                        /*Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(width: 1, color: Colors.black12)
-                        ),
-                        height: blockSizeVertical*30,
-                        alignment: Alignment.center,
-                        child: Text("Map view"),
-                      ),*/
-                        Container(
-                          height: 240,
-                          child: GoogleMap(
-                            mapType: MapType.normal,
-                            initialCameraPosition: _kGooglePlex,
-                            onMapCreated: (GoogleMapController controller) {
-                              _controller.complete(controller);
-
-                            //  _GetDeviceLocation();
-                             // _controller.complete(controller);
-                            },
-                            //myLocationEnabled: true,
-                            //polylines: Set<Polyline>.of(_mapPolylines.values),
-                          ),
-                       /*   GoogleMap(
-                            mapType: MapType.normal,
-                            initialCameraPosition: CameraPosition(
-                              target: LatLng(latitude_current, longitude_current),
-                              zoom: 14.4746,
+                        InkWell(
+                          onTap:() {
+                            _makingPhoneCall(widget._scheduleDetailInfo.phoneNumber);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(left: blockSizeVertical*5),
+                            child: Expanded(
+                                child: SvgPicture.asset(MyImage.ic_call_icons, height: 160,width: 160,)
                             ),
-                            onMapCreated: (GoogleMapController controller) async {
-                              _GetDeviceLocation();
-                              _controller.complete(controller);
-                            },
-                            myLocationEnabled: true,
-                            polylines: Set<Polyline>.of(_mapPolylines.values),
-                          ),*/
-                        ),
-                        SizedBox(height: 20),
-                        widget.isUpcommingVisit ? Expanded(
-                          flex: 0,
-                          child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                margin: EdgeInsets.only(bottom: blockSizeVertical*10),
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(colors: [
-                                      HexColor("#1785e9"),
-                                      HexColor("#83cff2")
-                                    ]),
-                                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                                child: TextButton(
-                                  child: Text(isVisitStarted ? LabelStr.lblVisitNote : LabelStr.lbStartVisit,
-                                      style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
-                                  onPressed: () {
-                                    FocusScope.of(context).requestFocus(FocusNode());
-                                    if(isVisitStarted){
-                                      Utils.navigateReplaceToScreen(context, CustomVisitMenuScreen(widget._scheduleDetailInfo));
-                                    } else {
-                                      checkConnection().then((isConnected) {
-                                        if (isConnected) {
-                                          _showDialog(context);
-                                        } else {
-                                          ToastUtils.showToast(context,
-                                              LabelStr.connectionError, Colors.red);
-                                        }
-                                      });
-                                    }
-                                  },
-                                ),
-                              )
                           ),
-                        ) : Expanded(
-                          flex: 0,
-                          child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: widget.fromScreen.compareTo("VisitComplete") == 0 ? Container(
-                                margin: EdgeInsets.only(bottom: blockSizeVertical*10),
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(colors: [
-                                      HexColor("#1785e9"),
-                                      HexColor("#83cff2")
-                                    ]),
-                                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                                child: TextButton(
-                                  child: Text(LabelStr.lblViewDocument,
-                                      style: AppTheme.boldSFTextStyle().copyWith(fontSize:18, color: Colors.white)),
-                                  onPressed: () {
-                                    FocusScope.of(context).requestFocus(FocusNode());
-                                    Utils.navigateToScreen(context, CarePlanPdfScreen("View Document"));
-                                  },
-                                ),
-                              ) : Container()
-                          ),
-                        ),
+                        )
                       ],
                     ),
                   ),
-                ],
-              ),
-              Positioned(
-                top: blockSizeVertical*30,
-                left: 25,
-                right: -50,
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 140,
-                        width: 140,
-                        padding: EdgeInsets.all(5),
-                        margin: EdgeInsets.only(top: 15),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: CachedNetworkImage(
-                            fit: BoxFit.fill,
-                            useOldImageOnUrlChange: false,
-                            imageUrl: widget._scheduleDetailInfo.profilePhotoPath,
-                            placeholder: (context, url) => Container(height: 60, width: 60, alignment: Alignment.center, child: CircularProgressIndicator()),
-                            errorWidget: (context, url, error) => Image.asset(MyImage.user_placeholder),
-                          )
-                        )
-                      ),
-                      InkWell(
-                        onTap:() {
-                          _makingPhoneCall(widget._scheduleDetailInfo.phoneNumber);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.only(left: blockSizeVertical*5),
-                          child: Expanded(
-                              child: SvgPicture.asset(MyImage.ic_call_icons, height: 160,width: 160,)
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

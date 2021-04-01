@@ -5,12 +5,11 @@ import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/NurseResponse.dart';
 import 'package:evv_plus/Models/SIgnatureResponse.dart';
 import 'package:evv_plus/Models/SigninVisitVerificationModel.dart';
-import 'package:evv_plus/Models/UpdatedVisitTrueModel.dart';
 import 'package:evv_plus/WebService/WebService.dart';
 
 import 'CityListResponse.dart';
 import 'StateListResponse.dart';
-import 'UpdateNurseProfile.dart';
+
 
 class AuthViewModel {
   ValidationResult validateLogIn(String email, String password) {
@@ -152,8 +151,6 @@ class AuthViewModel {
     });
   }
 
-  UpdateNurseProfile updateNurseProfile;
-
   void getUpdateProfileAPICall(
       String nurseId,
       String addressOne,
@@ -191,9 +188,9 @@ class AuthViewModel {
         .then((response) {
       if (response.statusCode == 1) {
         if (response.body != null) {
-          updateNurseProfile = UpdateNurseProfile.fromJson(response.body);
+          PrefUtils.setStringValue(PrefUtils.NurseImage, response.body["nurseImage"]);
         }
-        callback(true, updateNurseProfile);
+        callback(true, "Nurse profile updated successfully");
       } else {
         callback(false, response.message);
       }

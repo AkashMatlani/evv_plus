@@ -14,7 +14,6 @@ import 'package:evv_plus/Ui/VisitHistoryListScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../GeneralUtils/ColorExtension.dart';
 
@@ -55,7 +54,10 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     blockSizeVertical = screenHeight / 100;
-    return Scaffold(
+    return WillPopScope(onWillPop: (){
+      _showDialog(context);
+    },
+    child: Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
         title: Container(
@@ -151,7 +153,7 @@ class _CustomVisitMenuScreenState extends State<CustomVisitMenuScreen> {
           SizedBox(height: 20)
         ],
       ),
-    );
+    ));
   }
 
   _showDialog(BuildContext context){

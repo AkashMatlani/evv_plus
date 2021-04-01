@@ -42,6 +42,7 @@ class LabelStr {
   static const lblTask = "Task";
   static const lblIcident = "Incident";
   static const lblNotification = "Notification";
+  static const lblIncidentForm = "Incident Form";
   static const lblProfile = " Profile";
   static const lblAboutUs = "About Us";
   static const lblMyProfile = "My Profile";
@@ -62,7 +63,8 @@ class LabelStr {
   static const lblUpdate= "Update";
   static const lblSubmit= "Submit";
   static const lblCancel= "Cancel";
-  static const lblGetPatientSign= "Get Caretaker Sign";
+  static const lblBrowseFile = "Browse File";
+  static const lblGetPatientSign= "Get Patient Sign";
   static const lblGetCaretakerSignature= "Get Caretaker Signature";
   static const lblGetReasonOther= "Reason : Other";
   static const checkMailLink = "Please check your email box";

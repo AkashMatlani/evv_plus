@@ -8,16 +8,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class SearchScreen extends StatefulWidget
-{
+class SearchScreen extends StatefulWidget {
   SearchScreen(this.searchKey);
   String searchKey;
 
   @override
-  _PastDueScheduleScreenState createState() => _PastDueScheduleScreenState();
+  _SearchScreenScreenState createState() => _SearchScreenScreenState();
 }
 
-class _PastDueScheduleScreenState extends State<SearchScreen> {
+class _SearchScreenScreenState extends State<SearchScreen> {
 
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   bool isLoading = true;
@@ -89,7 +88,7 @@ class _PastDueScheduleScreenState extends State<SearchScreen> {
                 width: 80,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(MyImage.noImagePlaceholder),
+                  child: Image.asset(MyImage.user_placeholder),
                 ),
               ),
               SizedBox(width: 10),

@@ -112,6 +112,8 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
                   if (isConnected) {
                     if (( Utils.isPatientSignCompleted &&  Utils.isPatientVoiceCompleted) ||Utils.unableToSignReason) {
                       visitUpdateTRue(context);
+                    } else {
+                      ToastUtils.showToast(context, "Please add patient signature and voice or provide sign reason", Colors.red);
                     }
                   } else {
                     ToastUtils.showToast(

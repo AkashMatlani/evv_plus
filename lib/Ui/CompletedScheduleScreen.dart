@@ -161,11 +161,11 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                     useOldImageOnUrlChange: false,
                     imageUrl: _filterList[position].profilePhotoPath,
                     placeholder: (context, url) => Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => Image.asset(MyImage.noImagePlaceholder),
+                    errorWidget: (context, url, error) => SvgPicture.asset(MyImage.user_placeholder),
                   ),
                 ),
               ),

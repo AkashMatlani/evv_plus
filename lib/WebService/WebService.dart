@@ -31,6 +31,8 @@ class WebService {
   static const getState = "Nurse/GetAllState";
   static const getCity = "Nurse/GetCityByState";
   static const getNotification = "Patient/NotificationListById";
+  static const markAsRead = "Common/UpdateNotificationRead";
+  static const notificationCount = "Common/NotReadNotificationCount";
   static const patientSignatureVoiceRecording = "NurseVisit/PatienSignatureAndVoiceRecording";
   static const signReasonVisitVerification = "NurseVisit/SignReasonVisitVerification";
   static const updateVisitTrue = "NurseVisit/UpdateVisitTrue";
