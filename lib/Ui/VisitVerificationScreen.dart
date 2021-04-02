@@ -201,6 +201,8 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                       color: HexColor("#e9e9e9"),
                                     ),
                                     TextFormField(
+
+                                      keyboardType: TextInputType. multiline,
                                       controller: reasonController,
                                       onChanged: (String text) {
                                         setState(() {
@@ -214,7 +216,6 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                           }
                                         });
                                       },
-                                      maxLines: 1,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderSide: BorderSide.none,
@@ -255,12 +256,22 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                                             color:
                                                                 Colors.white)),
                                             onPressed: () {
-                                              submit = false;
-                                              caretaker = true;
-                                              FocusScope.of(context)
-                                                  .requestFocus(FocusNode());
-                                              checkConnection()
-                                                  .then((isConnected) {});
+                                              if (reasonController.text
+                                                  .trim()
+                                                  .toString()
+                                                  .isEmpty) {
+                                                ToastUtils.showToast(
+                                                    context,
+                                                    "Please enter reason",
+                                                    Colors.red);
+                                              } else {
+                                                submit = false;
+                                                caretaker = true;
+                                                FocusScope.of(context)
+                                                    .requestFocus(FocusNode());
+                                                checkConnection()
+                                                    .then((isConnected) {});
+                                              }
                                             },
                                           ),
                                         ),

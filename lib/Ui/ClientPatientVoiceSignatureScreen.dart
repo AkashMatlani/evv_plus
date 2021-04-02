@@ -136,10 +136,10 @@ class _ClientPatientVoiceSignatureScreenState
                       ),
                       InkWell(
                           onTap: () {
-                            if (_recording.status == RecordingStatus.Stopped) {
+                           /* if (_recording.status == RecordingStatus.Stopped) {
                               ToastUtils.showToast(
                                   context, "stoped", Colors.amber);
-                            }
+                            }*/
                             _opt();
                           },
                           child: _buttonIcon) /**/,

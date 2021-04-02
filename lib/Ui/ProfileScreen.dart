@@ -175,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       fit: BoxFit.cover,
                                     )
                                     ) : ClipOval(
-                                      child: CachedNetworkImage(useOldImageOnUrlChange: false,
+                                      child: CachedNetworkImage(
                                           fit: BoxFit.cover,
                                           imageUrl: nurseImage,
                                           placeholder: (context, url) => CircularProgressIndicator(),
@@ -409,6 +409,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   }
                                 }
                                 cityList.clear();
+                                cityId="0";
                                 _getCityList(stateId);
                               });
                             },
@@ -471,7 +472,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     }
                                   });
                                 },
-                                value: cityId,
+                                value: cityId.compareTo("0")==0?"Select city":cityId,
                               )
                                   : Center(
                                   child: Container(
@@ -533,9 +534,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void validationForCollectClientSignature() {
     if (_addressLineOneController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterAddressLineOne, Colors.red);
-    } else if (_addressLineTwoController.text.isEmpty) {
+    }/* else if (_addressLineTwoController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterAddressLineTwo, Colors.red);
-    } else if (stateId == null || stateList.isEmpty) {
+    }*/ else if (stateId == null || stateList.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterState, Colors.red);
     } else if (cityId == null || cityList.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterCity, Colors.red);
@@ -649,6 +650,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           cityList = [];
           cityList = _nurseViewModel.cityDataList;
+          cityId=cityList[0].cityId.toString();
+          if(cityList.length>0)
+            {
+              cityId=cityList[0].cityId.toString();
+            }
+          else{
+            cityId="0";
+          }
         });
       } else {
         setState(() {

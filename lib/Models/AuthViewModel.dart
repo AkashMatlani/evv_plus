@@ -170,6 +170,7 @@ class AuthViewModel {
     var params = {
       "NurseId": nurseId,
       "Address1": addressOne,
+      if(addressTwo!=null)
       "Address2": addressTwo,
       "ZipCode": zipCode,
       "FKcityID": city,
