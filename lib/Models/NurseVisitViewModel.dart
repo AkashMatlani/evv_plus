@@ -13,7 +13,7 @@ class NurseVisitViewModel{
   List<CommentFilterResponse> commentFilterList = [];
   List<NotificationResponse> notificationList = [];
   String carePlanPdfPath = "";
-  int notificationCount = 0;
+  int count = 0;
   CompletedNoteResponse completedNoteResponse = CompletedNoteResponse();
 
   void getFilterListAPICall(String flag, String patientName, String carePlan, ResponseCallback callback) {
@@ -173,9 +173,9 @@ class NurseVisitViewModel{
     WebService.getAPICall(WebService.notificationCount, params).then((response) {
       if (response.statusCode == 1) {
         if(response.body != null){
-          notificationCount = response.body;
+          count = response.body;
         } else {
-          notificationCount = 0;
+          count = 0;
         }
         callback(true, response.message);
       } else {

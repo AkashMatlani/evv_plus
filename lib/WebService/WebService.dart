@@ -112,6 +112,7 @@ class WebService {
 class ServerResponse {
   var message = LabelStr.serverError;
   var body;
+  var count = 0;
   var statusCode = 0;
 
   ServerResponse();
@@ -119,6 +120,9 @@ class ServerResponse {
   ServerResponse.withJson(Map<String, dynamic> jsonObj) {
     print("parsing response");
     String status = jsonObj["status"];
+    if(jsonObj.containsKey("count")){
+      count = jsonObj["count"];
+    }
     this.message = jsonObj["message"];
     if (jsonObj["data"] != null)
       this.body = jsonObj["data"];

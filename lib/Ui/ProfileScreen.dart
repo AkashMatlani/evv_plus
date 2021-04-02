@@ -65,44 +65,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((prefs) async {
-      PrefUtils.getNurseDataFromPref();
-      nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-      email = prefs.getString(PrefUtils.email);
-      addressLineOne = prefs.getString(PrefUtils.addressLineOne);
-      addressLineTwo = prefs.getString(PrefUtils.addressLineTwo);
-      zipCode = prefs.getString(PrefUtils.zipCode);
-      phoneNumber = prefs.getString(PrefUtils.phoneNumber);
-      firstName = prefs.getString(PrefUtils.firstName);
-      middleName = prefs.getString(PrefUtils.MiddleName);
-      lastName = prefs.getString(PrefUtils.lastName);
-      gender = prefs.getString(PrefUtils.Gender);
-      dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
-      print("dateofbirth" + dateOfBirth);
-      nurseImage = prefs.getString(PrefUtils.NurseImage);
-      stateId = prefs.getInt(PrefUtils.stateId).toString();
-       setState(() {
-        stateName = prefs.getString(PrefUtils.stateName);
-        cityName = prefs.getString(PrefUtils.cityName);
-      });
-
-      DateTime tempDate =
-      new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
-      print("tenpdate" + tempDate.toString());
-
-      formattedStr =
-          Utils.convertDate(dateOfBirth.toString(), DateFormat("dd/MM/yyyy"));
-      print("formattedStr" + formattedStr);
-
-      checkConnection().then((isConnected) {
-        if (isConnected) {
-          _getSateLIst();
-          _getCityList(stateId);
-          _getNurseProfileDetail(nurseId);
-        } else {
-          ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
-        }
-      });
+    Timer(Duration(milliseconds: 100), (){
+      getNurseDetails(true);
     });
   }
 
@@ -174,12 +138,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       height: 100,
                                       fit: BoxFit.cover,
                                     )
-                                    ) : ClipOval(
-                                      child: CachedNetworkImage(
+                                    ) : ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: CachedNetworkImage(useOldImageOnUrlChange: false,
                                           fit: BoxFit.cover,
                                           imageUrl: nurseImage,
                                           placeholder: (context, url) => CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) => SvgPicture.asset(MyImage.user_placeholder)),
+                                          errorWidget: (context, url, error) => defaultUserProfile()),
                                     )) : Container(
                                       decoration: BoxDecoration(
                                           color: Colors.grey[200],
@@ -409,7 +374,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   }
                                 }
                                 cityList.clear();
-                                cityId="0";
+                                cityId = "0";
                                 _getCityList(stateId);
                               });
                             },
@@ -472,7 +437,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     }
                                   });
                                 },
-                                value: cityId.compareTo("0")==0?"Select city":cityId,
+                                value: cityId.compareTo("0") == 0 ? "Select City" : cityId,
                               )
                                   : Center(
                                   child: Container(
@@ -534,7 +499,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void validationForCollectClientSignature() {
     if (_addressLineOneController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterAddressLineOne, Colors.red);
-    }/* else if (_addressLineTwoController.text.isEmpty) {
+    } /*else if (_addressLineTwoController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterAddressLineTwo, Colors.red);
     }*/ else if (stateId == null || stateList.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterState, Colors.red);
@@ -564,21 +529,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _img64, (isSuccess, message) {
         Utils.showLoader(false, context);
         if (isSuccess) {
-          ToastUtils.showToast(context, message, Colors.green);
-
-          PrefUtils.setIntValue(PrefUtils.stateId, int.parse(stateId));
-          PrefUtils.setIntValue(PrefUtils.cityId, int.parse(cityId));
-          if (stateName != null) {
-            PrefUtils.setStringValue(PrefUtils.stateName, stateName);
-          }
-          if (cityName != null) {
-            PrefUtils.setStringValue(PrefUtils.cityName, cityName);
-          }
-
-          Timer(
-            Duration(seconds: 2),
-                () => Navigator.of(context).pop(),
-          );
+          ToastUtils.showToast(context, "Nurse profile updated successfully.", Colors.green);
+          _getNurseProfileDetail(nurseId);
         } else {
           ToastUtils.showToast(context, message, Colors.red);
         }
@@ -591,38 +543,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _nurseViewModel.getProfileAPICall(nurseId, (isSuccess, message) {
       Utils.showLoader(false, context);
       if (isSuccess) {
-        setState(() {
-          isLoading = false;
-          email = _nurseViewModel.nurseResponse.email;
-          addressLineOne = _nurseViewModel.nurseResponse.address1;
-          addressLineTwo = _nurseViewModel.nurseResponse.address2;
-          zipCode = _nurseViewModel.nurseResponse.zipCode;
-          phoneNumber = _nurseViewModel.nurseResponse.phoneNumber;
-          gender = _nurseViewModel.nurseResponse.gender;
-          _addressLineOneController.text = addressLineOne;
-          _addressLineTwoController.text = addressLineTwo;
-          _zipController.text = zipCode;
-          _phoneController.text = phoneNumber;
-          firstName = _nurseViewModel.nurseResponse.firstName;
-          lastName = _nurseViewModel.nurseResponse.lastName;
-          cityId = _nurseViewModel.nurseResponse.cityId.toString();
-          stateId = _nurseViewModel.nurseResponse.stateId.toString();
-          dateOfBirth = _nurseViewModel.nurseResponse.dateOfBirth;
-          nurseImage=_nurseViewModel.nurseResponse.nurseImage;
-          PrefUtils.setStringValue(PrefUtils.NurseImage, nurseImage);
-          DateTime tempDate = new DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(dateOfBirth);
-          print("tenpdate" + tempDate.toString());
-          apiDateString = Utils.convertDate(
-              dateOfBirth.toString(), DateFormat("yyyy-MM-dd"));
-          print("formattedStr" + apiDateString);
-
-        });
+        isLoading = false;
+        getNurseDetails(false);
       } else {
         ToastUtils.showToast(context, message, Colors.red);
       }
     });
   }
 
+  void getNurseDetails(bool isLoadingFirst) {
+    SharedPreferences.getInstance().then((prefs) async {
+      PrefUtils.getNurseDataFromPref();
+      setState(() {
+        nurseId = prefs.getInt(PrefUtils.nurseId).toString();
+        email = prefs.getString(PrefUtils.email);
+        addressLineOne = prefs.getString(PrefUtils.addressLineOne);
+        addressLineTwo = prefs.getString(PrefUtils.addressLineTwo);
+        zipCode = prefs.getString(PrefUtils.zipCode);
+        phoneNumber = prefs.getString(PrefUtils.phoneNumber);
+        firstName = prefs.getString(PrefUtils.firstName);
+        middleName = prefs.getString(PrefUtils.MiddleName);
+        lastName = prefs.getString(PrefUtils.lastName);
+        gender = prefs.getString(PrefUtils.Gender);
+        nurseImage = prefs.getString(PrefUtils.NurseImage);
+        dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
+        formattedStr = Utils.convertDate(dateOfBirth.toString(), DateFormat("dd/MM/yyyy"));
+        apiDateString = Utils.convertDate(dateOfBirth.toString(), DateFormat("yyyy-MM-dd"));
+        print("formattedStr" + apiDateString);
+        stateId = prefs.getInt(PrefUtils.stateId).toString();
+        cityId = prefs.getInt(PrefUtils.cityId).toString();
+        stateName = prefs.getString(PrefUtils.stateName);
+        cityName = prefs.getString(PrefUtils.cityName);
+
+        _addressLineOneController.text = addressLineOne;
+        _addressLineTwoController.text = addressLineTwo;
+        _zipController.text = zipCode;
+        _phoneController.text = phoneNumber;
+      });
+
+      if(isLoadingFirst){
+        checkConnection().then((isConnected) {
+          if (isConnected) {
+            _getNurseProfileDetail(nurseId);
+            _getSateLIst();
+            _getCityList(stateId);
+          } else {
+            ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
+          }
+        });
+      }
+    });
+  }
   void _getSateLIst() {
     Utils.showLoader(true, context);
     _nurseViewModel.getStateList((isSuccess, response) {
@@ -650,18 +621,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           cityList = [];
           cityList = _nurseViewModel.cityDataList;
-          cityId=cityList[0].cityId.toString();
-          if(cityList.length>0)
-            {
-              cityId=cityList[0].cityId.toString();
-            }
-          else{
-            cityId="0";
-          }
+          cityId = cityList[0].cityId.toString();
         });
       } else {
         setState(() {
           cityList = [];
+          cityId="0";
         });
       }
     });

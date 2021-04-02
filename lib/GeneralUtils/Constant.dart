@@ -67,8 +67,8 @@ class MyImage {
   static const splashBgImage = "assets/bg_image/splash_bg.png";
   static const loginBgImage = "assets/bg_image/login_bg.png";
   static const noImagePlaceholder = "assets/bg_image/no_image_placeholder.png";
-  static const user_placeholder = "assets/icons/user_placeholder.svg";
   static const profileHeaderBgImage = "assets/icons/profile_header_bg.svg";
+  static const defaultProfile = "assets/icons/ic_default_user.svg";
 
   static const appLogoH = "assets/icons/app_logo_horizontal.svg";
   static const appLogoV = "assets/icons/app_logo_vertical.svg";

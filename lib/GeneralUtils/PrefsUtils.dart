@@ -52,9 +52,8 @@ class PrefUtils {
     prefs.clear();
   }
 
-  static void saveUserDataToPref(NurseResponse nurseDetails,String password) {
+  static void saveNurseDataToPref(NurseResponse nurseDetails, String from) {
     PrefUtils.setIntValue(PrefUtils.nurseId, nurseDetails.nurseid);
-    PrefUtils.setStringValue(PrefUtils.password, password);
     PrefUtils.setStringValue(PrefUtils.email, nurseDetails.email);
     PrefUtils.setStringValue(PrefUtils.firstName, nurseDetails.firstName);
     PrefUtils.setStringValue(PrefUtils.MiddleName, nurseDetails.middleName);
@@ -74,14 +73,15 @@ class PrefUtils {
     PrefUtils.setIntValue(PrefUtils.cityId, nurseDetails.cityId);
     PrefUtils.setStringValue(PrefUtils.cityName, nurseDetails.cityName);
     PrefUtils.setStringValue(PrefUtils.stateName, nurseDetails.stateName);
-    PrefUtils.setBoolValue(PrefUtils.isFirstTimeLogin, nurseDetails.isFirstTimeLogin);
-    PrefUtils.setIntValue(PrefUtils.visitId, 0);
-    PrefUtils.setBoolValue(PrefUtils.isLoggedIn, true);
+    if(from.compareTo("FromLogin") == 0){
+      PrefUtils.setBoolValue(PrefUtils.isFirstTimeLogin, nurseDetails.isFirstTimeLogin);
+      PrefUtils.setIntValue(PrefUtils.visitId, 0);
+      PrefUtils.setBoolValue(PrefUtils.isLoggedIn, true);
+    }
   }
 
   static void getNurseDataFromPref() async {
     var _nurseId = await getValueFor(PrefUtils.nurseId);
-    var _password = await getValueFor(PrefUtils.password);
     var _isLoggedIn = await getValueFor(PrefUtils.isLoggedIn);
     var _isFirstTimeLogin = await getValueFor(PrefUtils.isFirstTimeLogin);
     var _isEmail = await getValueFor(PrefUtils.email);

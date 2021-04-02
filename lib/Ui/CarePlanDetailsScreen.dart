@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
+import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
@@ -363,9 +364,9 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                               useOldImageOnUrlChange: false,
                               imageUrl: widget._scheduleDetailInfo.profilePhotoPath,
                               placeholder: (context, url) => Container(height: 60, width: 60, alignment: Alignment.center, child: CircularProgressIndicator()),
-                              errorWidget: (context, url, error) => SvgPicture.asset(MyImage.user_placeholder),
+                              errorWidget: (context, url, error) => defaultUserProfile(),
                             )
-                          ) : SvgPicture.asset(MyImage.user_placeholder)
+                          ) : defaultUserProfile()
                         ),
                         InkWell(
                           onTap:() {

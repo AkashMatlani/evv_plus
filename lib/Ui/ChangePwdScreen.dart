@@ -28,20 +28,19 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
   var _confirmPwdController = TextEditingController();
 
   var authViewModel = AuthViewModel();
-  String nurseId = "", currentPwd = "";
+  int nurseId;
+  String currentPwd = "";
 
   @override
   void initState() {
     super.initState();
-    Timer(
-      Duration(milliseconds: 100), () {
-      SharedPreferences.getInstance().then((prefs) async {
-        PrefUtils.getNurseDataFromPref();
-        nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-        currentPwd = prefs.getString(PrefUtils.password);
-      });
+
+    Timer(Duration(milliseconds: 100), () async {
+      nurseId = await PrefUtils.getValueFor(PrefUtils.nurseId);
+      currentPwd = await PrefUtils.getValueFor(PrefUtils.password);
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +151,7 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
     var confirmPwd = _confirmPwdController.text.trim();
 
     Utils.showLoader(true, context);
-    authViewModel.updatePwdResult(nurseId, currentPwd, newPwd, confirmPwd, (isValid, message) {
+    authViewModel.updatePwdResult(nurseId.toString(), currentPwd, newPwd, confirmPwd, (isValid, message) {
       Utils.showLoader(false, context);
       if (isValid) {
         ToastUtils.showToast(context, message, Colors.green);

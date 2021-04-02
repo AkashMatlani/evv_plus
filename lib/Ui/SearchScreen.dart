@@ -1,5 +1,6 @@
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
+import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
@@ -88,7 +89,7 @@ class _SearchScreenScreenState extends State<SearchScreen> {
                 width: 80,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(MyImage.user_placeholder),
+                  child: defaultUserProfile(),
                 ),
               ),
               SizedBox(width: 10),

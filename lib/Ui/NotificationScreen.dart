@@ -174,7 +174,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
         });
         updateNotificationStatus();
       } else {
-        ToastUtils.showToast(context, message, Colors.red);
         setState(() {
           _notificationList = [];
         });
@@ -185,7 +184,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
   updateNotificationStatus() {
     _nurseVisitViewModel.markAsReadNotificationApiCall(nurseId.toString(), (isSuccess, message){
       if(isSuccess){
-        ToastUtils.showToast(context, message, Colors.green);
+       setState(() {
+         Utils.notificationCount = 0;
+       });
       } else {
         ToastUtils.showToast(context, message, Colors.red);
       }
