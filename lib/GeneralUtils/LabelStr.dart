@@ -106,6 +106,7 @@ class LabelStr {
   static const lblPatientOrPlan = "Patient Name/Care Plan: ";
   static const lblNurseName = "Nurse Name: ";
   static const lblSearchPatientOrPlan = "Search patient name / care plan";
+  static const lblSearchPatient = "Search patient name";
   static const lblDailyLivingTask = "Daily Living Task";
   static const lblCompletedNote = "Completed Note";
   static const lblClientName = "Client Name";

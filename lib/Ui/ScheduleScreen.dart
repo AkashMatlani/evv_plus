@@ -4,9 +4,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/FirebaseNotificationHandler.dart';
+import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
-import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/Models/NurseVisitViewModel.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/ChangePwdScreen.dart';
@@ -37,10 +37,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   TabController _tabController;
   int activeTabIndex = 0;
   int _selectedIndex = 0;
-  int notiCount = 0;
 
-  String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "";
-  String pastDueCount, upcommingCount, completeCount;
+  String nurseName="", nurseEmailId="", nurseId = "";
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
 
@@ -83,7 +81,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   @override
   void initState() {
     super.initState();
-
+    imageCache.clear();
     notificationHandler = FirebaseNotificationHandler(context);
     notificationHandler.fireBaseInitialization((data){
       print("Notification Data :: "+data);
@@ -102,19 +100,14 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
     SharedPreferences.getInstance().then((prefs) async {
       PrefUtils.getNurseDataFromPref();
+      nurseId = prefs.getInt(PrefUtils.nurseId).toString();
       nurseName = prefs.getString(PrefUtils.fullName);
       nurseEmailId = prefs.getString(PrefUtils.email);
-      nurseProfile = prefs.getString(PrefUtils.NurseImage);
-      nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-
+      setState(() {
+        Utils.nurseProfile = prefs.getString(PrefUtils.NurseImage);
+      });
       _getScheduleCount();
       _getNotifiationCount();
-    });
-
-    setState(() {
-      pastDueCount="";
-      upcommingCount="";
-      completeCount="";
     });
   }
 
@@ -154,7 +147,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                     },
                   ),
                 ),
-                notiCount == 0 ? Container() : Positioned(
+                Utils.notificationCount == 0 ? Container() : Positioned(
                   right: 7,
                   top: 50,
                   child: Container(
@@ -165,7 +158,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                       color: Colors.green,
                       shape: BoxShape.circle,
                     ),
-                    child: Text(notiCount.toString(), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 8, color: Colors.white)),
+                    child: Text(Utils.notificationCount.toString(), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 8, color: Colors.white)),
                   ),
                 )
               ],
@@ -208,17 +201,16 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                           margin: EdgeInsets.only(left: 30),
                           alignment: Alignment.topLeft,
                           child: Container(
-                            height: 100,
-                            width: 100,
-                            child: ClipOval(
-                              child: CachedNetworkImage(
-                                useOldImageOnUrlChange: false,
-                                fit: BoxFit.cover,
-                                imageUrl: nurseProfile,
-                                placeholder: (context, url) => Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator()),
-                                errorWidget: (context, url, error) => SvgPicture.asset(MyImage.user_placeholder),
-                              ),
-                            ),
+                            height: 80,
+                            width: 80,
+                            child: Utils.nurseProfile.isNotEmpty ? ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(Utils.nurseProfile, fit: BoxFit.cover,
+                                loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Colors.white)));
+                                },
+                              )) : defaultUserProfile(),
                           )
                         ),
                         SizedBox(height: 10),
@@ -298,27 +290,27 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                       width: tabWidth,
                       height: tabHeight,
                       child: activeTabIndex == 0
-                          ? _columnSelected("Past Due("+pastDueCount+")", Colors.blue, false)
+                          ? _columnSelected("Past Due("+Utils.pastDueCount.toString()+")", Colors.blue, false)
                           : _columnSelected(
-                          "Past Due("+pastDueCount+")", HexColor("#969696"), true)),
+                          "Past Due("+Utils.pastDueCount.toString()+")", HexColor("#969696"), true)),
                 ),
                 Tab(
                   child: Container(
                       width: tabWidth,
                       height: tabHeight,
                       child: activeTabIndex == 1
-                          ? _columnSelected("Upcoming("+upcommingCount+")", Colors.blue, false)
+                          ? _columnSelected("Upcoming("+Utils.upcommingCountCount.toString()+")", Colors.blue, false)
                           : _columnSelected(
-                          "Upcoming("+upcommingCount+")", HexColor("#969696"), true)),
+                          "Upcoming("+Utils.upcommingCountCount.toString()+")", HexColor("#969696"), true)),
                 ),
                 Tab(
                   child: Container(
                       width: tabWidth,
                       height: tabHeight,
                       child: activeTabIndex == 2
-                          ? _columnSelected("Completed("+completeCount+")", Colors.blue, false)
+                          ? _columnSelected("Completed("+Utils.completedCount.toString()+")", Colors.blue, false)
                           : _columnSelected(
-                          "Completed("+completeCount+")", HexColor("#969696"), true)),
+                          "Completed("+Utils.completedCount.toString()+")", HexColor("#969696"), true)),
                 ),
               ],
               controller: _tabController,
@@ -391,76 +383,21 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     );
   }
 
-  listRowItems(BuildContext context, int position) {
-    return Card(
-      elevation: 2,
-      margin: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5.0),
-          side: BorderSide(
-            color: HexColor("#E9E9E9"),
-            width: 0.5,
-          )
-      ),
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Container(
-              height: 80,
-              width: 80,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(MyImage.user_placeholder),
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-                child:Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(_scheduleViewModel.filterScheduleList[position].firstName, style: AppTheme.boldSFTextStyle().copyWith(fontSize: 16)),
-                      SizedBox(height: 3),
-                      // Text(Utils.convertDate(_pastVisitList[position].visitDate, DateFormat('dd/MM/yyyy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
-                      SizedBox(height: 3),
-                      //Text(Utils.convertTime(_pastVisitList[position].timeFrom.substring(0, 5))+" - "+Utils.convertTime(_pastVisitList[position].timeTo.substring(0, 5)), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696")))
-                    ],
-                  ),
-                )
-            ),
-            SizedBox(width: 10),
-            Container(
-              height: MediaQuery.of(context).size.height*0.09,
-              padding: EdgeInsets.all(5),
-              alignment: Alignment.topRight,
-              child: Row(
-                children: [
-                  Container(
-                    height: 7,
-                    width: 7,
-                    margin: EdgeInsets.only(top: 3),
-                    child: SvgPicture.asset(MyImage.ic_fill_circle, color: HexColor("#2ab554")),
-                  ),
-                  SizedBox(width: 3),
-                  //Text(_pastVisitList[position].carePlanName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   _getScheduleCount(){
     _scheduleViewModel.getScheduleCountAPICall(nurseId, (isSuccess, response) {
-      setState(() {
-        pastDueCount = _scheduleViewModel.pastDueVisitCount.toString();
-        upcommingCount = _scheduleViewModel.upcommingVisitCount.toString();
-        completeCount = _scheduleViewModel.completedVisitCount.toString();
-      });
+      if(isSuccess){
+        setState(() {
+          Utils.pastDueCount = _scheduleViewModel.pastDueVisitCount;
+          Utils.upcommingCountCount = _scheduleViewModel.upcommingVisitCount;
+          Utils.completedCount = _scheduleViewModel.completedVisitCount;
+        });
+      } else{
+        setState(() {
+          Utils.pastDueCount = 0;
+          Utils.upcommingCountCount = 0;
+          Utils.completedCount = 0;
+        });
+      }
     });
 
     _firebaseMessaging.getToken().then((token){
@@ -469,22 +406,18 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   }
 
   void updateDeviceTokenApi(String token) {
-    _scheduleViewModel.updateDeviceTokenAPICall(nurseId, token, (isSuccess, message){
-      if(!isSuccess){
-        ToastUtils.showToast(context, message, Colors.red);
-      }
-    });
+    _scheduleViewModel.updateDeviceTokenAPICall(nurseId, token, (isSuccess, message){});
   }
 
   _getNotifiationCount() {
     _nurseVisitViewModel.getNotificationCountApiCall(nurseId, (isSuccess, message) {
       if(isSuccess){
         setState(() {
-          notiCount = _nurseVisitViewModel.notificationCount;
+          Utils.notificationCount = _nurseVisitViewModel.count;
         });
       } else {
         setState(() {
-          notiCount = 0;
+          Utils.notificationCount = 0;
         });
       }
     });

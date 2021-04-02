@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
+import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
@@ -161,16 +162,16 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
                 width: 80,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: ClipRRect(
+                  child: _filterList[position].profilePhotoPath.isNotEmpty ? ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
                       useOldImageOnUrlChange: false,
                       imageUrl: _filterList[position].profilePhotoPath,
                       placeholder: (context, url) => Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) => SvgPicture.asset(MyImage.user_placeholder),
+                      errorWidget: (context, url, error) => defaultUserProfile(),
                     ),
-                  ),
+                  ) : defaultUserProfile(),
                 ),
               ),
               SizedBox(width: 10),
@@ -227,6 +228,7 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
           _upcommingVisitList = [];
           _upcommingVisitList = _scheduleViewModel.upCommingScheduleList;
           _filterList = _upcommingVisitList;
+          Utils.upcommingCountCount = _scheduleViewModel.upcommingVisitCount;
         });
       } else{
         setState(() {

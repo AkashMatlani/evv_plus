@@ -5,10 +5,16 @@ import 'package:intl/intl.dart';
 
 class Utils {
   static String answer = "Yes";
+  static String nurseProfile = "";
 
   static bool isPatientSignCompleted=false;
   static bool isPatientVoiceCompleted=false;
   static bool unableToSignReason=false;
+  
+  static int notificationCount = 0;
+  static int upcommingCountCount = 0;
+  static int completedCount = 0;
+  static int pastDueCount = 0;
 
 
   static void showLoader(bool show, BuildContext context) {

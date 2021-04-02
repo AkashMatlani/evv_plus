@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
+import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
@@ -112,16 +113,16 @@ class _VisitHistoryListScreenState extends State<VisitHistoryListScreen> {
               width: 80,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: ClipRRect(
+                child: _visitHistoryList[position].profilePhotoPath.isNotEmpty ? ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
                     fit: BoxFit.cover,
                     useOldImageOnUrlChange: false,
                     imageUrl: _visitHistoryList[position].profilePhotoPath,
                     placeholder: (context, url) => Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => SvgPicture.asset(MyImage.user_placeholder),
+                    errorWidget: (context, url, error) => defaultUserProfile(),
                   ),
-                ),
+                ) : defaultUserProfile(),
               ),
             ),
             SizedBox(width: 10),

@@ -19,6 +19,7 @@ class ScheduleViewModel{
     var params = {"NurseId":nurseId};
     WebService.getAPICall(WebService.pastDueScheduleList, params).then((response) {
       if (response.statusCode == 1) {
+        pastDueVisitCount = response.count;
         for (var data in response.body) {
           pastDueScheduleList.add(ScheduleInfoResponse.fromJson(data));
         }
@@ -36,6 +37,7 @@ class ScheduleViewModel{
     var params = {"NurseId":nurseId};
     WebService.getAPICall(WebService.upcommingScheduleList, params).then((response) {
       if (response.statusCode == 1) {
+        upcommingVisitCount = response.count;
         for (var data in response.body) {
           upCommingScheduleList.add(ScheduleInfoResponse.fromJson(data));
         }
@@ -53,6 +55,7 @@ class ScheduleViewModel{
     var params = {"NurseId":nurseId};
     WebService.getAPICall(WebService.completeScheduleList, params).then((response) {
       if (response.statusCode == 1) {
+        completedVisitCount = response.count;
         for (var data in response.body) {
           completedScheduleList.add(ScheduleInfoResponse.fromJson(data));
         }
@@ -99,32 +102,10 @@ class ScheduleViewModel{
         PrefUtils.setIntValue(PrefUtils.visitId, visitId);
         callback(true, response.message);
       } else {
-        PrefUtils.setIntValue(PrefUtils.visitId, 0);
         callback(false, response.message);
       }
     }).catchError((error) {
       print(error);
-      PrefUtils.setIntValue(PrefUtils.visitId, 0);
-      callback(false, LabelStr.serverError);
-    });
-  }
-
-  void getScheduleFilterAPICall(String flag, String keyword, ResponseCallback callback) {
-    var params = {"flag":flag, "Searchword":keyword};
-    WebService.getAPICall(WebService.scheduleFilter, params).then((response) {
-      if (response.statusCode == 1) {
-        filterScheduleList=[];
-        for (var data in response.body) {
-          filterScheduleList.add(ScheduleInfoResponse.fromJson(data));
-        }
-        callback(true, "");
-      } else {
-        filterScheduleList=[];
-        callback(false, response.message);
-      }
-    }).catchError((error) {
-      print(error);
-      filterScheduleList=[];
       callback(false, LabelStr.serverError);
     });
   }

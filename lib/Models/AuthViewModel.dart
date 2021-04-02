@@ -38,8 +38,8 @@ class AuthViewModel {
       WebService.postAPICall(WebService.nurseLogin, params).then((response) {
         if (response.statusCode == 1) {
           if (response.body != null) {
-            PrefUtils.saveUserDataToPref(
-                NurseResponse.fromJson(response.body), password);
+            PrefUtils.setStringValue(PrefUtils.password, password);
+            PrefUtils.saveNurseDataToPref(NurseResponse.fromJson(response.body), "FromLogin");
             callback(true, "");
           }
         } else {
@@ -130,8 +130,6 @@ class AuthViewModel {
     }
   }
 
-  NurseResponse nurseResponse;
-
   void getProfileAPICall(String nurseId, ResponseCallback callback) {
     var params = {
       "NurseId": nurseId,
@@ -139,7 +137,7 @@ class AuthViewModel {
     WebService.getAPICall(WebService.nurseDetail, params).then((response) {
       if (response.statusCode == 1) {
         if (response.body != null) {
-          nurseResponse = NurseResponse.fromJson(response.body);
+          PrefUtils.saveNurseDataToPref(NurseResponse.fromJson(response.body), "FromProfile");
         }
         callback(true, "");
       } else {

@@ -216,7 +216,6 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
       Utils.showLoader(false, context);
       if(isSuccess){
         ToastUtils.showToast(context, message, Colors.green);
-        PrefUtils.setIntValue(PrefUtils.visitId, 0);
         Timer(Duration(seconds: 2), (){
           Utils.navigateToScreen(context, TaskWithDateDetailsScreen(_nurseVisitViewModel.completedNoteResponse));
         });

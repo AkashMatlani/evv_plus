@@ -22,7 +22,6 @@ class WebService {
   static const patientOrCarePlanComment = "NurseVisit/PatientAndCareplanComment";
   static const carePlanPdf = "NurseVisit/CarePlanPdf";
   static const dailyLivingTask = "NurseVisit/DailyLivingTaskQuestion";
-  static const scheduleFilter = "NurseVisit/SearchPastDueScreenAndCareplan";
   static const getVisitDetails = "NurseVisit/GetVisitDetails";
   static const updateDeviceId = "NurseVisit/UpdateDeviceId";
   static const updateVisitCompleteNote = "NurseVisit/UpdateNurseVisitCompleteNote";
@@ -36,6 +35,8 @@ class WebService {
   static const patientSignatureVoiceRecording = "NurseVisit/PatienSignatureAndVoiceRecording";
   static const signReasonVisitVerification = "NurseVisit/SignReasonVisitVerification";
   static const updateVisitTrue = "NurseVisit/UpdateVisitTrue";
+
+  static const uploadIncidentForm = "NurseVisit/UploadIncidentForm";
 
   static Future<ServerResponse> getAPICall(String apiName, Map<String, dynamic> params) async {
     var url = baseUrl + apiName;
@@ -112,6 +113,7 @@ class WebService {
 class ServerResponse {
   var message = LabelStr.serverError;
   var body;
+  var count = 0;
   var statusCode = 0;
 
   ServerResponse();
@@ -119,6 +121,9 @@ class ServerResponse {
   ServerResponse.withJson(Map<String, dynamic> jsonObj) {
     print("parsing response");
     String status = jsonObj["status"];
+    if(jsonObj.containsKey("count")){
+      count = jsonObj["count"];
+    }
     this.message = jsonObj["message"];
     if (jsonObj["data"] != null)
       this.body = jsonObj["data"];
