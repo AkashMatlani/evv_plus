@@ -246,6 +246,7 @@ class _ClientPatientVoiceSignatureScreenState
                                       ToastUtils.showToast(context,
                                           LabelStr.voiceError, Colors.red);
                                     } else {
+                                      audioPlayer.pause();
                                       submitCall(context);
                                     }
                                   });

@@ -274,7 +274,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                     padding: EdgeInsets.fromLTRB(5,0,10,0),
                     child: Row(
                       children: [
-                        SvgPicture.asset(MyImage.logout_icon),
+                        SvgPicture.asset(MyImage.logout_icon,height: 20,width: 20,),
                         SizedBox(width: 15),
                         Container( padding: EdgeInsets.fromLTRB(20,0,10,0),child: Text(LabelStr.lblLogout, style: AppTheme.sfProLightTextStyle().copyWith(color: Colors.black45)))
                       ],

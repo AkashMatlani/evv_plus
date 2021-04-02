@@ -175,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       fit: BoxFit.cover,
                                     )
                                     ) : ClipOval(
-                                      child: CachedNetworkImage(
+                                      child: CachedNetworkImage(useOldImageOnUrlChange: false,
                                           fit: BoxFit.cover,
                                           imageUrl: nurseImage,
                                           placeholder: (context, url) => CircularProgressIndicator(),

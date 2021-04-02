@@ -100,7 +100,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                         padding:
                                             EdgeInsets.fromLTRB(15, 20, 0, 0),
                                         child: Text(
-                                          LabelStr.lblGetPatientSign,
+                                          LabelStr.lblGetCaretakerSignature,
                                           style: AppTheme.boldSFTextStyle()
                                               .copyWith(
                                                   fontSize: 16,
@@ -200,29 +200,33 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                       thickness: 1,
                                       color: HexColor("#e9e9e9"),
                                     ),
-                                    TextFormField(
-
-                                      keyboardType: TextInputType. multiline,
-                                      controller: reasonController,
-                                      onChanged: (String text) {
-                                        setState(() {
-                                          if (reasonController.text.length ==
-                                                  0 ||
-                                              reasonController.text.length
-                                                  .toString()
-                                                  .isEmpty) {
-                                            submit = true;
-                                            caretaker = false;
-                                          }
-                                        });
-                                      },
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                    Container(
+                                      height: 80,
+                                      child: TextField(
+                                        maxLines: null,
+                                        expands: true,
+                                        keyboardType: TextInputType. multiline,
+                                        controller: reasonController,
+                                        onChanged: (String text) {
+                                          setState(() {
+                                            if (reasonController.text.length ==
+                                                    0 ||
+                                                reasonController.text.length
+                                                    .toString()
+                                                    .isEmpty) {
+                                              submit = true;
+                                              caretaker = false;
+                                            }
+                                          });
+                                        },
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          hintText: 'Broken arm',
                                         ),
-                                        hintText: 'Broken arm',
                                       ),
                                     ),
                                     Visibility(
