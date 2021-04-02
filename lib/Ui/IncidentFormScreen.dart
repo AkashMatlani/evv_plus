@@ -1,10 +1,18 @@
+import 'dart:io';
+
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/CommentFilterResponse.dart';
+import 'package:evv_plus/Models/NurseVisitViewModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:path_provider_ex/path_provider_ex.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class IncidentFormScreen extends StatefulWidget {
   @override
@@ -13,8 +21,13 @@ class IncidentFormScreen extends StatefulWidget {
 
 class _IncidentFormScreenState extends State<IncidentFormScreen> {
 
-  var searchController = TextEditingController();
-  bool selectedPatient = false;
+  var _searchController = TextEditingController();
+  String patientName="", patientId="";
+
+  NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
+  List<CommentFilterResponse> _filterList = [];
+
+  var files;
 
   @override
   Widget build(BuildContext context) {
@@ -54,53 +67,81 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
           ),
           SizedBox(height: 5),
           Container(
-            height: 50,
-            alignment: Alignment.centerLeft,
             margin: EdgeInsets.all(10),
+            alignment: Alignment.centerLeft,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: HexColor("#eaeff2")),
             child: Stack(
               children: [
                 Container(
-                    padding: EdgeInsets.only(left: 10, right: 50),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Search patient name",
+                  height: 50,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: HexColor("#eaeff2")),
+                  child: Stack(
+                    children: [
+                      Container(
+                          padding: EdgeInsets.only(left: 10, right: 50),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: LabelStr.lblSearchPatient,
+                            ),
+                            keyboardType: TextInputType.text,
+                            controller: _searchController,
+                            onChanged: (value){
+                              if(value.length == 0){
+                                setState(() {
+                                  patientName = "";
+                                });
+                              }
+                            },
+                          )),
+                      Positioned(
+                        child: InkWell(
+                          onTap: () {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            if(_searchController.text.trim().toString().isNotEmpty){
+                              checkConnection().then((isConnected) {
+                                if(isConnected){
+                                  _getFilterItemList(context, _searchController.text.toString());
+                                } else {
+                                  ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
+                                }
+                              });
+                            }
+                          },
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(5),
+                            child: SvgPicture.asset(MyImage.ic_search),
+                          ),
+                        ),
+                        right: 5,
+                        top: 10,
                       ),
-                      keyboardType: TextInputType.text,
-                      controller: searchController,
-                    )),
-                Positioned(
-                  child: InkWell(
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      String filterKey = searchController.text.toString();
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(5),
-                      child: SvgPicture.asset(MyImage.ic_search),
-                    ),
+                    ],
                   ),
-                  right: 5,
-                  top: 10,
+                ),
+                Container(
+                  child: _filterList.length == 0 ? Container() : _searchListView(),
                 )
               ],
             ),
           ),
-          SizedBox(height: 5),
-          Expanded(
+          patientName.compareTo("")==0?Container():Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.all(10),
-                  child: Text("Patient name", style: AppTheme.semiBoldSFTextStyle()),
+                  padding: EdgeInsets.all(30),
+                  alignment: Alignment.center,
+                  child: Text(patientName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 25)),
                 ),
                 Expanded(
                   child: Container(
@@ -122,12 +163,27 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
                                     .copyWith(fontSize: 18, color: Colors.white)),
                             onPressed: () {
                               FocusScope.of(context).requestFocus(FocusNode());
-                              ToastUtils.showToast(context, "Submit Clicked", Colors.red);
+                              getFiles();
                             },
                           ),
                         ),
                         SizedBox(height: 10),
-                        Text("File name")
+                        files == null? Text("Searching Files"):
+                        ListView.builder(  //if file/folder list is grabbed, then show here
+                          itemCount: files?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return Card(
+                                child:ListTile(
+                                  title: Text(files[index].path.split('/').last),
+                                  leading: Icon(Icons.picture_as_pdf),
+                                  trailing: Icon(Icons.arrow_forward, color: Colors.redAccent,),
+                                  onTap: (){
+                                    ToastUtils.showToast(context, files[index].path.toString(), Colors.red);
+                                  },
+                                )
+                            );
+                          },
+                        )
                       ],
                     ),
                   ),
@@ -156,5 +212,79 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
         ],
       ),
     );
+  }
+
+  void getFiles() async {
+    var status = await Permission.storage.status;
+    if (status.isGranted) {
+      List<StorageInfo> storageInfo = await PathProviderEx.getStorageInfo();
+      var root = storageInfo[0].rootDir;
+      var fm = FileManager(root: Directory(root)); //
+      files = await fm.filesTree(
+          excludedPaths: ["/storage/emulated/0/Android"],
+          extensions: ["pdf"]
+      );
+    } else {
+      Map<Permission, PermissionStatus> status = await [
+        Permission.storage,
+      ].request();
+      print("Permission status :: $status");
+    }
+  }
+
+  void _getFilterItemList(BuildContext context, String searchStr) {
+    Utils.showLoader(true, context);
+    _nurseVisitViewModel.getFilterListAPICall("1", searchStr, "", (isSuccess, message){
+      Utils.showLoader(false, context);
+      if(isSuccess){
+        setState(() {
+          _filterList = _nurseVisitViewModel.commentFilterList;
+        });
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
+  }
+
+  _searchListView() {
+    return Container(
+      margin: EdgeInsets.only(right: 50, bottom: 5),
+      color: HexColor("#eaeff2"),
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: _filterList.length,
+        itemBuilder: (context, int index) {
+          return Container(
+            decoration: new BoxDecoration(
+                color: HexColor("#eaeff2"),
+                border: new Border(
+                    bottom: new BorderSide(
+                        color: Colors.grey,
+                        width: 0.5
+                    )
+                )
+            ),
+            child: ListTile(
+              onTap: () {
+                setState(() {
+                  patientName = _filterList[index].patientName;
+                  patientId = _filterList[index].patientId.toString();
+                  _searchController.text = patientName;
+                  _filterList = [];
+                });
+              },
+              title: Text(_filterList[index].patientName,
+                  style: new TextStyle(fontSize: 18.0)),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }

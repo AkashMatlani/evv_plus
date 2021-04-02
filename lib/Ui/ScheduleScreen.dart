@@ -7,7 +7,6 @@ import 'package:evv_plus/GeneralUtils/FirebaseNotificationHandler.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
-import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/Models/NurseVisitViewModel.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/ChangePwdScreen.dart';
@@ -39,7 +38,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   int activeTabIndex = 0;
   int _selectedIndex = 0;
 
-  String nurseName="", nurseEmailId="", nurseProfile="", nurseId = "";
+  String nurseName="", nurseEmailId="", nurseId = "";
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
 
@@ -82,7 +81,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   @override
   void initState() {
     super.initState();
-
+    imageCache.clear();
     notificationHandler = FirebaseNotificationHandler(context);
     notificationHandler.fireBaseInitialization((data){
       print("Notification Data :: "+data);
@@ -101,10 +100,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
     SharedPreferences.getInstance().then((prefs) async {
       PrefUtils.getNurseDataFromPref();
+      nurseId = prefs.getInt(PrefUtils.nurseId).toString();
       nurseName = prefs.getString(PrefUtils.fullName);
       nurseEmailId = prefs.getString(PrefUtils.email);
-      nurseProfile = prefs.getString(PrefUtils.NurseImage);
-      nurseId = prefs.getInt(PrefUtils.nurseId).toString();
+      setState(() {
+        Utils.nurseProfile = prefs.getString(PrefUtils.NurseImage);
+      });
       _getScheduleCount();
       _getNotifiationCount();
     });
@@ -202,16 +203,14 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                           child: Container(
                             height: 80,
                             width: 80,
-                            child: nurseProfile.isNotEmpty ? ClipRRect(
+                            child: Utils.nurseProfile.isNotEmpty ? ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: CachedNetworkImage(
-                                useOldImageOnUrlChange: false,
-                                fit: BoxFit.cover,
-                                imageUrl: nurseProfile,
-                                placeholder: (context, url) => Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator()),
-                                errorWidget: (context, url, error) => defaultUserProfile(),
-                              ),
-                            ) : defaultUserProfile(),
+                              child: Image.network(Utils.nurseProfile, fit: BoxFit.cover,
+                                loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Colors.white)));
+                                },
+                              )) : defaultUserProfile(),
                           )
                         ),
                         SizedBox(height: 10),
@@ -376,69 +375,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
               child: Container(
                 padding:EdgeInsets.fromLTRB(20, 0, 5, 0),
                 child: Text(_menuNameList[position], style: AppTheme.sfProLightTextStyle().copyWith(color: _selectedIndex == position ? Colors.white : Colors.black45),textAlign: TextAlign.justify,),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  listRowItems(BuildContext context, int position) {
-    return Card(
-      elevation: 2,
-      margin: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5.0),
-          side: BorderSide(
-            color: HexColor("#E9E9E9"),
-            width: 0.5,
-          )
-      ),
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Container(
-              height: 80,
-              width: 80,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: defaultUserProfile(),
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-                child:Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(_scheduleViewModel.filterScheduleList[position].firstName, style: AppTheme.boldSFTextStyle().copyWith(fontSize: 16)),
-                      SizedBox(height: 3),
-                      // Text(Utils.convertDate(_pastVisitList[position].visitDate, DateFormat('dd/MM/yyyy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
-                      SizedBox(height: 3),
-                      //Text(Utils.convertTime(_pastVisitList[position].timeFrom.substring(0, 5))+" - "+Utils.convertTime(_pastVisitList[position].timeTo.substring(0, 5)), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696")))
-                    ],
-                  ),
-                )
-            ),
-            SizedBox(width: 10),
-            Container(
-              height: MediaQuery.of(context).size.height*0.09,
-              padding: EdgeInsets.all(5),
-              alignment: Alignment.topRight,
-              child: Row(
-                children: [
-                  Container(
-                    height: 7,
-                    width: 7,
-                    margin: EdgeInsets.only(top: 3),
-                    child: SvgPicture.asset(MyImage.ic_fill_circle, color: HexColor("#2ab554")),
-                  ),
-                  SizedBox(width: 3),
-                  //Text(_pastVisitList[position].carePlanName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
-                ],
               ),
             )
           ],

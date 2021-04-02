@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
@@ -192,6 +194,24 @@ class NurseVisitViewModel{
       "NurseId": nurseId
     };
     WebService.getAPICall(WebService.markAsRead, params).then((response) {
+      if (response.statusCode == 1) {
+        callback(true, response.message);
+      } else {
+        callback(false, response.message);
+      }
+    }).catchError((error) {
+      print(error);
+      callback(false, LabelStr.serverError);
+    });
+  }
+
+  void uploadIncidentFormApiCall(String nurseId, String patientId, File incidentForm, ResponseCallback callback, {Function onInactiveAccount}) {
+    var params = {
+      "NurseId": nurseId,
+      "PatientId": patientId,
+      "file": incidentForm
+    };
+    WebService.postAPICall(WebService.uploadIncidentForm, params).then((response) {
       if (response.statusCode == 1) {
         callback(true, response.message);
       } else {

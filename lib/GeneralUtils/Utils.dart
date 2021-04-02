@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 class Utils {
   static String answer = "Yes";
+  static String nurseProfile = "";
 
   static bool isPatientSignCompleted=false;
   static bool isPatientVoiceCompleted=false;

@@ -9,6 +9,7 @@ import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
 import 'package:evv_plus/Models/CityListResponse.dart';
 import 'package:evv_plus/Models/StateListResponse.dart';
+import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,8 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       firstName,
       middleName,
       lastName,
-      dateOfBirth,
-      nurseImage;
+      dateOfBirth;
   bool isLoading = true;
   String nurseId;
   List<StateData> stateList = [];
@@ -132,7 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     onTap: () {
                                       _showPicker(context);
                                     },
-                                    child: nurseImage != null ? (_image != null ? ClipOval(child: Image.file(
+                                    child: Utils.nurseProfile != null ? (_image != null ? ClipOval(child: Image.file(
                                       _image,
                                       width: 100,
                                       height: 100,
@@ -140,11 +140,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     )
                                     ) : ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
-                                      child: CachedNetworkImage(useOldImageOnUrlChange: false,
-                                          fit: BoxFit.cover,
-                                          imageUrl: nurseImage,
-                                          placeholder: (context, url) => CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) => defaultUserProfile()),
+                                      child: Image.network(Utils.nurseProfile, fit: BoxFit.cover,
+                                        loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                                          if (loadingProgress == null) return child;
+                                          return Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Colors.white)));
+                                        },
+                                      ),
                                     )) : Container(
                                       decoration: BoxDecoration(
                                           color: Colors.grey[200],
@@ -530,7 +531,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Utils.showLoader(false, context);
         if (isSuccess) {
           ToastUtils.showToast(context, "Nurse profile updated successfully.", Colors.green);
-          _getNurseProfileDetail(nurseId);
+          Timer(Duration(seconds: 2),()=> Utils.navigateWithClearState(context, ScheduleScreen()));
         } else {
           ToastUtils.showToast(context, message, Colors.red);
         }
@@ -552,6 +553,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void getNurseDetails(bool isLoadingFirst) {
+    imageCache.clear();
     SharedPreferences.getInstance().then((prefs) async {
       PrefUtils.getNurseDataFromPref();
       setState(() {
@@ -565,7 +567,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         middleName = prefs.getString(PrefUtils.MiddleName);
         lastName = prefs.getString(PrefUtils.lastName);
         gender = prefs.getString(PrefUtils.Gender);
-        nurseImage = prefs.getString(PrefUtils.NurseImage);
+        Utils.nurseProfile = prefs.getString(PrefUtils.NurseImage);
         dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
         formattedStr = Utils.convertDate(dateOfBirth.toString(), DateFormat("dd/MM/yyyy"));
         apiDateString = Utils.convertDate(dateOfBirth.toString(), DateFormat("yyyy-MM-dd"));
