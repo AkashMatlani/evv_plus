@@ -9,6 +9,7 @@ import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/Models/NurseVisitViewModel.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
+import 'package:evv_plus/Ui/AboutUsScreen.dart';
 import 'package:evv_plus/Ui/ChangePwdScreen.dart';
 import 'package:evv_plus/Ui/IncidentFormScreen.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
@@ -75,6 +76,9 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       Utils.navigateToScreen(context, ProfileScreen());
     } else if (index == 4) {
       Utils.navigateToScreen(context, ChangePwdScreen(LabelStr.lblChangePwd));
+    }
+    else if (index == 5) {
+      Utils.navigateToScreen(context, AboutUsScreen());
     }
   }
 
