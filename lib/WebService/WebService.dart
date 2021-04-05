@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 class WebService {
 
@@ -35,8 +36,8 @@ class WebService {
   static const patientSignatureVoiceRecording = "NurseVisit/PatienSignatureAndVoiceRecording";
   static const signReasonVisitVerification = "NurseVisit/SignReasonVisitVerification";
   static const updateVisitTrue = "NurseVisit/UpdateVisitTrue";
-
   static const uploadIncidentForm = "NurseVisit/UploadIncidentForm";
+
 
   static Future<ServerResponse> getAPICall(String apiName, Map<String, dynamic> params) async {
     var url = baseUrl + apiName;
@@ -72,6 +73,7 @@ class WebService {
     ServerResponse serverResponse = ServerResponse.withJson(jsValue);
     return serverResponse;
   }
+
   static Future<ServerResponse> postAPICall(
       String apiName, Map<String, dynamic> params) async {
     var url = baseUrl + apiName;
@@ -105,6 +107,31 @@ class WebService {
       }
       response.statusCode = 0;
       completer.complete(response);
+    });
+    return completer.future;
+  }
+
+  static Future<ServerResponse> multiPartAPI(String apiName, Map<String, String> params, String filePath) async {
+    var url = baseUrl + apiName;
+    var postUri = Uri.parse(url);
+
+    print("reqeust Url: \n$url");
+    print("reqeust parameters: \n$params");
+    var request = new MultipartRequest("POST", postUri);
+    params.forEach((key, value) => {request.fields[key] = value});
+    if (filePath != null) {
+      var multiPart = await http.MultipartFile.fromPath("file", filePath);
+      request.files.add(multiPart);
+    }
+
+    var result = await request.send();
+    var completer = Completer<ServerResponse>();
+
+    result.stream.transform(utf8.decoder).listen((body) {
+      var value = json.decode(body);
+      print(value);
+      var serverResponseObj = ServerResponse.withJson(value);
+      completer.complete(serverResponseObj);
     });
     return completer.future;
   }

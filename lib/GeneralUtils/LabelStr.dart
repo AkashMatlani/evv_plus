@@ -68,6 +68,7 @@ class LabelStr {
   static const lblGetCaretakerSignature= "Get Caretaker Signature";
   static const lblGetReasonOther= "Reason : Other";
   static const checkMailLink = "Please check your email box";
+  static const selectFileError = "Please select file from storage";
   static const connectionError = "Please check you internet connectivity, Try again";
   static const digitalSignatureError = "Please provide digital signature";
   static const voiceError = "Please record your signature";

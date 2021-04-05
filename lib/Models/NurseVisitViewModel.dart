@@ -205,13 +205,13 @@ class NurseVisitViewModel{
     });
   }
 
-  void uploadIncidentFormApiCall(String nurseId, String patientId, File incidentForm, ResponseCallback callback, {Function onInactiveAccount}) {
+  void uploadIncidentFormApiCall(String nurseId, String patientId, String filePath, ResponseCallback callback, {Function onInactiveAccount}) {
     var params = {
       "NurseId": nurseId,
       "PatientId": patientId,
-      "file": incidentForm
     };
-    WebService.postAPICall(WebService.uploadIncidentForm, params).then((response) {
+
+    WebService.multiPartAPI(WebService.uploadIncidentForm, params, filePath).then((response) {
       if (response.statusCode == 1) {
         callback(true, response.message);
       } else {

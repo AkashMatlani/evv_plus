@@ -1,18 +1,22 @@
-import 'dart:io';
+
+import 'dart:async';
 
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/CommentFilterResponse.dart';
 import 'package:evv_plus/Models/NurseVisitViewModel.dart';
+import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_file_manager/flutter_file_manager.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:path_provider_ex/path_provider_ex.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 
 class IncidentFormScreen extends StatefulWidget {
   @override
@@ -22,12 +26,21 @@ class IncidentFormScreen extends StatefulWidget {
 class _IncidentFormScreenState extends State<IncidentFormScreen> {
 
   var _searchController = TextEditingController();
-  String patientName="", patientId="";
+  String patientName="", patientId="", filePath="", fileName="";
+  int nurseId;
 
   NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
   List<CommentFilterResponse> _filterList = [];
 
-  var files;
+  @override
+  void initState() {
+    super.initState();
+    _getNurseId();
+  }
+
+  _getNurseId() async{
+    nurseId = await PrefUtils.getValueFor(PrefUtils.nurseId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,26 +176,13 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
                                     .copyWith(fontSize: 18, color: Colors.white)),
                             onPressed: () {
                               FocusScope.of(context).requestFocus(FocusNode());
-                              getFiles();
+                              uploadPDFFromStorage();
                             },
                           ),
                         ),
-                        SizedBox(height: 10),
-                        files == null? Text("Searching Files"):
-                        ListView.builder(  //if file/folder list is grabbed, then show here
-                          itemCount: files?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return Card(
-                                child:ListTile(
-                                  title: Text(files[index].path.split('/').last),
-                                  leading: Icon(Icons.picture_as_pdf),
-                                  trailing: Icon(Icons.arrow_forward, color: Colors.redAccent,),
-                                  onTap: (){
-                                    ToastUtils.showToast(context, files[index].path.toString(), Colors.red);
-                                  },
-                                )
-                            );
-                          },
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text(fileName, style: AppTheme.regularSFTextStyle()),
                         )
                       ],
                     ),
@@ -202,7 +202,18 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
                             .copyWith(fontSize: 18, color: Colors.white)),
                     onPressed: () {
                       FocusScope.of(context).requestFocus(FocusNode());
-                      ToastUtils.showToast(context, "Submit Clicked", Colors.red);
+                      checkConnection().then((isConnected) {
+                        if (isConnected) {
+                          if(fileName.isNotEmpty){
+                            uploadIncidentForm();
+                          } else{
+                            ToastUtils.showToast(context, LabelStr.selectFileError, Colors.red);
+                          }
+                        } else {
+                          ToastUtils.showToast(context,
+                              LabelStr.connectionError, Colors.red);
+                        }
+                      });
                     },
                   ),
                 )
@@ -212,24 +223,6 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
         ],
       ),
     );
-  }
-
-  void getFiles() async {
-    var status = await Permission.storage.status;
-    if (status.isGranted) {
-      List<StorageInfo> storageInfo = await PathProviderEx.getStorageInfo();
-      var root = storageInfo[0].rootDir;
-      var fm = FileManager(root: Directory(root)); //
-      files = await fm.filesTree(
-          excludedPaths: ["/storage/emulated/0/Android"],
-          extensions: ["pdf"]
-      );
-    } else {
-      Map<Permission, PermissionStatus> status = await [
-        Permission.storage,
-      ].request();
-      print("Permission status :: $status");
-    }
   }
 
   void _getFilterItemList(BuildContext context, String searchStr) {
@@ -280,6 +273,41 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
         },
       ),
     );
+  }
+
+  void uploadPDFFromStorage() async {
+    var status = await Permission.storage.status;
+    if(status.isGranted){
+      filePath = await FlutterDocumentPicker.openDocument();
+      if(filePath.contains(".pdf")){
+        setState(() {
+          fileName = filePath.split('/').last;
+        });
+      } else {
+        ToastUtils.showToast(context, "Please Select only pdf file", Colors.red);
+        setState(() {
+          fileName = "";
+        });
+      }
+    } else {
+      Map<Permission, PermissionStatus> status = await [
+        Permission.storage,
+      ].request();
+      print("Permission status :: $status");
+    }
+  }
+
+  uploadIncidentForm(){
+    Utils.showLoader(true, context);
+    _nurseVisitViewModel.uploadIncidentFormApiCall(nurseId.toString(), patientId, filePath, (isSuccess, message){
+      Utils.showLoader(false, context);
+      if(isSuccess){
+        ToastUtils.showToast(context, message, Colors.green);
+        Timer(Duration(seconds: 2), ()=>Utils.navigateWithClearState(context, ScheduleScreen()));
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
   }
 
   @override

@@ -62,7 +62,12 @@ class PrefUtils {
     String nurseName = nurseDetails.firstName + " "+nurseDetails.lastName;
     PrefUtils.setStringValue(PrefUtils.fullName, nurseName);
 
-    PrefUtils.setStringValue(PrefUtils.NurseImage, nurseDetails.nurseImage);
+    if(nurseDetails.nurseImage.split('/').last.isNotEmpty){
+      PrefUtils.setStringValue(PrefUtils.NurseImage, nurseDetails.nurseImage);
+    }else{
+      PrefUtils.setStringValue(PrefUtils.NurseImage, "");
+    }
+
     PrefUtils.setStringValue(PrefUtils.Gender, nurseDetails.gender);
     PrefUtils.setStringValue(PrefUtils.DateOfBirth, nurseDetails.dateOfBirth);
     PrefUtils.setStringValue(PrefUtils.addressLineOne, nurseDetails.address1);

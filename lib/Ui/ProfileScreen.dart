@@ -120,47 +120,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ))
                                   ],
                                 ),
-                                SizedBox(height: 15),
+                                SizedBox(height: 20),
                                 Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                      borderRadius:
-                                      BorderRadius.circular(50)),
                                   width: 100,
                                   height: 100,
-                                  child: GestureDetector(
-                                    onTap: () {
+                                  child: InkWell(
+                                    onTap: (){
                                       _showPicker(context);
-                                    },
-                                    child: Utils.nurseProfile != null ? (_image != null ? ClipOval(child: Image.file(
+                                      },
+                                    child: _image == null ? (Utils.nurseProfile.isEmpty ? defaultUserProfile() : ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(Utils.nurseProfile, fit: BoxFit.cover,
+                                          loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                                            if (loadingProgress == null) return child;
+                                            return Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Colors.white)));
+                                          },
+                                        )
+                                    )) : ClipRRect(borderRadius: BorderRadius.circular(10), child: Image.file(
                                       _image,
                                       width: 100,
                                       height: 100,
                                       fit: BoxFit.cover,
-                                    )
-                                    ) : ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(Utils.nurseProfile, fit: BoxFit.cover,
-                                        loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-                                          if (loadingProgress == null) return child;
-                                          return Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Colors.white)));
-                                        },
-                                      ),
-                                    )) : Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius:
-                                          BorderRadius.circular(50)),
-                                      width: 100,
-                                      height: 100,
-                                      child: Icon(
-                                        Icons.camera_alt,
-                                        color: Colors.grey[800],
-                                      ),
-                                    ),
-                                  ),
+                                    )),
+                                  ) ,
                                 ),
-                                SizedBox(height: 5),
+                                SizedBox(height: 10),
                                 Container(
                                   width: MediaQuery.of(context).size.width,
                                   alignment: Alignment.center,
@@ -168,7 +152,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       style: AppTheme.boldSFTextStyle().copyWith(
                                           fontSize: 24, color: Colors.white)),
                                 ),
-                                SizedBox(height: 5),
                                 Container(
                                   width: MediaQuery.of(context).size.width,
                                   alignment: Alignment.center,

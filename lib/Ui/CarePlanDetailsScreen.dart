@@ -103,6 +103,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
             child: Stack(
               children: <Widget>[
                 Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     Container(
                       height: blockSizeVertical*40,
@@ -345,18 +346,15 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                 Positioned(
                   top: blockSizeVertical*30,
                   left: 25,
-                  right: -50,
                   child: Container(
                     alignment: Alignment.center,
                     child: Row(
-                      mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          height: 140,
-                          width: 140,
-                          padding: EdgeInsets.all(5),
-                          margin: EdgeInsets.only(top: 15),
+                          height: 120,
+                          width: 120,
+                          margin: EdgeInsets.only(top: blockSizeVertical*3),
                           child: widget._scheduleDetailInfo.profilePhotoPath.isNotEmpty ? ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: CachedNetworkImage(
@@ -373,10 +371,8 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                             _makingPhoneCall(widget._scheduleDetailInfo.phoneNumber);
                           },
                           child: Container(
-                            padding: EdgeInsets.only(left: blockSizeVertical*5),
-                            child: Expanded(
-                                child: SvgPicture.asset(MyImage.ic_call_icons, height: 160,width: 160,)
-                            ),
+                            margin: EdgeInsets.only(left: blockSizeVertical*10, top: blockSizeVertical*1),
+                            child: SvgPicture.asset(MyImage.ic_call_icons, height: 150, width: 150),
                           ),
                         )
                       ],
