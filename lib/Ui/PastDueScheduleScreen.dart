@@ -200,7 +200,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
                     SizedBox(height: 3),
                     Text(
                         Utils.convertDate(_filterList[position].visitDate,
-                            DateFormat('dd/MM/yyyy')),
+                            DateFormat('MM/dd/yy')),
                         style: AppTheme.regularSFTextStyle().copyWith(
                             fontSize: 14, color: HexColor("#969696"))),
                     SizedBox(height: 3),

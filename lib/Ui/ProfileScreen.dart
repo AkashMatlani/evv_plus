@@ -16,6 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../GeneralUtils/ColorExtension.dart';
@@ -186,7 +187,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: 5,
                               ),
                               Text(
-                                "xxx xx xxx",
+                                "xxx-xx-xxxx".toUpperCase(),
                                 style: AppTheme.regularSFTextStyle().copyWith(
                                     fontSize: 16, color: Color(0xff868686)),
                               )
@@ -276,7 +277,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: 5,
                             ),
                             Text(
-                              phoneNumber,
+                              formatNumbersAsCode(phoneNumber),
                               style: AppTheme.regularSFTextStyle().copyWith(
                                   fontSize: 16, color: Color(0xff868686)),
                             )
@@ -437,7 +438,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               padding: EdgeInsets.fromLTRB(10, 5, 20, 0),
                               child: textFieldFor(zipCode, _zipController,
                                   autocorrect: false,
-                                  maxLength: 6,
+                                  maxLength: 5,
                                   keyboardType: TextInputType.number)),
                         ),
                       ],
@@ -446,8 +447,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
                         width: MediaQuery.of(context).size.width,
                         height: 65,
-                        child: textFieldFor(phoneNumber, _phoneController,
-                            keyboardType: TextInputType.number, maxLength: 10)),
+                        child: textFieldFor(
+                          formatNumbersAsCode(phoneNumber), _phoneController,
+                          keyboardType: TextInputType.number,
+                          maxLength: 10,
+                          inputFormatter: [MaskTextInputFormatter(mask: '###-###-####', filter: { "#": RegExp(r'[0-9]') })]
+                        )
+                    ),
                     Container(
                       margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
                       width: MediaQuery.of(context).size.width,
@@ -478,6 +484,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       );
     }
+  }
+
+  formatNumbersAsCode(String number) {
+    int groupDigits = 0;
+    String tmp = "";
+    for (int i = 0; i < number.length; ++i) {
+      tmp += number[i];
+      ++groupDigits;
+      if (groupDigits == 3) {
+        if(tmp.length > 8){
+          tmp+="";
+        } else {
+          tmp += "-";
+        }
+        groupDigits = 0;
+      }
+    }
+    return tmp;
   }
 
   void validationForCollectClientSignature() {
@@ -552,7 +576,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         gender = prefs.getString(PrefUtils.Gender);
         Utils.nurseProfile = prefs.getString(PrefUtils.NurseImage);
         dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
-        formattedStr = Utils.convertDate(dateOfBirth.toString(), DateFormat("dd/MM/yyyy"));
+        formattedStr = Utils.convertDate(dateOfBirth.toString(), DateFormat("MM/dd/yy"));
         apiDateString = Utils.convertDate(dateOfBirth.toString(), DateFormat("yyyy-MM-dd"));
         print("formattedStr" + apiDateString);
         stateId = prefs.getInt(PrefUtils.stateId).toString();
@@ -563,7 +587,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _addressLineOneController.text = addressLineOne;
         _addressLineTwoController.text = addressLineTwo;
         _zipController.text = zipCode;
-        _phoneController.text = phoneNumber;
+        _phoneController.text = formatNumbersAsCode(phoneNumber);
       });
 
       if(isLoadingFirst){

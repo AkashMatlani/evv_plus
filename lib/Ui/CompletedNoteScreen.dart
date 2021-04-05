@@ -86,7 +86,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
                       width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.all(5),
                       alignment: Alignment.center,
-                      child: Text(widget._scheduleDetailInfo.carePlanName+": "+Utils.convertDate(widget._scheduleDetailInfo.visitDate, DateFormat('dd/MM/yyyy')),
+                      child: Text(widget._scheduleDetailInfo.carePlanName+": "+Utils.convertDate(widget._scheduleDetailInfo.visitDate, DateFormat('MM/dd/yy')),
                           style: AppTheme.semiBoldSFTextStyle()
                               .copyWith(color: HexColor("#2ab554"))),
                     ),
@@ -183,7 +183,7 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
     if (picked != null && picked != _selectedDate)
       setState(() {
         _selectedDate = picked;
-        String formattedDate = DateFormat('dd/MM/yyyy').format(picked);
+        String formattedDate = DateFormat('MM/dd/yy').format(picked);
         controller.text = formattedDate;
       });
   }

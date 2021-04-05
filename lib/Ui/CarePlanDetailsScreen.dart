@@ -152,7 +152,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                           Container(
                             width: MediaQuery.of(context).size.width,
                             alignment: Alignment.center,
-                            child: Text(Utils.convertDate(widget._scheduleDetailInfo.visitDate, DateFormat('MMMM dd, yyyy')), style: AppTheme.boldSFTextStyle().copyWith(fontSize: 30, color: Colors.white)),
+                            child: Text(Utils.convertDate(widget._scheduleDetailInfo.visitDate, DateFormat('MM/dd/yy')), style: AppTheme.boldSFTextStyle().copyWith(fontSize: 30, color: Colors.white)),
                           ),
                           SizedBox(height: 10),
                           Container(

@@ -154,13 +154,13 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 ),
                 Utils.notificationCount == 0 ? Container() : Positioned(
                   right: 7,
-                  top: 50,
+                  top: 35,
                   child: Container(
                     height: 25,
                     width: 25,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
-                      color: Colors.green,
+                      color: Colors.red,
                       shape: BoxShape.circle,
                     ),
                     child: Text(Utils.notificationCount.toString(), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 8, color: Colors.white)),

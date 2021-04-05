@@ -183,7 +183,7 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
                       children: [
                         Text(_filterList[position].firstName+" "+_filterList[position].lastName, style: AppTheme.boldSFTextStyle().copyWith(fontSize: 16)),
                         SizedBox(height: 3),
-                        Text(Utils.convertDate(_filterList[position].visitDate, DateFormat('dd/MM/yyyy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
+                        Text(Utils.convertDate(_filterList[position].visitDate, DateFormat('MM/dd/yy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
                         SizedBox(height: 3),
                         Text(Utils.convertTime(_filterList[position].timeFrom.substring(0, 5))+" - "+Utils.convertTime(_filterList[position].timeTo.substring(0, 5)), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696")))
                       ],

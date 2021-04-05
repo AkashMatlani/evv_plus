@@ -134,7 +134,7 @@ class _VisitHistoryListScreenState extends State<VisitHistoryListScreen> {
                     children: [
                       Text(_visitHistoryList[position].firstName+" "+_visitHistoryList[position].lastName, style: AppTheme.boldSFTextStyle().copyWith(fontSize: 16)),
                       SizedBox(height: 3),
-                      Text(Utils.convertDate(_visitHistoryList[position].visitDate, DateFormat('dd/MM/yyyy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
+                      Text(Utils.convertDate(_visitHistoryList[position].visitDate, DateFormat('MM/dd/yy')), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696"))),
                       SizedBox(height: 3),
                       Text(Utils.convertTime(_visitHistoryList[position].timeFrom.substring(0, 5))+" - "+Utils.convertTime(_visitHistoryList[position].timeTo.substring(0, 5)), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 14, color: HexColor("#969696")))
                     ],

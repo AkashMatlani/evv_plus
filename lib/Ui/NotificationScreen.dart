@@ -93,7 +93,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               Container(
                                   padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                                   child: Text(
-                                    Utils.convertDate(_notificationList[index].visitDate, DateFormat("dd MMM yyyy")),
+                                    Utils.convertDate(_notificationList[index].visitDate, DateFormat("MM/dd/yy")),
                                     style: AppTheme.mediumSFTextStyle()
                                         .copyWith(
                                         fontSize: 12,

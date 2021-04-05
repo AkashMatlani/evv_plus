@@ -66,11 +66,11 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
     } else if(flag == 3){
       _checkInTimeController.text = Utils.convertTime(widget._visitNoteDetails.checkInTime.substring(0, 5));
     } else if(flag == 4){
-      _checkInDateController.text = Utils.convertDate(widget._visitNoteDetails.checkInDate, DateFormat("dd/MM/yyyy"));
+      _checkInDateController.text = Utils.convertDate(widget._visitNoteDetails.checkInDate, DateFormat("MM/dd/yy"));
     } else if(flag == 5){
       _checkOutTimeController.text = Utils.convertTime(widget._visitNoteDetails.checkOutTime.substring(0, 5));
     } else {
-      _checkOutDateController.text = Utils.convertDate(widget._visitNoteDetails.checkOutDate, DateFormat("dd/MM/yyyy"));
+      _checkOutDateController.text = Utils.convertDate(widget._visitNoteDetails.checkOutDate, DateFormat("MM/dd/yy"));
     }
   }
 
@@ -89,7 +89,7 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
           title: Container(
             alignment: Alignment.center,
             margin: EdgeInsets.only(right: 30),
-            child: Text("Task "+Utils.convertDate(widget._visitNoteDetails.checkInDate, DateFormat("dd/MM/yyyy")),
+            child: Text("Task "+Utils.convertDate(widget._visitNoteDetails.checkInDate, DateFormat("MM/dd/yy")),
                 style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
           ),
           backgroundColor: Colors.white10,
