@@ -228,7 +228,7 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
           _upcommingVisitList = [];
           _upcommingVisitList = _scheduleViewModel.upCommingScheduleList;
           _filterList = _upcommingVisitList;
-          Utils.upcommingCountCount = _scheduleViewModel.upcommingVisitCount;
+          Utils.upcommingCountCount =_upcommingVisitList.length;
         });
       } else{
         setState(() {

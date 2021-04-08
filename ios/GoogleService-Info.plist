@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>973541682452-o1cbv6i0959krno8q4fg33k03gtiok7c.apps.googleusercontent.com</string>
+	<string>973541682452-fvptpln4r9bi4619l2emjmj0sd633vtf.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.973541682452-o1cbv6i0959krno8q4fg33k03gtiok7c</string>
+	<string>com.googleusercontent.apps.973541682452-fvptpln4r9bi4619l2emjmj0sd633vtf</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAOJ6Q6Oyl7R3__FIP2Fey7SoU8jLOITL8</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.app.Evv</string>
+	<string>com.app.EVVPLUS</string>
 	<key>PROJECT_ID</key>
 	<string>evv-plus</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:973541682452:ios:ac474743a2214a81192601</string>
+	<string>1:973541682452:ios:604f102d3f88a5e8192601</string>
 </dict>
 </plist>

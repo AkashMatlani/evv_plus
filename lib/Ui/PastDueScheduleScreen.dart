@@ -217,7 +217,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
                 ),
               )),
               SizedBox(width: 10),
-              Container(
+              _filterList[position].carePlanName!=null? Container(
                 height: MediaQuery.of(context).size.height * 0.09,
                 padding: EdgeInsets.all(5),
                 alignment: Alignment.topRight,
@@ -236,7 +236,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
                             .copyWith(fontSize: 14, color: HexColor("#2ab554")))
                   ],
                 ),
-              )
+              ):Container()
             ],
           ),
         ),
@@ -255,7 +255,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
           _filterList = [];
           _pastVisitList = _scheduleViewModel.pastDueScheduleList;
           _filterList = _pastVisitList;
-          Utils.pastDueCount = _scheduleViewModel.pastDueVisitCount;
+          Utils.pastDueCount =_pastVisitList.length;
         });
       } else {
         setState(() {

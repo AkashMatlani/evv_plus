@@ -222,7 +222,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
           _completedVisitList = [];
           _completedVisitList = _scheduleViewModel.completedScheduleList;
           _filterList = _completedVisitList;
-          Utils.completedCount = _scheduleViewModel.completedVisitCount;
+          Utils.completedCount =_completedVisitList.length;
         });
       } else{
         setState(() {

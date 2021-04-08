@@ -180,7 +180,7 @@ class AuthViewModel {
       "Gender": gender,
       "DateOfBirth": dateOfBirth,
       "Email": email,
-      if (nurseImage != null) "NurseImage": nurseImage else "NurseImage": "abcd"
+      if (nurseImage != null) "NurseImage": nurseImage else "NurseImage": ""
     };
 
     WebService.postAPICall(WebService.nurseUpdateProfile, params)

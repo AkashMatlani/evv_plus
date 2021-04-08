@@ -1,4 +1,4 @@
-package com.evv_plus
+package com.app.EVVPLUS
 
 import io.flutter.embedding.android.FlutterActivity
 

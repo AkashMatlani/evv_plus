@@ -210,7 +210,8 @@ class _CompletedNoteScreenState extends State<CompletedNoteScreen> {
   void submitDetails() {
     Utils.showLoader(true, context);
     List<String> tempDate = _signatureDateController.text.toString().split("/");
-    String formattedDate = tempDate[2]+"-"+tempDate[1]+"-"+tempDate[0];_nurseVisitViewModel.completeVisitNoteApiCall(visitId, nurseId, widget._scheduleDetailInfo.patientId.toString(),
+    String formattedDate = tempDate[0]+"/"+tempDate[1]+"/"+tempDate[2];
+    _nurseVisitViewModel.completeVisitNoteApiCall(visitId, nurseId, widget._scheduleDetailInfo.patientId.toString(),
         _clientNameController.text.toString(), _clinicianNameController.text.toString(),
         formattedDate, (isSuccess, message){
       Utils.showLoader(false, context);

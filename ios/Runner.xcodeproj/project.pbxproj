@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		183079DA261B3D3300379F2E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 183079D9261B3D3300379F2E /* Launch Screen.storyboard */; };
+		183079DC261B3DBA00379F2E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 183079DB261B3DBA00379F2E /* GoogleService-Info.plist */; };
 		185617A225FA4555005E6A70 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 185617A125FA4555005E6A70 /* Main.storyboard */; };
-		18C705AB26144F7B004046D2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18C705AA26144F7B004046D2 /* GoogleService-Info.plist */; };
 		18D1F2D325FA320300D42117 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D1F2C025FA311C00D42117 /* GeneratedPluginRegistrant.m */; };
 		18D1F2D425FA328300D42117 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D1F2BE25FA30A400D42117 /* AppDelegate.swift */; };
 		18D1F2D525FA32B400D42117 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18D1F2C225FA311C00D42117 /* Assets.xcassets */; };
@@ -30,8 +31,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		183079D9261B3D3300379F2E /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		183079DB261B3DBA00379F2E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		185617A125FA4555005E6A70 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		18C705AA26144F7B004046D2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		18D1F2BE25FA30A400D42117 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Runner/AppDelegate.swift; sourceTree = "<group>"; };
 		18D1F2BF25FA311B00D42117 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GeneratedPluginRegistrant.h; path = Runner/GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		18D1F2C025FA311C00D42117 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GeneratedPluginRegistrant.m; path = Runner/GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
@@ -104,7 +106,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
-				18C705AA26144F7B004046D2 /* GoogleService-Info.plist */,
+				183079DB261B3DBA00379F2E /* GoogleService-Info.plist */,
 				18D1F2BE25FA30A400D42117 /* AppDelegate.swift */,
 				18D1F2C225FA311C00D42117 /* Assets.xcassets */,
 				18D1F2BF25FA311B00D42117 /* GeneratedPluginRegistrant.h */,
@@ -112,6 +114,7 @@
 				18D1F2C125FA311C00D42117 /* Info.plist */,
 				18D1F2C325FA311C00D42117 /* Runner-Bridging-Header.h */,
 				185617A125FA4555005E6A70 /* Main.storyboard */,
+				183079D9261B3D3300379F2E /* Launch Screen.storyboard */,
 			);
 			name = Runner;
 			sourceTree = "<group>";
@@ -189,8 +192,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				185617A225FA4555005E6A70 /* Main.storyboard in Resources */,
-				18C705AB26144F7B004046D2 /* GoogleService-Info.plist in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
+				183079DC261B3DBA00379F2E /* GoogleService-Info.plist in Resources */,
+				183079DA261B3D3300379F2E /* Launch Screen.storyboard in Resources */,
 				18D1F2D525FA32B400D42117 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -353,9 +357,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = "";
+				CURRENT_PROJECT_VERSION = 1.1;
+				DEVELOPMENT_TEAM = KAUQZZDPVQ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -370,9 +375,10 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.EVVPLUS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = EVVPLUS_05_April_Appstore;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -494,8 +500,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = "";
+				CURRENT_PROJECT_VERSION = 1.1;
+				DEVELOPMENT_TEAM = KAUQZZDPVQ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -510,9 +516,10 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.EVVPLUS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = EVVPLUS_05_April_Dev;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -526,9 +533,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = "";
+				CURRENT_PROJECT_VERSION = 1.1;
+				DEVELOPMENT_TEAM = KAUQZZDPVQ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -543,9 +551,10 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.EVVPLUS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = EVVPLUS_05_April_Appstore;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
@@ -23,7 +22,6 @@ import '../GeneralUtils/ColorExtension.dart';
 import '../GeneralUtils/Constant.dart';
 import '../GeneralUtils/LabelStr.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -42,6 +40,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   double blockSizeHorizontal;
   double blockSizeVertical;
   AuthViewModel _nurseViewModel = AuthViewModel();
+
+  final int maxLength = 5;
   var email,
       addressLineOne,
       addressLineTwo,
@@ -61,12 +61,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String formattedStr;
   String apiDateString;
   File _image;
-  String stateName="", cityName="";
+  String stateName = "", cityName = "";
 
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 100), (){
+    Timer(Duration(milliseconds: 100), () {
       getNurseDetails(true);
     });
   }
@@ -92,78 +92,99 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Stack(
                       children: [
-                        SvgPicture.asset(MyImage.profileHeaderBgImage, fit: BoxFit.fill),
+                        SvgPicture.asset(MyImage.profileHeaderBgImage,
+                            fit: BoxFit.fill),
                         Container(
                             child: Column(
+                          children: [
+                            SizedBox(height: 50),
+                            Row(
                               children: [
-                                SizedBox(height: 50),
-                                Row(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Container(
-                                        child: Icon(Icons.arrow_back,
-                                            color: Colors.white),
-                                        margin: EdgeInsets.only(left: 10),
-                                      ),
-                                    ),
-                                    Expanded(
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          margin: EdgeInsets.only(right: 20),
-                                          child: Text(LabelStr.lblMyProfile,
-                                              style: AppTheme.boldSFTextStyle()
-                                                  .copyWith(
-                                                  fontSize: 24,
-                                                  color: Colors.white)),
-                                        ))
-                                  ],
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Container(
+                                    child: Icon(Icons.arrow_back,
+                                        color: Colors.white),
+                                    margin: EdgeInsets.only(left: 10),
+                                  ),
                                 ),
-                                SizedBox(height: 20),
-                                Container(
-                                  width: 100,
-                                  height: 100,
-                                  child: InkWell(
-                                    onTap: (){
-                                      _showPicker(context);
-                                      },
-                                    child: _image == null ? (Utils.nurseProfile.isEmpty ? defaultUserProfile() : ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(Utils.nurseProfile, fit: BoxFit.cover,
-                                          loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-                                            if (loadingProgress == null) return child;
-                                            return Container(height: 40, width: 40, alignment: Alignment.center, child: CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Colors.white)));
-                                          },
-                                        )
-                                    )) : ClipRRect(borderRadius: BorderRadius.circular(10), child: Image.file(
-                                      _image,
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                    )),
-                                  ) ,
-                                ),
-                                SizedBox(height: 10),
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
+                                Expanded(
+                                    child: Container(
                                   alignment: Alignment.center,
-                                  child: Text("${firstName + " " + lastName}",
-                                      style: AppTheme.boldSFTextStyle().copyWith(
-                                          fontSize: 24, color: Colors.white)),
-                                ),
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  alignment: Alignment.center,
-                                  child: Text("${stateName + ", " + cityName}",
-                                      style: AppTheme.regularSFTextStyle()
+                                  margin: EdgeInsets.only(right: 20),
+                                  child: Text(LabelStr.lblMyProfile,
+                                      style: AppTheme.boldSFTextStyle()
                                           .copyWith(
-                                          fontSize: 14,
-                                          color: Colors.white))
-                                ),
+                                              fontSize: 24,
+                                              color: Colors.white)),
+                                ))
                               ],
-                            ))
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              width: 100,
+                              height: 100,
+                              child: InkWell(
+                                onTap: () {
+                                  _showPicker(context);
+                                },
+                                child: _image == null
+                                    ? (Utils.nurseProfile.isEmpty
+                                        ? defaultUserProfile()
+                                        : ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Image.network(
+                                              Utils.nurseProfile,
+                                              fit: BoxFit.cover,
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent
+                                                          loadingProgress) {
+                                                if (loadingProgress == null)
+                                                  return child;
+                                                return Container(
+                                                    height: 40,
+                                                    width: 40,
+                                                    alignment: Alignment.center,
+                                                    child: CircularProgressIndicator(
+                                                        valueColor:
+                                                            new AlwaysStoppedAnimation<
+                                                                    Color>(
+                                                                Colors.white)));
+                                              },
+                                            )))
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.file(
+                                          _image,
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.cover,
+                                        )),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              alignment: Alignment.center,
+                              child: Text("${firstName + " " + lastName}",
+                                  style: AppTheme.boldSFTextStyle().copyWith(
+                                      fontSize: 24, color: Colors.white)),
+                            ),
+                            Container(
+                                width: MediaQuery.of(context).size.width,
+                                alignment: Alignment.center,
+                                child: Text("${stateName + ", " + cityName}",
+                                    style: AppTheme.regularSFTextStyle()
+                                        .copyWith(
+                                            fontSize: 14,
+                                            color: Colors.white))),
+                          ],
+                        ))
                       ],
                     ),
                     SizedBox(
@@ -277,7 +298,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               height: 5,
                             ),
                             Text(
-                              formatNumbersAsCode(phoneNumber),
+                              phoneNumber.toString().contains("-")?phoneNumber:formatNumbersAsCode(phoneNumber),
                               style: AppTheme.regularSFTextStyle().copyWith(
                                   fontSize: 16, color: Color(0xff868686)),
                             )
@@ -335,36 +356,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: HexColor("#D2D2D2"),
                                   style: BorderStyle.solid),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(5.0)),
+                                  BorderRadius.all(Radius.circular(5.0)),
                             ),
                           ),
                           width: MediaQuery.of(context).size.width,
                           height: 45,
-                          child:  stateList!=null && stateList.length > 0
-                        ? DropdownButton(
-                            underline: SizedBox(),
-                            isExpanded: true,
-                            items: stateList.map((item) {
-                              return  DropdownMenuItem(
-                                child: Text(item.stateName),
-                                value: item.stateId.toString(),
-                              );
-                            }).toList(),
-                            onChanged: (newVal) {
-                              setState(() {
-                                stateId = newVal;
-                                for (var i=0; i<stateList.length; i++){
-                                  if(stateId.compareTo(stateList[i].stateId.toString()) == 0){
-                                    stateName = stateList[i].stateName;
-                                  }
-                                }
-                                cityList.clear();
-                                cityId = "0";
-                                _getCityList(stateId);
-                              });
-                            },
-                            value: stateId,
-                          ):Container(),
+                          child: stateList != null && stateList.length > 0
+                              ? DropdownButton(
+                                  underline: SizedBox(),
+                                  isExpanded: true,
+                                  items: stateList.map((item) {
+                                    return DropdownMenuItem(
+                                      child: Text(item.stateName),
+                                      value: item.stateId.toString(),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newVal) {
+                                    setState(() {
+                                      stateId = newVal;
+                                      for (var i = 0;
+                                          i < stateList.length;
+                                          i++) {
+                                        if (stateId.compareTo(stateList[i]
+                                                .stateId
+                                                .toString()) ==
+                                            0) {
+                                          stateName = stateList[i].stateName;
+                                        }
+                                      }
+                                      cityList.clear();
+                                      cityId = "0";
+                                      _getCityList(stateId);
+                                    });
+                                  },
+                                  value: stateId,
+                                )
+                              : Container(),
                         ),
                       ),
                     ),
@@ -397,37 +424,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       color: HexColor("#D2D2D2"),
                                       style: BorderStyle.solid),
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0)),
+                                      BorderRadius.all(Radius.circular(5.0)),
                                 ),
                               ),
                               width: MediaQuery.of(context).size.width * 0.42,
                               height: 45,
-                              child: cityList!=null && cityList.length>0
+                              child: cityList != null && cityList.length > 0
                                   ? DropdownButton(
-                                underline: SizedBox(),
-                                isExpanded: true,
-                                items: cityList.map((item) {
-                                  return new DropdownMenuItem(
-                                    child: Text(item.cityName),
-                                    value: item.cityId.toString(),
-                                  );
-                                }).toList(),
-                                onChanged: (newVal) {
-                                  setState(() {
-                                    cityId = newVal;
-                                    for (var i=0; i<cityList.length; i++){
-                                      if(cityId.compareTo(cityList[i].cityId.toString()) == 0){
-                                        cityName = cityList[i].cityName;
-                                      }
-                                    }
-                                  });
-                                },
-                                value: cityId.compareTo("0") == 0 ? "Select City" : cityId,
-                              )
+                                      underline: SizedBox(),
+                                      isExpanded: true,
+                                      items: cityList.map((item) {
+                                        return new DropdownMenuItem(
+                                          child: Text(item.cityName),
+                                          value: item.cityId.toString(),
+                                        );
+                                      }).toList(),
+                                      onChanged: (newVal) {
+                                        setState(() {
+                                          cityId = newVal;
+                                          for (var i = 0;
+                                              i < cityList.length;
+                                              i++) {
+                                            if (cityId.compareTo(cityList[i]
+                                                    .cityId
+                                                    .toString()) ==
+                                                0) {
+                                              cityName = cityList[i].cityName;
+                                            }
+                                          }
+                                        });
+                                      },
+                                      value: cityId.compareTo("0") == 0
+                                          ? "Select City"
+                                          : cityId,
+                                    )
                                   : Center(
-                                  child: Container(
-                                    child: Text("Select city"),
-                                  )),
+                                      child: Container(
+                                      child: Text("Select city"),
+                                    )),
                             ),
                           ),
                         ),
@@ -436,10 +470,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               margin: EdgeInsets.fromLTRB(0, 5, 2, 0),
                               height: 65,
                               padding: EdgeInsets.fromLTRB(10, 5, 20, 0),
-                              child: textFieldFor(zipCode, _zipController,
-                                  autocorrect: false,
-                                  maxLength: 5,
-                                  keyboardType: TextInputType.number)),
+                              child: textFieldFor(
+                                zipCode,
+                                _zipController,
+                                inputFormatter: [
+                                  LengthLimitingTextInputFormatter(maxLength)
+                                ],
+                                keyboardType: TextInputType.number,
+                                maxLength: 5,
+                              )),
                         ),
                       ],
                     ),
@@ -448,12 +487,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: MediaQuery.of(context).size.width,
                         height: 65,
                         child: textFieldFor(
-                          formatNumbersAsCode(phoneNumber), _phoneController,
-                          keyboardType: TextInputType.number,
-                          maxLength: 10,
-                          inputFormatter: [MaskTextInputFormatter(mask: '###-###-####', filter: { "#": RegExp(r'[0-9]') })]
-                        )
-                    ),
+                            "123-456-7890", _phoneController,
+                            keyboardType: TextInputType.number,
+                            maxLength: 12,
+                            inputFormatter: [
+                              MaskTextInputFormatter(
+                                  mask: '###-###-####',
+                                  filter: {"#": RegExp(r'[0-9]')})
+                            ])),
                     Container(
                       margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
                       width: MediaQuery.of(context).size.width,
@@ -493,8 +534,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       tmp += number[i];
       ++groupDigits;
       if (groupDigits == 3) {
-        if(tmp.length > 8){
-          tmp+="";
+        if (tmp.length > 8) {
+          tmp += "";
         } else {
           tmp += "-";
         }
@@ -507,9 +548,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void validationForCollectClientSignature() {
     if (_addressLineOneController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterAddressLineOne, Colors.red);
-    } /*else if (_addressLineTwoController.text.isEmpty) {
+    }
+    /*else if (_addressLineTwoController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterAddressLineTwo, Colors.red);
-    }*/ else if (stateId == null || stateList.isEmpty) {
+    }*/
+    else if (stateId == null || stateList.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterState, Colors.red);
     } else if (cityId == null || cityList.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterCity, Colors.red);
@@ -517,8 +560,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ToastUtils.showToast(context, LabelStr.enterZip, Colors.red);
     } else if (_phoneController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterPhoneNumber, Colors.red);
-    }
-    else {
+    } else if (_phoneController.text.length !=12) {
+      ToastUtils.showToast(
+          context, LabelStr.enterProperPhoneNumber, Colors.red);
+    } else {
       Utils.showLoader(true, context);
       _nurseViewModel.getUpdateProfileAPICall(
           nurseId,
@@ -537,8 +582,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _img64, (isSuccess, message) {
         Utils.showLoader(false, context);
         if (isSuccess) {
-          ToastUtils.showToast(context, "Nurse profile updated successfully.", Colors.green);
-          Timer(Duration(seconds: 2),()=> Utils.navigateWithClearState(context, ScheduleScreen()));
+          ToastUtils.showToast(
+              context, "Nurse profile updated successfully.", Colors.green);
+          Timer(Duration(seconds: 2),
+              () => Utils.navigateWithClearState(context, ScheduleScreen()));
         } else {
           ToastUtils.showToast(context, message, Colors.red);
         }
@@ -576,8 +623,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         gender = prefs.getString(PrefUtils.Gender);
         Utils.nurseProfile = prefs.getString(PrefUtils.NurseImage);
         dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
-        formattedStr = Utils.convertDate(dateOfBirth.toString(), DateFormat("MM/dd/yy"));
-        apiDateString = Utils.convertDate(dateOfBirth.toString(), DateFormat("yyyy-MM-dd"));
+        formattedStr =
+            Utils.convertDate(dateOfBirth.toString(), DateFormat("MM/dd/yy"));
+        apiDateString =
+            Utils.convertDate(dateOfBirth.toString(), DateFormat("yyyy-MM-dd"));
         print("formattedStr" + apiDateString);
         stateId = prefs.getInt(PrefUtils.stateId).toString();
         cityId = prefs.getInt(PrefUtils.cityId).toString();
@@ -587,10 +636,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _addressLineOneController.text = addressLineOne;
         _addressLineTwoController.text = addressLineTwo;
         _zipController.text = zipCode;
-        _phoneController.text = formatNumbersAsCode(phoneNumber);
+        if (phoneNumber.toString().contains("-")) {
+          _phoneController.text = phoneNumber;
+        } else {
+          _phoneController.text = formatNumbersAsCode(phoneNumber);
+        }
       });
 
-      if(isLoadingFirst){
+      if (isLoadingFirst) {
         checkConnection().then((isConnected) {
           if (isConnected) {
             _getNurseProfileDetail(nurseId);
@@ -603,6 +656,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     });
   }
+
   void _getSateLIst() {
     Utils.showLoader(true, context);
     _nurseViewModel.getStateList((isSuccess, response) {
@@ -635,7 +689,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       } else {
         setState(() {
           cityList = [];
-          cityId="0";
+          cityId = "0";
         });
       }
     });
@@ -648,7 +702,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       _image = image;
       final bytes = _image.readAsBytesSync();
-       _img64 = base64Encode(bytes);
+      _img64 = base64Encode(bytes);
     });
   }
 
@@ -659,7 +713,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       _image = image;
       final bytes = _image.readAsBytesSync();
-       _img64 = base64Encode(bytes);
+      _img64 = base64Encode(bytes);
     });
   }
 

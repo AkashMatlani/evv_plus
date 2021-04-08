@@ -7,6 +7,53 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:973541682452:android:623df16d2874b23d192601",
+        "android_client_info": {
+          "package_name": "com.app.EVVPLUS"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "973541682452-o2flftn5560o5l5l1hgvgkt7e6fre5b4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.EVVPLUS",
+            "certificate_hash": "1e851e7f66f8876d99115699157577b9bbef4bbc"
+          }
+        },
+        {
+          "client_id": "973541682452-g5sf1kb3ct6o43164cfrtu9j6glqdv2c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKO8zSpu01yGjkJUX-aSQnDG3LmHER83U"
+        },
+        {
+          "current_key": "AIzaSyAzmRety96ZiIPw_iQyzpKqrAsk95l0fNg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "973541682452-g5sf1kb3ct6o43164cfrtu9j6glqdv2c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "973541682452-8p0ve1dg6smecvuj9g20l3k9pg7n4acg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.EVVPLUS"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:973541682452:android:137eb8b73a5b26c1192601",
         "android_client_info": {
           "package_name": "com.evv_plus"
@@ -20,6 +67,9 @@
       ],
       "api_key": [
         {
+          "current_key": "AIzaSyCKO8zSpu01yGjkJUX-aSQnDG3LmHER83U"
+        },
+        {
           "current_key": "AIzaSyAzmRety96ZiIPw_iQyzpKqrAsk95l0fNg"
         }
       ],
@@ -29,6 +79,13 @@
             {
               "client_id": "973541682452-g5sf1kb3ct6o43164cfrtu9j6glqdv2c.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "973541682452-8p0ve1dg6smecvuj9g20l3k9pg7n4acg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.EVVPLUS"
+              }
             }
           ]
         }

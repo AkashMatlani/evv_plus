@@ -15,6 +15,8 @@ class ScheduleViewModel{
 
   int pastDueVisitCount=0, upcommingVisitCount=0, completedVisitCount=0;
 
+  bool accountStatus=true;
+
   void getPastDueListAPICall(String nurseId, ResponseCallback callback) {
     var params = {"NurseId":nurseId};
     WebService.getAPICall(WebService.pastDueScheduleList, params).then((response) {
@@ -73,6 +75,7 @@ class ScheduleViewModel{
     var params = {"NurseId":nurseId};
     WebService.getAPICall(WebService.scheduleCount, params).then((response) {
       if (response.statusCode == 1) {
+        accountStatus=response.body["isAccountactive"];
         pastDueVisitCount = response.body["pastDueVisitCount"];
         upcommingVisitCount = response.body["upComingVisitCount"];
         completedVisitCount = response.body["completedVisitCount"];
