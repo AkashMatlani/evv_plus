@@ -27,7 +27,9 @@ import 'NotificationScreen.dart';
 import 'ProfileScreen.dart';
 import 'UpcommingScheduleScreen.dart';
 
+
 class ScheduleScreen extends StatefulWidget {
+
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
 }
@@ -38,9 +40,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   int activeTabIndex = 0;
   int _selectedIndex = 0;
 
-  String nurseName = "",
-      nurseEmailId = "",
-      nurseId = "";
+  String nurseName="", nurseEmailId="", nurseId = "";
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
 
@@ -123,28 +123,21 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
   @override
   Widget build(BuildContext context) {
-    var tabWidth = (MediaQuery
-        .of(context)
-        .size
-        .width - 80) / 3;
-    var tabHeight = MediaQuery
-        .of(context)
-        .size
-        .height * 0.1;
+    var tabWidth = (MediaQuery.of(context).size.width-80) / 3;
+    var tabHeight = MediaQuery.of(context).size.height * 0.1;
 
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 100,
         title: Container(
           alignment: Alignment.center,
-          child: Text(LabelStr.lblSchedule,
-              style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
+          child: Text(LabelStr.lblSchedule, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 22)),
         ),
         backgroundColor: Colors.white10,
         elevation: 0.0,
         actions: [
           InkWell(
-            onTap: () {
+            onTap: (){
               Utils.navigateToScreen(context, NotificationScreen());
             },
             child: Stack(
@@ -152,29 +145,24 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 Center(
                   child: IconButton(
                     padding: EdgeInsets.only(right: 7),
-                    icon: SvgPicture.asset(MyImage.ic_notification,
-                        height: 30, width: 30),
+                    icon: SvgPicture.asset(MyImage.ic_notification, height: 30, width: 30),
                     onPressed: () {
                       Utils.navigateToScreen(context, NotificationScreen());
                     },
                   ),
                 ),
-                Utils.notificationCount == 0
-                    ? Container()
-                    : Positioned(
+                Utils.notificationCount == 0 ? Container() : Positioned(
                   right: 7,
-                  top: 35,
+                  top: 30,
                   child: Container(
-                    height: 25,
-                    width: 25,
+                    height: 22,
+                    width: 22,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
                       color: Colors.red,
                       shape: BoxShape.circle,
                     ),
-                    child: Text(Utils.notificationCount.toString(),
-                        style: AppTheme.regularSFTextStyle()
-                            .copyWith(fontSize: 8, color: Colors.white)),
+                    child: Text(Utils.notificationCount.toString(), style: AppTheme.regularSFTextStyle().copyWith(fontSize: 8, color: Colors.white)),
                   ),
                 )
               ],
@@ -184,13 +172,11 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: SvgPicture.asset(MyImage.ic_drawer),
+                icon: SvgPicture.asset(MyImage.ic_drawer),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
-              tooltip: MaterialLocalizations
-                  .of(context)
-                  .openAppDrawerTooltip,
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             );
           },
         ),
@@ -202,10 +188,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             bottomLeft: Radius.zero,
             bottomRight: Radius.zero),
         child: Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width * 0.88,
+          width: MediaQuery.of(context).size.width*0.88,
           child: Drawer(
             child: ListView(
               shrinkWrap: true,
@@ -296,11 +279,13 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                       itemCount: _menuNameList.length,
                       itemBuilder: (context, position) {
                         return _listRowItems(context, position);
-                      }),
+                      }
+                  ),
                 ),
                 InkWell(
-                  onTap: () {
+                  onTap: (){
                     Utils.showLoader(true, context);
+                    imageCache.clear();
                     PrefUtils.clearPref();
                     Timer(Duration(seconds: 1), () {
                       Utils.showLoader(false, context);
@@ -318,6 +303,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                       children: [
                         SvgPicture.asset(
                           MyImage.logout_icon,
+                          color: Colors.black45,
                         ),
                         SizedBox(width: 15),
                         Container(
@@ -346,50 +332,27 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                       width: tabWidth,
                       height: tabHeight,
                       child: activeTabIndex == 0
-                          ? _columnSelected(
-                          "Past Due(" + Utils.pastDueCount.toString() + ")",
-                          Colors.blue,
-                          false)
+                          ? _columnSelected("Past Due("+Utils.pastDueCount.toString()+")", Colors.blue, false)
                           : _columnSelected(
-                          "Past Due(" + Utils.pastDueCount.toString() + ")",
-                          HexColor("#969696"),
-                          true)),
+                          "Past Due("+Utils.pastDueCount.toString()+")", HexColor("#969696"), true)),
                 ),
                 Tab(
                   child: Container(
                       width: tabWidth,
                       height: tabHeight,
                       child: activeTabIndex == 1
-                          ? _columnSelected(
-                          "Upcoming(" +
-                              Utils.upcommingCountCount.toString() +
-                              ")",
-                          Colors.blue,
-                          false)
+                          ? _columnSelected("Upcoming("+Utils.upcommingCountCount.toString()+")", Colors.blue, false)
                           : _columnSelected(
-                          "Upcoming(" +
-                              Utils.upcommingCountCount.toString() +
-                              ")",
-                          HexColor("#969696"),
-                          true)),
+                          "Upcoming("+Utils.upcommingCountCount.toString()+")", HexColor("#969696"), true)),
                 ),
                 Tab(
                   child: Container(
                       width: tabWidth,
                       height: tabHeight,
                       child: activeTabIndex == 2
-                          ? _columnSelected(
-                          "Completed(" +
-                              Utils.completedCount.toString() +
-                              ")",
-                          Colors.blue,
-                          false)
+                          ? _columnSelected("Completed("+Utils.completedCount.toString()+")", Colors.blue, false)
                           : _columnSelected(
-                          "Completed(" +
-                              Utils.completedCount.toString() +
-                              ")",
-                          HexColor("#969696"),
-                          true)),
+                          "Completed("+Utils.completedCount.toString()+")", HexColor("#969696"), true)),
                 ),
               ],
               controller: _tabController,
@@ -418,18 +381,15 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          child: Text(tabName,
-              style: AppTheme.semiBoldSFTextStyle()
-                  .copyWith(color: color, fontSize: 15)),
+          child: Text(tabName, style: AppTheme.semiBoldSFTextStyle().copyWith(color: color, fontSize: 15)),
         ),
         flag
             ? Expanded(child: Container(height: 7))
-            : Expanded(
-            child: Container(
-              height: 7,
-              width: 7,
-              child: SvgPicture.asset(MyImage.ic_fill_circle),
-            ))
+            : Expanded(child: Container(
+          height: 7,
+          width: 7,
+          child: SvgPicture.asset(MyImage.ic_fill_circle),
+        ))
       ],
     );
   }
@@ -441,14 +401,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         _onSelected(position);
       },
       child: Container(
-        margin: EdgeInsets.only(
-            left: 15,
-            top: 5,
-            bottom: 5,
-            right: MediaQuery
-                .of(context)
-                .size
-                .width * 0.28),
+        margin: EdgeInsets.only(left: 15, top: 5, bottom: 5, right: MediaQuery.of(context).size.width*0.28),
         padding: EdgeInsets.all(10),
         decoration: _selectedIndex == position
             ? BoxDecoration(
@@ -490,9 +443,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     _scheduleViewModel.getScheduleCountAPICall(nurseId, (isSuccess, response) {
       if (isSuccess) {
         if (!_scheduleViewModel.accountStatus) {
-          ToastUtils.showToast(context,
-              "Your account is deactivated, please contact with administrator",
-              Colors.red);
+          ToastUtils.showToast(context, "Your account is deactivated, please contact with administrator", Colors.red);
+          imageCache.clear();
           PrefUtils.clearPref();
           Timer(
               Duration(seconds: 2),
@@ -514,24 +466,17 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       }
     });
 
-    _firebaseMessaging.getToken().then((token) {
-      if (token.isNotEmpty) {
+    _firebaseMessaging.getToken().then((token){
+      if(token.isNotEmpty) {
         updateDeviceTokenApi(token);
-      } else {
-        ToastUtils.showToast(context, "Token not found", Colors.red);
+      } else{
+        ToastUtils.showToast(context, "Token not found", Colors.blue);
       }
     });
   }
 
   void updateDeviceTokenApi(String token) {
-    _scheduleViewModel.updateDeviceTokenAPICall(nurseId, token,
-            (isSuccess, message) {
-          if (isSuccess) {
-            ToastUtils.showToast(context, "Device registerd", Colors.green);
-          } else {
-            ToastUtils.showToast(context, "Device not registerd", Colors.red);
-          }
-        });
+    _scheduleViewModel.updateDeviceTokenAPICall(nurseId, token, (isSuccess, message){});
   }
 
   _getNotifiationCount() {

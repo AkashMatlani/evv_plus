@@ -561,8 +561,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } else if (_phoneController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterPhoneNumber, Colors.red);
     } else if (_phoneController.text.length !=12) {
-      ToastUtils.showToast(
-          context, LabelStr.enterProperPhoneNumber, Colors.red);
+      ToastUtils.showToast(context, LabelStr.enterValidPhoneNumber, Colors.red);
     } else {
       Utils.showLoader(true, context);
       _nurseViewModel.getUpdateProfileAPICall(

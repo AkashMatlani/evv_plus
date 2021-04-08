@@ -30,6 +30,11 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
   bool isLoading = true;
   var searchController = TextEditingController();
 
+  double screenWidth;
+  double screenHeight;
+  double blockSizeHorizontal;
+  double blockSizeVertical;
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +59,12 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    screenWidth = MediaQuery.of(context).size.width;
+    screenHeight = MediaQuery.of(context).size.height;
+    blockSizeHorizontal = screenWidth / 100;
+    blockSizeVertical = screenHeight / 100;
+
     return Scaffold(
       body: _pastVisitList.length == 0
           ? emptyListView()
@@ -124,14 +135,14 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
             ),
           ),
           SizedBox(height: 10),
-          ListView.builder(
+          _filterList.length != 0 ? ListView.builder(
             primary: false,
             shrinkWrap: true,
             itemCount: _filterList.length,
             itemBuilder: (context, position) {
               return listRowItems(context, position);
             },
-          )
+          ) : Container(child: emptyListView(), height: blockSizeVertical*65, width: blockSizeHorizontal*60)
         ],
       )),
     );
