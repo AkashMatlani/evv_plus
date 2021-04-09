@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/FirebaseNotificationHandler.dart';

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CarePlanDetailsScreen.dart';
@@ -34,10 +36,18 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
   double screenHeight;
   double blockSizeHorizontal;
   double blockSizeVertical;
+  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
+  GlobalKey<LiquidPullToRefreshState>();
 
+  static int refreshNum = 2; // number that changes when refreshed
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  ScrollController _scrollController;
+  Stream<int> counterStream =
+  Stream<int>.periodic(Duration(seconds: 3), (x) => refreshNum);
   @override
   void initState() {
     super.initState();
+    _scrollController = new ScrollController();
     SharedPreferences.getInstance().then((prefs) async {
       PrefUtils.getNurseDataFromPref();
       String nurseId = prefs.getInt(PrefUtils.nurseId).toString();
@@ -46,6 +56,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
         () {
           checkConnection().then((isConnected) {
             if (isConnected) {
+              Utils.showLoader(false, context);
               _getPastDueList(nurseId);
             } else {
               ToastUtils.showToast(
@@ -59,16 +70,42 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    screenWidth = MediaQuery.of(context).size.width;
-    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     blockSizeHorizontal = screenWidth / 100;
     blockSizeVertical = screenHeight / 100;
 
-    return Scaffold(
+     return Scaffold(
+      key: _scaffoldKey,
       body: _pastVisitList.length == 0
           ? emptyListView()
-          : SingleChildScrollView(child: Column(
+          :  LiquidPullToRefresh(
+          key: _refreshIndicatorKey,	// key if you want to add
+          onRefresh: _handleRefresh,
+          showChildOpacityTransition: false,
+          child: StreamBuilder<int>(
+            stream: counterStream,
+            builder: (context, snapshot) {
+              return ListView.builder(
+                  controller: _scrollController,
+                  primary: false,
+                  shrinkWrap: true,
+                  itemCount: _filterList.length,
+                  itemBuilder: (context, position) {
+                    return listRowItems(context, position);
+                  });},
+          ))
+    );}
+
+
+
+   /* return Scaffold(body:     SingleChildScrollView(child: Column(
         children: [
           Container(
             height: 50,
@@ -135,17 +172,61 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
             ),
           ),
           SizedBox(height: 10),
-          _filterList.length != 0 ? ListView.builder(
-            primary: false,
-            shrinkWrap: true,
-            itemCount: _filterList.length,
-            itemBuilder: (context, position) {
-              return listRowItems(context, position);
-            },
-          ) : Container(child: emptyListView(), height: blockSizeVertical*65, width: blockSizeHorizontal*60)
+          _filterList.length != 0 ?
+
+          LiquidPullToRefresh(
+              key: _refreshIndicatorKey, // key if you want to add
+              onRefresh: _handleRefresh,
+              showChildOpacityTransition: false,
+              child: StreamBuilder<int>(
+                stream: counterStream,
+                builder: (context, snapshot) {
+                  return ListView.builder(
+                      controller: _scrollController,
+                      primary: false,
+                      shrinkWrap: true,
+                      itemCount: _filterList.length,
+                      itemBuilder: (context, position) {
+                        return listRowItems(context, position);
+                      });
+                },
+              )) : Container(child: emptyListView(),
+              height: blockSizeVertical * 65,
+              width: blockSizeHorizontal * 60)
         ],
-      )),
-    );
+      )));}*/
+
+
+
+  Future<void> _handleRefresh() {
+    final Completer<void> completer = Completer<void>();
+    Timer(const Duration(seconds: 3), () {
+      completer.complete();
+      SharedPreferences.getInstance().then((prefs) async {
+        PrefUtils.getNurseDataFromPref();
+        String nurseId = prefs.getInt(PrefUtils.nurseId).toString();
+        checkConnection().then((isConnected) {
+          if (isConnected) {
+            _getPastDueList(nurseId);
+          } else {
+            ToastUtils.showToast(
+                context, LabelStr.connectionError, Colors.red);
+          }
+        });
+      });
+    });
+    setState(() {
+      refreshNum = new Random().nextInt(100);
+    });
+    return completer.future.then<void>((_) {
+      _scaffoldKey.currentState?.showSnackBar(SnackBar(
+          content: const Text('Refresh complete'),
+          action: SnackBarAction(
+              label: 'RETRY',
+              onPressed: () {
+                _refreshIndicatorKey.currentState.show();
+              })));
+    });
   }
 
   emptyListView() {
