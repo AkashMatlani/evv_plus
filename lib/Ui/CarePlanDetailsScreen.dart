@@ -143,7 +143,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                   child: Container(
                                     alignment: Alignment.center,
                                     margin: EdgeInsets.only(right: 20),
-                                    child: Text(widget._scheduleDetailInfo.carePlanName, style: AppTheme.mediumSFTextStyle().copyWith(fontSize:22, color: Colors.white)),
+                                    child: Text(widget._scheduleDetailInfo.carePlanName != null ? widget._scheduleDetailInfo.carePlanName : "", style: AppTheme.mediumSFTextStyle().copyWith(fontSize:22, color: Colors.white)),
                                   )
                               )
                             ],

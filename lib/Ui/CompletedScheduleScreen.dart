@@ -198,7 +198,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
                   )
               ),
               SizedBox(width: 10),
-              Container(
+              _filterList[position].carePlanName!=null?Container(
                 height: MediaQuery.of(context).size.height*0.09,
                 padding: EdgeInsets.all(5),
                 alignment: Alignment.topRight,
@@ -214,7 +214,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
                     Text(_filterList[position].carePlanName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 14, color: HexColor("#2ab554")))
                   ],
                 ),
-              )
+              ):Container()
             ],
           ),
         ),

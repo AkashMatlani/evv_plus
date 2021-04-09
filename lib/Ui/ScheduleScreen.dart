@@ -17,6 +17,7 @@ import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:evv_plus/Ui/PastDueScheduleScreen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -155,8 +156,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                   right: 7,
                   top: 30,
                   child: Container(
-                    height: 22,
-                    width: 22,
+                    height: 23,
+                    width: 23,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
                       color: Colors.red,
@@ -360,6 +361,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             Expanded(
               child: Container(
                 child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
                   controller: _tabController,
                   children: <Widget>[
                     PastDueScheduleScreen(),
