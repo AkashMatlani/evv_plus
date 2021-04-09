@@ -581,10 +581,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _img64, (isSuccess, message) {
         Utils.showLoader(false, context);
         if (isSuccess) {
-          ToastUtils.showToast(
-              context, "Nurse profile updated successfully.", Colors.green);
-          Timer(Duration(seconds: 2),
-              () => Utils.navigateWithClearState(context, ScheduleScreen()));
+          ToastUtils.showToast(context, "Nurse profile updated successfully.", Colors.green);
+          Timer(Duration(seconds: 2), () {
+            imageCache.clear();
+            Utils.navigateWithClearState(context, ScheduleScreen());
+          });
         } else {
           ToastUtils.showToast(context, message, Colors.red);
         }
@@ -606,7 +607,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void getNurseDetails(bool isLoadingFirst) {
-    imageCache.clear();
     SharedPreferences.getInstance().then((prefs) async {
       PrefUtils.getNurseDataFromPref();
       setState(() {

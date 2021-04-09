@@ -8,6 +8,7 @@ import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
+import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -38,6 +39,7 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
     Timer(Duration(milliseconds: 100), () async {
       nurseId = await PrefUtils.getValueFor(PrefUtils.nurseId);
       currentPwd = await PrefUtils.getValueFor(PrefUtils.password);
+      print("curent Pwd => $currentPwd");
     });
   }
 
@@ -157,7 +159,13 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
         ToastUtils.showToast(context, message, Colors.green);
         Timer(
           Duration(seconds: 2), (){
-          Utils.navigateReplaceToScreen(context, ScheduleScreen());
+            if(widget.title.compareTo(LabelStr.lblChangePwd) == 0){
+              PrefUtils.clearPref();
+              imageCache.clear();
+              Utils.navigateWithClearState(context, LoginScreen());
+            } else {
+              Utils.navigateReplaceToScreen(context, ScheduleScreen());
+            }
         });
       } else {
         ToastUtils.showToast(context, message, Colors.red);

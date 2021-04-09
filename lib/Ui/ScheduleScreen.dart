@@ -16,6 +16,7 @@ import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:evv_plus/Ui/PastDueScheduleScreen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -84,7 +85,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   @override
   void initState() {
     super.initState();
-    imageCache.clear();
     notificationHandler = FirebaseNotificationHandler(context);
     notificationHandler.fireBaseInitialization((data) {
       print("Notification Data :: " + data);
@@ -154,8 +154,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                   right: 7,
                   top: 30,
                   child: Container(
-                    height: 22,
-                    width: 22,
+                    height: 23,
+                    width: 23,
                     alignment: Alignment.center,
                     decoration: new BoxDecoration(
                       color: Colors.red,
@@ -284,8 +284,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 InkWell(
                   onTap: (){
                     Utils.showLoader(true, context);
-                    imageCache.clear();
                     PrefUtils.clearPref();
+                    imageCache.clear();
                     Timer(Duration(seconds: 1), () {
                       Utils.showLoader(false, context);
                       Utils.navigateWithClearState(context, LoginScreen());
@@ -359,6 +359,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             Expanded(
               child: Container(
                 child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
                   controller: _tabController,
                   children: <Widget>[
                     PastDueScheduleScreen(),
@@ -443,8 +444,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       if (isSuccess) {
         if (!_scheduleViewModel.accountStatus) {
           ToastUtils.showToast(context, "Your account is deactivated, please contact with administrator", Colors.red);
-          imageCache.clear();
           PrefUtils.clearPref();
+          imageCache.clear();
           Timer(
               Duration(seconds: 2),
                   () => Utils.navigateWithClearState(context, LoginScreen()));
