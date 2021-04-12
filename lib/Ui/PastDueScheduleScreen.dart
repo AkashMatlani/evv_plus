@@ -56,7 +56,6 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
         () {
           checkConnection().then((isConnected) {
             if (isConnected) {
-              Utils.showLoader(false, context);
               _getPastDueList(nurseId);
             } else {
               ToastUtils.showToast(
@@ -83,7 +82,94 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
 
      return Scaffold(
       key: _scaffoldKey,
-      body: _pastVisitList.length == 0
+      body:  LiquidPullToRefresh(
+          key: _refreshIndicatorKey, // key if you want to add
+          onRefresh: _handleRefresh,
+          showChildOpacityTransition: false,child:SingleChildScrollView(child: Column(
+        children: [
+          Container(
+            height: 50,
+            alignment: Alignment.centerLeft,
+            margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: HexColor("#eaeff2")),
+            child: Stack(
+              children: [
+                Container(
+                    padding: EdgeInsets.only(left: 10, right: 50),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Search patient name/care plan",
+                      ),
+                      keyboardType: TextInputType.text,
+                      controller: searchController,
+                      onChanged: (value) {
+                        setState(() {
+                          if (value.isEmpty) {
+                            _filterList = [];
+                            _filterList = _pastVisitList;
+                          }
+                        });
+                      },
+                    )),
+                Positioned(
+                  child: InkWell(
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      String filterKey = searchController.text.toString();
+                      if (filterKey.isNotEmpty) {
+                        _filterList = [];
+                        for (var i = 0; i < _pastVisitList.length; i++) {
+                          String name = _pastVisitList[i].firstName +
+                              " " +
+                              _pastVisitList[i].lastName;
+                          if (name.contains(filterKey) ||
+                              _pastVisitList[i]
+                                  .carePlanName
+                                  .contains(filterKey)) {
+                            _filterList.add(_pastVisitList[i]);
+                          }
+                        }
+                      } else {
+                        _filterList = [];
+                        _filterList = _pastVisitList;
+                      }
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(5),
+                      child: SvgPicture.asset(MyImage.ic_search),
+                    ),
+                  ),
+                  right: 5,
+                  top: 10,
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 10),
+          _filterList.length != 0 ?
+                   ListView.builder(
+                      controller: _scrollController,
+                      primary: false,
+                      shrinkWrap: true,
+                      itemCount: _filterList.length,
+                      itemBuilder: (context, position) {
+                        return listRowItems(context, position);
+                      })
+
+               : Container(child: emptyListView(),
+              height: blockSizeVertical * 65,
+              width: blockSizeHorizontal * 60)
+        ],
+      ))));
+
+}
+    /*  _pastVisitList.length == 0
           ? emptyListView()
           :  LiquidPullToRefresh(
           key: _refreshIndicatorKey,	// key if you want to add
@@ -101,7 +187,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
                     return listRowItems(context, position);
                   });},
           ))
-    );}
+    );}*/
 
 
 
@@ -216,6 +302,7 @@ class _PastDueScheduleScreenState extends State<PastDueScheduleScreen> {
       });
     });
     setState(() {
+      completer.complete();
       refreshNum = new Random().nextInt(100);
     });
     return completer.future.then<void>((_) {

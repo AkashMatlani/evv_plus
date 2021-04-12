@@ -14,6 +14,7 @@ import 'package:evv_plus/Ui/ChangePwdScreen.dart';
 import 'package:evv_plus/Ui/IncidentFormScreen.dart';
 import 'package:evv_plus/Ui/LoginScreen.dart';
 import 'package:evv_plus/Ui/PastDueScheduleScreen.dart';
+import 'package:evv_plus/Ui/UpcomingSchuduleScreenOne.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -359,11 +360,11 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             Expanded(
               child: Container(
                 child: TabBarView(
-                  physics: NeverScrollableScrollPhysics(),
+                 // physics: NeverScrollableScrollPhysics(),
                   controller: _tabController,
                   children: <Widget>[
                     PastDueScheduleScreen(),
-                    UpcommingScheduleScreen(),
+                    UpcomingScuduleScreenOne(),
                     CompletedScheduleScreen(),
                   ],
                 ),
