@@ -211,7 +211,7 @@ class NurseVisitViewModel{
       "PatientId": patientId,
     };
 
-    WebService.multiPartAPI(WebService.uploadIncidentForm, params, filePath).then((response) {
+    WebService.multiPartAPI(WebService.uploadIncidentForm, params, "file", filePath).then((response) {
       if (response.statusCode == 1) {
         callback(true, response.message);
       } else {

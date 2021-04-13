@@ -111,7 +111,7 @@ class WebService {
     return completer.future;
   }
 
-  static Future<ServerResponse> multiPartAPI(String apiName, Map<String, String> params, String filePath) async {
+  static Future<ServerResponse> multiPartAPI(String apiName, Map<String, String> params, String imageKey, String filePath) async {
     var url = baseUrl + apiName;
     var postUri = Uri.parse(url);
 
@@ -120,7 +120,7 @@ class WebService {
     var request = new MultipartRequest("POST", postUri);
     params.forEach((key, value) => {request.fields[key] = value});
     if (filePath != null) {
-      var multiPart = await http.MultipartFile.fromPath("file", filePath);
+      var multiPart = await http.MultipartFile.fromPath(imageKey, filePath);
       request.files.add(multiPart);
     }
 

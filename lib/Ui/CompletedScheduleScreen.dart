@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
@@ -16,8 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class CompletedScheduleScreen extends StatefulWidget {
 
@@ -26,41 +23,38 @@ class CompletedScheduleScreen extends StatefulWidget {
 }
 
 class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
+
   ScheduleViewModel _scheduleViewModel = ScheduleViewModel();
   List<ScheduleInfoResponse> _completedVisitList = [];
   List<ScheduleInfoResponse> _filterList = [];
   bool isLoading = true;
   var searchController = TextEditingController();
+  int nurseId;
   double screenWidth;
   double screenHeight;
   double blockSizeHorizontal;
   double blockSizeVertical;
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
 
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((prefs) async {
-      PrefUtils.getNurseDataFromPref();
-      String nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-      Timer(
-        Duration(milliseconds: 100), (){
-        checkConnection().then((isConnected) {
-          if(isConnected){
-            _getCompletedList(nurseId);
-          } else {
-            ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
-          }
-        });
-      },
-      );
+    _getNurseId();
+  }
+
+  _getNurseId() async {
+    nurseId = await PrefUtils.getValueFor(PrefUtils.nurseId);
+    checkConnection().then((isConnected) {
+      if (isConnected) {
+        _getCompletedList(nurseId.toString());
+      } else {
+        ToastUtils.showToast(
+            context, LabelStr.connectionError, Colors.red);
+      }
     });
   }
 
-  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
-  GlobalKey<LiquidPullToRefreshState>();
-
-  static int refreshNum = 2; // number that changes when refreshed
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
@@ -68,10 +62,9 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
     blockSizeHorizontal = screenWidth / 100;
     blockSizeVertical = screenHeight / 100;
     return Scaffold(
-      body: LiquidPullToRefresh(
-        key: _refreshIndicatorKey, // key if you want to add
-        onRefresh: _handleRefresh,
-        showChildOpacityTransition: false,child:_completedVisitList.length == 0 ? emptyListView() : SingleChildScrollView(child: Column(
+      body: _completedVisitList.length == 0
+          ? emptyListView()
+          : RefreshIndicator(child: SingleChildScrollView(child: Column(
         children: [
           Container(
             height: 50,
@@ -135,6 +128,7 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
           ),
           SizedBox(height: 10),
           _filterList.length != 0 ? ListView.builder(
+            physics: AlwaysScrollableScrollPhysics(),
             primary: false,
             shrinkWrap: true,
             itemCount: _filterList.length,
@@ -143,8 +137,8 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
             },
           ) : Container(child: emptyListView(), height: blockSizeVertical*65, width: blockSizeHorizontal*60)
         ],
-      ))
-    ));
+      ), physics: AlwaysScrollableScrollPhysics()), key: _refreshIndicatorKey, onRefresh: _handleRefresh)
+    );
   }
 
   emptyListView() {
@@ -256,35 +250,19 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
     super.dispose();
   }
 
-  Future<void> _handleRefresh() {
-    final Completer<void> completer = Completer<void>();
-    Timer(const Duration(seconds: 3), () {
-      completer.complete();
-      SharedPreferences.getInstance().then((prefs) async {
-        PrefUtils.getNurseDataFromPref();
-        String nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-        checkConnection().then((isConnected) {
-          if (isConnected) {
-            _getCompletedList(nurseId);
-          } else {
-            ToastUtils.showToast(
-                context, LabelStr.connectionError, Colors.red);
-          }
-        });
-      });
+  Future<Null> _handleRefresh() async {
+    _refreshIndicatorKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 2));
+
+    checkConnection().then((isConnected) {
+      if (isConnected) {
+        _getCompletedList(nurseId.toString());
+        searchController.text = "";
+      } else {
+        ToastUtils.showToast(
+            context, LabelStr.connectionError, Colors.red);
+      }
     });
-    setState(() {
-      completer.complete();
-      refreshNum = new Random().nextInt(100);
-    });
-    return completer.future.then<void>((_) {
-      _scaffoldKey.currentState?.showSnackBar(SnackBar(
-          content: const Text('Refresh complete'),
-          action: SnackBarAction(
-              label: 'RETRY',
-              onPressed: () {
-                _refreshIndicatorKey.currentState.show();
-              })));
-    });
+    return null;
   }
 }

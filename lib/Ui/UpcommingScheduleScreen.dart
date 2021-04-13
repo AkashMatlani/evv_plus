@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
@@ -15,10 +13,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'CarePlanDetailsScreen.dart';
+
 
 class UpcommingScheduleScreen extends StatefulWidget {
 
@@ -34,131 +30,33 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
   bool isLoading = true;
   var searchController = TextEditingController();
 
+  int nurseId;
   double screenWidth;
   double screenHeight;
   double blockSizeHorizontal;
   double blockSizeVertical;
-  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
-  GlobalKey<LiquidPullToRefreshState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
-  static int refreshNum = 2; // number that changes when refreshed
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  ScrollController _scrollController;
-  Stream<int> counterStream =
-  Stream<int>.periodic(Duration(seconds: 3), (x) => refreshNum);
 
   @override
   void initState() {
     super.initState();
-    _scrollController = new ScrollController();
-    SharedPreferences.getInstance().then((prefs) async {
-      PrefUtils.getNurseDataFromPref();
-      String nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-      Timer(
-        Duration(milliseconds: 100), (){
-              checkConnection().then((isConnected) {
-                if(isConnected){
-                  _getUpCommingList(nurseId);
-                } else {
-                  ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
-                }
-              });
-        },
-      );
+    _getNurseId();
+  }
+
+  _getNurseId() async {
+    nurseId = await PrefUtils.getValueFor(PrefUtils.nurseId);
+    checkConnection().then((isConnected) {
+      if (isConnected) {
+        _getUpCommingList(nurseId.toString());
+      } else {
+        ToastUtils.showToast(
+            context, LabelStr.connectionError, Colors.red);
+      }
     });
   }
 
-/*  @override
-  Widget build(BuildContext context) {
-
-    screenWidth = MediaQuery.of(context).size.width;
-    screenHeight = MediaQuery.of(context).size.height;
-    blockSizeHorizontal = screenWidth / 100;
-    blockSizeVertical = screenHeight / 100;
-
-    return Scaffold(
-        key: _scaffoldKey,
-      body:  LiquidPullToRefresh(
-        key: _refreshIndicatorKey, // key if you want to add
-        onRefresh: _handleRefresh,
-        showChildOpacityTransition: false,child: SingleChildScrollView(child:Column(
-        children: [
-          Container(
-            height: 50,
-            alignment: Alignment.centerLeft,
-            margin: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: HexColor("#eaeff2")),
-            child: Stack(
-              children: [
-                Container(
-                    padding: EdgeInsets.only(left: 10, right: 50),
-                    child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Search patient name/care plan",
-                        ),
-                        keyboardType: TextInputType.text,
-                        controller: searchController,
-                        onChanged: (value){
-                          setState(() {
-                            if(value.isEmpty){
-                              _filterList = [];
-                              _filterList = _upcommingVisitList;
-                            }
-                          });
-                        }
-                    )
-                ),
-                Positioned(
-                  child: InkWell(
-                    onTap: (){
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      String filterKey = searchController.text.toString();
-                      if(filterKey.isNotEmpty){
-                        _filterList = [];
-                        for(var i=0; i< _upcommingVisitList.length; i++){
-                          String name = _upcommingVisitList[i].firstName+" "+_upcommingVisitList[i].lastName;
-                          if(name.contains(filterKey) || _upcommingVisitList[i].carePlanName.contains(filterKey)){
-                            _filterList.add(_upcommingVisitList[i]);
-                          }
-                        }
-                      } else {
-                        _filterList = [];
-                        _filterList = _upcommingVisitList;
-                      }
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(5),
-                      child: SvgPicture.asset(MyImage.ic_search),
-                    ),
-                  ),
-                  right: 5,
-                  top: 10,
-                )
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-          _filterList.length != 0 ? ListView.builder(
-            primary: false,
-            shrinkWrap: true,
-            itemCount: _filterList.length,
-            itemBuilder: (context, position) {
-              return listRowItems(context, position);
-            },
-          ) : Container(child: emptyListView(), height: blockSizeVertical*65, width: blockSizeHorizontal*60)
-        ],
-      ))
-    ));
-  }*/
-
-
- /* @override
+  @override
   Widget build(BuildContext context) {
     screenWidth = MediaQuery
         .of(context)
@@ -171,14 +69,9 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
     blockSizeHorizontal = screenWidth / 100;
     blockSizeVertical = screenHeight / 100;
     return Scaffold(
-        key: _scaffoldKey,
-        body:  LiquidPullToRefresh(
-            key: _refreshIndicatorKey, // key if you want to add
-            onRefresh: _handleRefresh,
-            showChildOpacityTransition: false,
-            child:
-            SingleChildScrollView(child:
-            Column(
+        body: _upcommingVisitList.length == 0
+            ? emptyListView()
+            : RefreshIndicator(child:SingleChildScrollView(child: Column(
           children: [
             Container(
               height: 50,
@@ -192,32 +85,36 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
                   Container(
                       padding: EdgeInsets.only(left: 10, right: 50),
                       child: TextField(
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Search patient name/care plan",
-                          ),
-                          keyboardType: TextInputType.text,
-                          controller: searchController,
-                          onChanged: (value){
-                            setState(() {
-                              if(value.isEmpty){
-                                _filterList = [];
-                                _filterList = _upcommingVisitList;
-                              }
-                            });
-                          }
-                      )
-                  ),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Search patient name/care plan",
+                        ),
+                        keyboardType: TextInputType.text,
+                        controller: searchController,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value.isEmpty) {
+                              _filterList = [];
+                              _filterList = _upcommingVisitList;
+                            }
+                          });
+                        },
+                      )),
                   Positioned(
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         String filterKey = searchController.text.toString();
-                        if(filterKey.isNotEmpty){
+                        if (filterKey.isNotEmpty) {
                           _filterList = [];
-                          for(var i=0; i< _upcommingVisitList.length; i++){
-                            String name = _upcommingVisitList[i].firstName+" "+_upcommingVisitList[i].lastName;
-                            if(name.contains(filterKey) || _upcommingVisitList[i].carePlanName.contains(filterKey)){
+                          for (var i = 0; i < _upcommingVisitList.length; i++) {
+                            String name = _upcommingVisitList[i].firstName +
+                                " " +
+                                _upcommingVisitList[i].lastName;
+                            if (name.contains(filterKey) ||
+                                _upcommingVisitList[i]
+                                    .carePlanName
+                                    .contains(filterKey)) {
                               _filterList.add(_upcommingVisitList[i]);
                             }
                           }
@@ -243,7 +140,6 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
             SizedBox(height: 10),
             _filterList.length != 0 ?
             ListView.builder(
-                controller: _scrollController,
                 primary: false,
                 shrinkWrap: true,
                 itemCount: _filterList.length,
@@ -255,9 +151,10 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
                 height: blockSizeVertical * 65,
                 width: blockSizeHorizontal * 60)
           ],
-        ))));
+        ), physics: AlwaysScrollableScrollPhysics()), key: _refreshIndicatorKey, onRefresh: _handleRefresh)
+    );
+  }
 
-  }*/
   emptyListView() {
     return Container(
       alignment: Alignment.center,
@@ -370,138 +267,19 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
     super.dispose();
   }
 
-  Future<void> _handleRefresh() {
-    final Completer<void> completer = Completer<void>();
-    Timer(const Duration(seconds: 3), () {
-      completer.complete();
-      SharedPreferences.getInstance().then((prefs) async {
-        PrefUtils.getNurseDataFromPref();
-        String nurseId = prefs.getInt(PrefUtils.nurseId).toString();
-        checkConnection().then((isConnected) {
-          if (isConnected) {
-            _getUpCommingList(nurseId);
-          } else {
-            ToastUtils.showToast(
-                context, LabelStr.connectionError, Colors.red);
-          }
-        });
-      });
+  Future<Null> _handleRefresh() async {
+    _refreshIndicatorKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 2));
+
+    checkConnection().then((isConnected) {
+      if (isConnected) {
+        _getUpCommingList(nurseId.toString());
+        searchController.text = "";
+      } else {
+        ToastUtils.showToast(
+            context, LabelStr.connectionError, Colors.red);
+      }
     });
-    setState(() {
-      completer.complete();
-      refreshNum = new Random().nextInt(100);
-    });
-    return completer.future.then<void>((_) {
-      _scaffoldKey.currentState?.showSnackBar(SnackBar(
-          content: const Text('Refresh complete'),
-          action: SnackBarAction(
-              label: 'RETRY',
-              onPressed: () {
-                _refreshIndicatorKey.currentState.show();
-              })));
-    });
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    blockSizeHorizontal = screenWidth / 100;
-    blockSizeVertical = screenHeight / 100;
-    return Scaffold(
-        key: _scaffoldKey,
-        body:  LiquidPullToRefresh(
-            key: _refreshIndicatorKey, // key if you want to add
-            onRefresh: _handleRefresh,
-            showChildOpacityTransition: false,child:SingleChildScrollView(child: Column(
-          children: [
-            Container(
-              height: 50,
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: HexColor("#eaeff2")),
-              child: Stack(
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(left: 10, right: 50),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Search patient name/care plan",
-                        ),
-                        keyboardType: TextInputType.text,
-                        controller: searchController,
-                        onChanged: (value) {
-                          setState(() {
-                            if (value.isEmpty) {
-                              _filterList = [];
-                              _filterList = _upcommingVisitList;
-                            }
-                          });
-                        },
-                      )),
-                  Positioned(
-                    child: InkWell(
-                      onTap: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        String filterKey = searchController.text.toString();
-                        if (filterKey.isNotEmpty) {
-                          _filterList = [];
-                          for (var i = 0; i < _upcommingVisitList.length; i++) {
-                            String name = _upcommingVisitList[i].firstName +
-                                " " +
-                                _upcommingVisitList[i].lastName;
-                            if (name.contains(filterKey) ||
-                                _upcommingVisitList[i]
-                                    .carePlanName
-                                    .contains(filterKey)) {
-                              _filterList.add(_upcommingVisitList[i]);
-                            }
-                          }
-                        } else {
-                          _filterList = [];
-                          _filterList = _upcommingVisitList;
-                        }
-                      },
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(5),
-                        child: SvgPicture.asset(MyImage.ic_search),
-                      ),
-                    ),
-                    right: 5,
-                    top: 10,
-                  )
-                ],
-              ),
-            ),
-            SizedBox(height: 10),
-            _filterList.length != 0 ?
-            ListView.builder(
-                controller: _scrollController,
-                primary: false,
-                shrinkWrap: true,
-                itemCount: _filterList.length,
-                itemBuilder: (context, position) {
-                  return listRowItems(context, position);
-                })
-
-                : Container(child: emptyListView(),
-                height: blockSizeVertical * 65,
-                width: blockSizeHorizontal * 60)
-          ],
-        ))));
-
+    return null;
   }
 }

@@ -168,23 +168,22 @@ class AuthViewModel {
     var params = {
       "NurseId": nurseId,
       "Address1": addressOne,
-      if(addressTwo!=null)
+      if(addressTwo!=null && addressTwo.isNotEmpty)
       "Address2": addressTwo,
       "ZipCode": zipCode,
       "FKcityID": city,
       "FKstateID": state,
       "PhoneNumber": phoneNumber,
       "FirstName": firstName,
+      if(middleName!=null && middleName.isNotEmpty)
       "MiddleName": middleName,
       "LastName": lastName,
       "Gender": gender,
       "DateOfBirth": dateOfBirth,
-      "Email": email,
-      if (nurseImage != null) "NurseImage": nurseImage else "NurseImage": ""
+      "Email": email
     };
 
-    WebService.postAPICall(WebService.nurseUpdateProfile, params)
-        .then((response) {
+    WebService.multiPartAPI(WebService.nurseUpdateProfile, params, "nurseImage", nurseImage).then((response) {
       if (response.statusCode == 1) {
         if (response.body != null) {
           PrefUtils.setStringValue(PrefUtils.NurseImage, response.body["nurseImage"]);

@@ -21,6 +21,7 @@ class ScheduleViewModel{
     var params = {"NurseId":nurseId};
     WebService.getAPICall(WebService.pastDueScheduleList, params).then((response) {
       if (response.statusCode == 1) {
+        pastDueScheduleList = [];
         pastDueVisitCount = response.count;
         for (var data in response.body) {
           pastDueScheduleList.add(ScheduleInfoResponse.fromJson(data));
@@ -39,6 +40,7 @@ class ScheduleViewModel{
     var params = {"NurseId":nurseId};
     WebService.getAPICall(WebService.upcommingScheduleList, params).then((response) {
       if (response.statusCode == 1) {
+        upCommingScheduleList = [];
         upcommingVisitCount = response.count;
         for (var data in response.body) {
           upCommingScheduleList.add(ScheduleInfoResponse.fromJson(data));
@@ -57,6 +59,7 @@ class ScheduleViewModel{
     var params = {"NurseId":nurseId};
     WebService.getAPICall(WebService.completeScheduleList, params).then((response) {
       if (response.statusCode == 1) {
+        completedScheduleList = [];
         completedVisitCount = response.count;
         for (var data in response.body) {
           completedScheduleList.add(ScheduleInfoResponse.fromJson(data));

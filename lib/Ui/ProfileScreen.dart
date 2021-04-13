@@ -22,6 +22,7 @@ import '../GeneralUtils/ColorExtension.dart';
 import '../GeneralUtils/Constant.dart';
 import '../GeneralUtils/LabelStr.dart';
 
+
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -32,7 +33,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   var _addressLineTwoController = TextEditingController();
   var _zipController = TextEditingController();
   var _phoneController = TextEditingController();
-  String _img64;
   final Widget svg = new SvgPicture.asset(MyImage.profileHeaderBgImage);
   MediaQueryData _mediaQueryData;
   double screenWidth;
@@ -549,15 +549,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (_addressLineOneController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterAddressLineOne, Colors.red);
     }
-    /*else if (_addressLineTwoController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterAddressLineTwo, Colors.red);
-    }*/
     else if (stateId == null || stateList.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterState, Colors.red);
     } else if (cityId == null || cityList.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterCity, Colors.red);
     } else if (_zipController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterZip, Colors.red);
+    } else if (_zipController.text.isNotEmpty && _zipController.text.length != 5) {
+      ToastUtils.showToast(context, LabelStr.enterValidZip, Colors.red);
     } else if (_phoneController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterPhoneNumber, Colors.red);
     } else if (_phoneController.text.length !=12) {
@@ -578,7 +577,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           gender,
           apiDateString,
           email,
-          _img64, (isSuccess, message) {
+          _image != null ? _image.path : null, (isSuccess, message) {
         Utils.showLoader(false, context);
         if (isSuccess) {
           ToastUtils.showToast(context, "Nurse profile updated successfully.", Colors.green);
@@ -700,8 +699,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     setState(() {
       _image = image;
-      final bytes = _image.readAsBytesSync();
-      _img64 = base64Encode(bytes);
+      //final bytes = _image.readAsBytesSync();
+      //_img64 = base64Encode(bytes);
     });
   }
 
@@ -711,8 +710,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     setState(() {
       _image = image;
-      final bytes = _image.readAsBytesSync();
-      _img64 = base64Encode(bytes);
+      //final bytes = _image.readAsBytesSync();
+      //_img64 = base64Encode(bytes);
     });
   }
 
