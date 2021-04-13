@@ -30,20 +30,17 @@ class _UpcomingScuduleScreenOneState extends State<UpcomingScuduleScreenOne> {
   List<ScheduleInfoResponse> _filterList = [];
   bool isLoading = true;
   var searchController = TextEditingController();
-
   double screenWidth;
   double screenHeight;
   double blockSizeHorizontal;
   double blockSizeVertical;
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
   GlobalKey<LiquidPullToRefreshState>();
-
   static int refreshNum = 2; // number that changes when refreshed
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   ScrollController _scrollController;
   Stream<int> counterStream =
   Stream<int>.periodic(Duration(seconds: 3), (x) => refreshNum);
-
   List<ScheduleInfoResponse> _pastVisitList = [];
   @override
   void initState() {
@@ -104,10 +101,10 @@ class _UpcomingScuduleScreenOneState extends State<UpcomingScuduleScreenOne> {
     blockSizeVertical = screenHeight / 100;
     return Scaffold(
         key: _scaffoldKey,
-        body:  LiquidPullToRefresh(
+        body:  RefreshIndicator(
             key: _refreshIndicatorKey, // key if you want to add
             onRefresh: _handleRefresh,
-            showChildOpacityTransition: false,child:SingleChildScrollView(child: Column(
+           child:SingleChildScrollView(child: Column(
           children: [
             Container(
               height: 50,
@@ -176,6 +173,7 @@ class _UpcomingScuduleScreenOneState extends State<UpcomingScuduleScreenOne> {
             SizedBox(height: 10),
             _filterList.length != 0 ?
             ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
                 controller: _scrollController,
                 primary: false,
                 shrinkWrap: true,
@@ -201,8 +199,8 @@ class _UpcomingScuduleScreenOneState extends State<UpcomingScuduleScreenOne> {
         String nurseId = prefs.getInt(PrefUtils.nurseId).toString();
         checkConnection().then((isConnected) {
           if (isConnected) {
-            _getPastDueList(nurseId,context);
-            //_getUpCommingList(nurseId);
+            //_getPastDueList(nurseId,context);
+            _getUpCommingList(nurseId);
           } else {
             ToastUtils.showToast(
                 context, LabelStr.connectionError, Colors.red);
