@@ -13,10 +13,10 @@ import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-
+import 'dart:io' as io;
 
 class CarePlanPdfScreen extends StatefulWidget {
 
@@ -179,11 +179,23 @@ class _CarePlanPdfScreenState extends State<CarePlanPdfScreen> {
     var bytes = await consolidateHttpClientResponseBytes(response);
     var status = await Permission.storage.status;
     if (status.isGranted) {
-      String path = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
-      File file = new File('$path/$filename');
-      ToastUtils.showToast(context, "Your file save at "+file.toString()+" location", Colors.green);
-      await file.writeAsBytes(bytes);
-      return file;
+      if (io.Platform.isIOS) {
+        io.Directory appDocDirectory;
+        appDocDirectory = await getApplicationDocumentsDirectory();
+        Directory directory= await new Directory(appDocDirectory.path+'/'+'Download').create(recursive: true);
+        String path=directory.path.toString();
+        File file = new File('$path/$filename');
+        ToastUtils.showToast(context, "Your file save at "+file.toString()+" location", Colors.green);
+        await file.writeAsBytes(bytes);
+        return file;
+      }
+      else{
+        String path = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
+        File file = new File('$path/$filename');
+        ToastUtils.showToast(context, "Your file save at "+file.toString()+" location", Colors.green);
+        await file.writeAsBytes(bytes);
+        return file;
+      }
     } else {
       Map<Permission, PermissionStatus> status = await [
         Permission.storage,
