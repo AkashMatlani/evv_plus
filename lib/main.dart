@@ -1,10 +1,17 @@
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/Models/ScheduleCountModel.dart';
 import 'package:evv_plus/Ui/SplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ScheduleCountModel("Past Due(0)", "Upcoming(0)", "Completed(0)"),
+      child: MyApp()
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {

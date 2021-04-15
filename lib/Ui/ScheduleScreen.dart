@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:evv_plus/GeneralUtils/ColorExtension.dart';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/FirebaseNotificationHandler.dart';
@@ -7,6 +6,7 @@ import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
+import 'package:evv_plus/Models/ScheduleCountModel.dart';
 import 'package:evv_plus/Models/NurseVisitViewModel.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/AboutUsScreen.dart';
@@ -18,8 +18,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../GeneralUtils/Utils.dart';
 import 'CompletedScheduleScreen.dart';
 import 'NotificationScreen.dart';
@@ -33,8 +33,7 @@ class ScheduleScreen extends StatefulWidget {
   _ScheduleScreenState createState() => _ScheduleScreenState();
 }
 
-class _ScheduleScreenState extends State<ScheduleScreen>
-    with SingleTickerProviderStateMixin {
+class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProviderStateMixin {
   TabController _tabController;
   int activeTabIndex = 0;
   int _selectedIndex = 0;
@@ -69,15 +68,35 @@ class _ScheduleScreenState extends State<ScheduleScreen>
     if (index == 0) {
       Utils.navigateToScreen(context, ScheduleScreen());
     } else if (index == 1) {
-      Utils.navigateToScreen(context, IncidentFormScreen());
+      Utils.navigateToScreen(context, IncidentFormScreen()).then((value){
+        setState(() {
+          _selectedIndex = int.parse(value);
+        });
+      });;
     } else if (index == 2) {
-      Utils.navigateToScreen(context, NotificationScreen());
+      Utils.navigateToScreen(context, NotificationScreen()).then((value){
+        setState(() {
+          _selectedIndex = int.parse(value);
+        });
+      });;
     } else if (index == 3) {
-      Utils.navigateToScreen(context, ProfileScreen());
+      Utils.navigateToScreen(context, ProfileScreen()).then((value){
+        setState(() {
+          _selectedIndex = int.parse(value);
+        });
+      });;
     } else if (index == 4) {
-      Utils.navigateToScreen(context, ChangePwdScreen(LabelStr.lblChangePwd));
+      Utils.navigateToScreen(context, ChangePwdScreen(LabelStr.lblChangePwd)).then((value){
+        setState(() {
+          _selectedIndex = int.parse(value);
+        });
+      });
     } else if (index == 5) {
-      Utils.navigateToScreen(context, AboutUsScreen());
+      Utils.navigateToScreen(context, AboutUsScreen()).then((value){
+        setState(() {
+          _selectedIndex = int.parse(value);
+        });
+      });
     }
   }
 
@@ -121,6 +140,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
   @override
   Widget build(BuildContext context) {
+
     var tabWidth = (MediaQuery.of(context).size.width-80) / 3;
     var tabHeight = MediaQuery.of(context).size.height * 0.1;
 
@@ -330,27 +350,33 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                       width: tabWidth,
                       height: tabHeight,
                       child: activeTabIndex == 0
-                          ? _columnSelected("Past Due("+Utils.pastDueCount.toString()+")", Colors.blue, false)
+                          /*? _columnSelected("Past Due("+Utils.pastDueCount.toString()+")", Colors.blue, false)
                           : _columnSelected(
-                          "Past Due("+Utils.pastDueCount.toString()+")", HexColor("#969696"), true)),
+                          "Past Due("+Utils.pastDueCount.toString()+")", HexColor("#969696"), true)*/
+                          ? _columnSelected(Provider.of<ScheduleCountModel>(context).tabTitle1, Colors.blue, false)
+                          : _columnSelected(Provider.of<ScheduleCountModel>(context).tabTitle1, HexColor("#969696"), true)),
                 ),
                 Tab(
                   child: Container(
                       width: tabWidth,
                       height: tabHeight,
                       child: activeTabIndex == 1
-                          ? _columnSelected("Upcoming("+Utils.upcommingCountCount.toString()+")", Colors.blue, false)
+                          /*? _columnSelected("Upcoming("+Utils.upcommingCountCount.toString()+")", Colors.blue, false)
                           : _columnSelected(
-                          "Upcoming("+Utils.upcommingCountCount.toString()+")", HexColor("#969696"), true)),
+                          "Upcoming("+Utils.upcommingCountCount.toString()+")", HexColor("#969696"), true)*/
+                          ? _columnSelected(Provider.of<ScheduleCountModel>(context).tabTitle2, Colors.blue, false)
+                          : _columnSelected(Provider.of<ScheduleCountModel>(context).tabTitle2, HexColor("#969696"), true)),
                 ),
                 Tab(
                   child: Container(
                       width: tabWidth,
                       height: tabHeight,
                       child: activeTabIndex == 2
-                          ? _columnSelected("Completed("+Utils.completedCount.toString()+")", Colors.blue, false)
+                          /*? _columnSelected("Completed("+Utils.completedCount.toString()+")", Colors.blue, false)
                           : _columnSelected(
-                          "Completed("+Utils.completedCount.toString()+")", HexColor("#969696"), true)),
+                          "Completed("+Utils.completedCount.toString()+")", HexColor("#969696"), true)*/
+                          ? _columnSelected(Provider.of<ScheduleCountModel>(context).tabTitle3, Colors.blue, false)
+                          : _columnSelected(Provider.of<ScheduleCountModel>(context).tabTitle3, HexColor("#969696"), true)),
                 ),
               ],
               controller: _tabController,
@@ -463,6 +489,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
           Utils.completedCount = 0;
         });
       }
+
+      ScheduleCountModel model = ScheduleCountModel(
+          "Past Due("+Utils.pastDueCount.toString()+")",
+          "Upcoming("+Utils.upcommingCountCount.toString()+")",
+          "Completed("+Utils.completedCount.toString()+")");
+      Provider.of<ScheduleCountModel>(context, listen: false).updateCount(model);
     });
 
     _firebaseMessaging.getToken().then((token){

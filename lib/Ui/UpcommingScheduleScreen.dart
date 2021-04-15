@@ -7,12 +7,14 @@ import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/ScheduleCountModel.dart';
 import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'CarePlanDetailsScreen.dart';
 
 
@@ -256,8 +258,15 @@ class _UpcommingScheduleScreenState extends State<UpcommingScheduleScreen> {
         setState(() {
           _upcommingVisitList = [];
           _filterList=[];
+          Utils.upcommingCountCount =_upcommingVisitList.length;
         });
       }
+
+      ScheduleCountModel model = ScheduleCountModel(
+          "Past Due("+Utils.pastDueCount.toString()+")",
+          "Upcoming("+Utils.upcommingCountCount.toString()+")",
+          "Completed("+Utils.completedCount.toString()+")");
+      Provider.of<ScheduleCountModel>(context, listen: false).updateCount(model);
     });
   }
 

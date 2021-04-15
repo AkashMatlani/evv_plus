@@ -51,6 +51,7 @@ dependencies:
   flutter_local_notifications: ^1.4.4+2
   cached_network_image: ^2.5.1
   location: ^3.0.0
+  provider: ^5.0.0
 
   flutter_document_picker: ^3.0.1
   mask_text_input_formatter: ^1.2.1

@@ -73,6 +73,7 @@ class LabelStr {
   static const digitalSignatureError = "Please provide digital signature";
   static const voiceError = "Please record your signature";
   static const recordFirst = "Please record first";
+  static const recordRunningError = "Please wait until recording is not finished";
   static const serverError = "Server not responding, Try again";
   static const emptyFieldError = "Please fill required details";
   static const lblclientSignature = "Client Signature";

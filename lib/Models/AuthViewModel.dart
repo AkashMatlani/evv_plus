@@ -154,8 +154,8 @@ class AuthViewModel {
       String addressOne,
       String addressTwo,
       String zipCode,
-      String city,
-      String state,
+      String cityId,
+      String stateId,
       String phoneNumber,
       String firstName,
       String middleName,
@@ -171,8 +171,8 @@ class AuthViewModel {
       if(addressTwo!=null && addressTwo.isNotEmpty)
       "Address2": addressTwo,
       "ZipCode": zipCode,
-      "FKcityID": city,
-      "FKstateID": state,
+      "FKcityID": cityId,
+      "FKstateID": stateId,
       "PhoneNumber": phoneNumber,
       "FirstName": firstName,
       if(middleName!=null && middleName.isNotEmpty)

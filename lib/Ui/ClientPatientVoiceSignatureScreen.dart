@@ -160,7 +160,7 @@ class _ClientPatientVoiceSignatureScreenState
                         height: 10,
                       ),
                       Text(
-                          "${_recording?.duration?.inSeconds.toString() + " Sec"}",
+                          "${_recording?.duration?.inSeconds.toString().isEmpty ? "0" :_recording?.duration?.inSeconds.toString()  + " Sec"}",
                           style: AppTheme.boldSFTextStyle().copyWith(
                             fontSize: 26,
                             color: HexColor("#3d3d3d"),
@@ -182,9 +182,8 @@ class _ClientPatientVoiceSignatureScreenState
                       GestureDetector(
                         onTap: () {
                           if (_recording?.duration?.inSeconds == 0) {
-                            ToastUtils.showToast(
-                                context, LabelStr.recordFirst, Colors.red);
-                          } else {
+                            ToastUtils.showToast(context, LabelStr.recordFirst, Colors.red);
+                          } else if (_recording?.status == RecordingStatus.Stopped) {
                             setState(() {
                               if (!issongplaying) {
                                 audioPlayer.play(_recording.path);

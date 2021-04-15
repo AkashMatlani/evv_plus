@@ -1,3 +1,4 @@
+import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -40,6 +41,13 @@ class Utils {
         context, MaterialPageRoute(builder: (context) => screen));
     return value;
   }
+
+  /*static Future<dynamic> navigateWithReloadScreen(BuildContext context, Widget screen) async {
+    var value = await Navigator.push(context, MaterialPageRoute<String>(builder: (context) => screen)).then((String data){
+      ToastUtils.showToast(context, "Pop with "+data, Colors.indigo);
+    });
+    return value;
+  }*/
 
   static navigateReplaceToScreen(BuildContext context, Widget screen) {
     Navigator.pushReplacement(

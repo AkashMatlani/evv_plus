@@ -44,183 +44,188 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 100,
-        elevation: 0.0,
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-        centerTitle: true,
-        title: Container(
-          alignment: Alignment.center,
-          margin: EdgeInsets.only(right: 30),
-          child: Text(
-            LabelStr.lblIncidentForm,
-            style: AppTheme.boldSFTextStyle()
-                .copyWith(fontSize: 26, color: Colors.black),
+    return WillPopScope(
+      onWillPop: (){
+        Navigator.of(context).pop('0');
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 100,
+          elevation: 0.0,
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
+          centerTitle: true,
+          title: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(right: 30),
+            child: Text(
+              LabelStr.lblIncidentForm,
+              style: AppTheme.boldSFTextStyle()
+                  .copyWith(fontSize: 26, color: Colors.black),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              Navigator.of(context).pop('0');
+            },
           ),
         ),
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 1,
-            color: HexColor("#efefef"),
-          ),
-          SizedBox(height: 5),
-          Container(
-            margin: EdgeInsets.all(10),
-            alignment: Alignment.centerLeft,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: HexColor("#eaeff2")),
-            child: Stack(
-              children: [
-                Container(
-                  height: 50,
-                  alignment: Alignment.centerLeft,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: HexColor("#eaeff2")),
-                  child: Stack(
-                    children: [
-                      Container(
-                          padding: EdgeInsets.only(left: 10, right: 50),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: LabelStr.lblSearchPatient,
-                            ),
-                            keyboardType: TextInputType.text,
-                            controller: _searchController,
-                            onChanged: (value){
-                              if(value.length == 0){
-                                setState(() {
-                                  patientName = "";
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 1,
+              color: HexColor("#efefef"),
+            ),
+            SizedBox(height: 5),
+            Container(
+              margin: EdgeInsets.all(10),
+              alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: HexColor("#eaeff2")),
+              child: Stack(
+                children: [
+                  Container(
+                    height: 50,
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: HexColor("#eaeff2")),
+                    child: Stack(
+                      children: [
+                        Container(
+                            padding: EdgeInsets.only(left: 10, right: 50),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: LabelStr.lblSearchPatient,
+                              ),
+                              keyboardType: TextInputType.text,
+                              controller: _searchController,
+                              onChanged: (value){
+                                if(value.length == 0){
+                                  setState(() {
+                                    patientName = "";
+                                  });
+                                }
+                              },
+                            )),
+                        Positioned(
+                          child: InkWell(
+                            onTap: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              if(_searchController.text.trim().toString().isNotEmpty){
+                                checkConnection().then((isConnected) {
+                                  if(isConnected){
+                                    _getFilterItemList(context, _searchController.text.toString());
+                                  } else {
+                                    ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
+                                  }
                                 });
                               }
                             },
-                          )),
-                      Positioned(
-                        child: InkWell(
-                          onTap: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                            if(_searchController.text.trim().toString().isNotEmpty){
-                              checkConnection().then((isConnected) {
-                                if(isConnected){
-                                  _getFilterItemList(context, _searchController.text.toString());
-                                } else {
-                                  ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
-                                }
-                              });
-                            }
-                          },
-                          child: Container(
-                            height: 30,
-                            width: 30,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.all(5),
-                            child: SvgPicture.asset(MyImage.ic_search),
+                            child: Container(
+                              height: 30,
+                              width: 30,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(5),
+                              child: SvgPicture.asset(MyImage.ic_search),
+                            ),
                           ),
+                          right: 5,
+                          top: 10,
                         ),
-                        right: 5,
-                        top: 10,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: _filterList.length == 0 ? Container() : _searchListView(),
-                )
-              ],
-            ),
-          ),
-          patientName.compareTo("")==0?Container():Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(30),
-                  alignment: Alignment.center,
-                  child: Text(patientName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 25)),
-                ),
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child:Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 140,
-                          height: 40,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [HexColor("#1785e9"), HexColor("#83cff2")]),
-                              borderRadius: BorderRadius.all(Radius.circular(5))),
-                          child: TextButton(
-                            child: Text(LabelStr.lblBrowseFile,
-                                style: AppTheme.boldSFTextStyle()
-                                    .copyWith(fontSize: 18, color: Colors.white)),
-                            onPressed: () {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              uploadPDFFromStorage();
-                            },
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text(fileName, style: AppTheme.regularSFTextStyle()),
-                        )
                       ],
                     ),
                   ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [HexColor("#1785e9"), HexColor("#83cff2")]),
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: TextButton(
-                    child: Text(LabelStr.lblSubmit,
-                        style: AppTheme.boldSFTextStyle()
-                            .copyWith(fontSize: 18, color: Colors.white)),
-                    onPressed: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      checkConnection().then((isConnected) {
-                        if (isConnected) {
-                          if(fileName.isNotEmpty){
-                            uploadIncidentForm();
-                          } else{
-                            ToastUtils.showToast(context, LabelStr.selectFileError, Colors.red);
-                          }
-                        } else {
-                          ToastUtils.showToast(context,
-                              LabelStr.connectionError, Colors.red);
-                        }
-                      });
-                    },
-                  ),
-                )
-              ],
+                  Container(
+                    child: _filterList.length == 0 ? Container() : _searchListView(),
+                  )
+                ],
+              ),
             ),
-          )
-        ],
+            patientName.compareTo("")==0?Container():Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(30),
+                    alignment: Alignment.center,
+                    child: Text(patientName, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 25)),
+                  ),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child:Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 140,
+                            height: 40,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    colors: [HexColor("#1785e9"), HexColor("#83cff2")]),
+                                borderRadius: BorderRadius.all(Radius.circular(5))),
+                            child: TextButton(
+                              child: Text(LabelStr.lblBrowseFile,
+                                  style: AppTheme.boldSFTextStyle()
+                                      .copyWith(fontSize: 18, color: Colors.white)),
+                              onPressed: () {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                uploadPDFFromStorage();
+                              },
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: Text(fileName, style: AppTheme.regularSFTextStyle()),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    margin: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [HexColor("#1785e9"), HexColor("#83cff2")]),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: TextButton(
+                      child: Text(LabelStr.lblSubmit,
+                          style: AppTheme.boldSFTextStyle()
+                              .copyWith(fontSize: 18, color: Colors.white)),
+                      onPressed: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        checkConnection().then((isConnected) {
+                          if (isConnected) {
+                            if(fileName.isNotEmpty){
+                              uploadIncidentForm();
+                            } else{
+                              ToastUtils.showToast(context, LabelStr.selectFileError, Colors.red);
+                            }
+                          } else {
+                            ToastUtils.showToast(context,
+                                LabelStr.connectionError, Colors.red);
+                          }
+                        });
+                      },
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

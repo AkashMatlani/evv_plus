@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:evv_plus/GeneralUtils/LabelStr.dart';
+import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
@@ -310,8 +311,9 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
           Utils.isPatientVoiceCompleted=false;
           Utils.isPatientSignCompleted=false;
           Utils.unableToSignReason=false;
-          _showDialog(context);
         });
+        PrefUtils.setIntValue(PrefUtils.visitId, 0);
+        _showDialog(context);
       } else {
         ToastUtils.showToast(context, message, Colors.red);
       }

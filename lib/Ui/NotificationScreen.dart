@@ -35,105 +35,110 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 100,
-          elevation: 0.0,
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-          centerTitle: true,
-          title: Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(right: 30),
-            child: Text(
-              LabelStr.lblNotification,
-              style: AppTheme.boldSFTextStyle()
-                  .copyWith(fontSize: 26, color: Colors.black),
+    return WillPopScope(
+      onWillPop: (){
+        Navigator.of(context).pop('0');
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 100,
+            elevation: 0.0,
+            iconTheme: IconThemeData(
+              color: Colors.black, //change your color here
             ),
-          ),
-          backgroundColor: Colors.white,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-        ),
-        body: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 1,
-              color: HexColor("#efefef"),
-            ),
-            _notificationList.length == 0 ? emptyListView() : Expanded(
-              child: Container(
-                color: Colors.white,
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                child: ListView.separated(
-                  itemCount: _notificationList.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                              child: Text(
-                                _notificationList[index].notificationMessage,
-                                style: AppTheme.semiBoldSFTextStyle().copyWith(
-                                    fontSize: 16, color: HexColor("#3d3d3d")),
-                              )
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                  padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                  child: Text(
-                                    Utils.convertDate(_notificationList[index].visitDate, DateFormat("MM/dd/yy")),
-                                    style: AppTheme.mediumSFTextStyle()
-                                        .copyWith(
-                                        fontSize: 12,
-                                        color: HexColor("#838383")),
-                                  )),
-                              Container(
-                                height: 7,
-                                width: 7,
-                                margin: EdgeInsets.only(top: 13,left: 5),
-                                child: SvgPicture.asset(MyImage.ic_fill_circle, color: HexColor("#228de9")),
-                              ),
-                              Container(
-                                  padding: EdgeInsets.fromLTRB(5, 15, 0, 0),
-                                  child: Text(
-                                    Utils.convertTime(_notificationList[index].fromTime.substring(0, 5)),
-                                    style: AppTheme.mediumSFTextStyle()
-                                        .copyWith(
-                                        fontSize: 12,
-                                        color: HexColor("#838383")),
-                                  )),
-                            ],
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Divider(
-                        height: 1,
-                        thickness: 1,
-                      ),
-                    );
-                  },
-                ),
+            centerTitle: true,
+            title: Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(right: 30),
+              child: Text(
+                LabelStr.lblNotification,
+                style: AppTheme.boldSFTextStyle()
+                    .copyWith(fontSize: 26, color: Colors.black),
               ),
             ),
-          ],
-        )
+            backgroundColor: Colors.white,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  Navigator.of(context).pop('0');
+                },
+              ),
+          ),
+          body: Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 1,
+                color: HexColor("#efefef"),
+              ),
+              _notificationList.length == 0 ? emptyListView() : Expanded(
+                child: Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: ListView.separated(
+                    itemCount: _notificationList.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                                child: Text(
+                                  _notificationList[index].notificationMessage,
+                                  style: AppTheme.semiBoldSFTextStyle().copyWith(
+                                      fontSize: 16, color: HexColor("#3d3d3d")),
+                                )
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                    padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                    child: Text(
+                                      Utils.convertDate(_notificationList[index].visitDate, DateFormat("MM/dd/yy")),
+                                      style: AppTheme.mediumSFTextStyle()
+                                          .copyWith(
+                                          fontSize: 12,
+                                          color: HexColor("#838383")),
+                                    )),
+                                Container(
+                                  height: 7,
+                                  width: 7,
+                                  margin: EdgeInsets.only(top: 13,left: 5),
+                                  child: SvgPicture.asset(MyImage.ic_fill_circle, color: HexColor("#228de9")),
+                                ),
+                                Container(
+                                    padding: EdgeInsets.fromLTRB(5, 15, 0, 0),
+                                    child: Text(
+                                      Utils.convertTime(_notificationList[index].fromTime.substring(0, 5)),
+                                      style: AppTheme.mediumSFTextStyle()
+                                          .copyWith(
+                                          fontSize: 12,
+                                          color: HexColor("#838383")),
+                                    )),
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Divider(
+                          height: 1,
+                          thickness: 1,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          )
+      ),
     ); //
   }
 
