@@ -31,14 +31,26 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>For play music</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>To use calendar</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Allow access to camera to capture photos</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Allow Contact Access</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location is required to find out where you are</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>For Use User Location</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Allow access to microphone</string>
+	<key>NSMotionUsageDescription</key>
+	<string>This app needs to be able to access your motion use</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow access to photo library</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>For recognize speech</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
