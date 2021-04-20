@@ -105,7 +105,7 @@ class MyImage {
   static const ic_calender = "assets/icons/ic_calender.svg";
   static const ic_clock = "assets/icons/ic_clock.svg";
   static const ic_thumbUp = "assets/icons/ic_thumb_up.svg";
-  static const ic_rectangle = "assets/icons/rectangle.jpg";
+  static const ic_notification_icons = "assets/icons/ic_notification.png";
 }
 
 class MyColor {

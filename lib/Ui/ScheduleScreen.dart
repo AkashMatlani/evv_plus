@@ -35,7 +35,7 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProviderStateMixin {
   TabController _tabController;
-  int activeTabIndex = 0;
+  int activeTabIndex = 1;
   int _selectedIndex = 0;
 
   String nurseName="", nurseEmailId="", nurseId = "";
@@ -110,7 +110,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
 
     _tabController = TabController(
       length: 3,
-      initialIndex: 0,
+      initialIndex: 1,
       vsync: this,
     );
     _tabController.addListener(() {

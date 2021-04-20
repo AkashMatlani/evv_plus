@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:evv_plus/GeneralUtils/Constant.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -15,7 +16,7 @@ class FirebaseNotificationHandler {
 
   BuildContext context;
 
-  //static const platform = const MethodChannel('com.evv_plus/notification');
+  static const platform = const MethodChannel('com.app.EVVPLUS/configuration');
 
   FirebaseNotificationHandler(BuildContext context) {
     this.context = context;
@@ -30,7 +31,6 @@ class FirebaseNotificationHandler {
 
   fireBaseInitialization(Function callback) async {
     this.callback = callback;
-
     _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
       print("Notification" + message.toString());
@@ -38,8 +38,8 @@ class FirebaseNotificationHandler {
         var title = message["notification"]["title"];
         var detail = message["notification"]["body"];
         Map<String, String> map = { "title": title ,"detail": detail};
-        //String result = await platform.invokeMethod('notification', map);
-        //print("Invoke result" + result);
+        String result = await platform.invokeMethod('notification', map);
+        print("Invoke result" + result);
       }
       showLocalAlert(message);
 
@@ -116,10 +116,11 @@ class FirebaseNotificationHandler {
                         width: 100,
                         height: 45,
                         decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: Colors.blue,
                             borderRadius: BorderRadius.all(Radius.circular(5))),
                         child: TextButton(
-                          child: Text("OK", style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 20),
+                          onPressed: (){print('OK pressed');},
+                          child: Text("OK", style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 20, color: Colors.white),
                         ),
                       ),
                       ),
@@ -135,17 +136,43 @@ class FirebaseNotificationHandler {
 
   showNotifications(Map<dynamic, dynamic> payload) async {
     print("show notificationcallled");
-
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'your channel id', 'your channel name', 'your channel description',
-        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+        'your channel id',
+        'your channel name',
+        'your channel description',
+        importance: Importance.Max,
+        priority: Priority.High,
+        icon: 'ic_default_notification',
+        ticker: 'ticker');
 
     var iOSPlatformChannelSpecifics = IOSNotificationDetails(presentAlert: true);
     var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
     var data = payload['data'];
     await flutterLocalNotificationsPlugin.show(
-        1, "EVVPLUS", payload['notification']['body'], platformChannelSpecifics,
+        1, "EVVPLUS",
+        payload['notification']['body'],
+        platformChannelSpecifics,
         payload: json.encode(data));
   }
+
+  /*void initLocalNotification() async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+    final IOSInitializationSettings initializationSettingsIOS =
+    IOSInitializationSettings(
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
+        onDidReceiveLocalNotification: (int id, String title, String body, String payload) async {
+          print('notification title: $title');
+        });
+    var initializationSettings = InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String payload) async {
+          if (payload != null) {
+            debugPrint('notification payload: $payload');
+          };
+        });
+  }*/
 }

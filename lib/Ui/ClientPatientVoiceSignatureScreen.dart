@@ -189,6 +189,7 @@ class _ClientPatientVoiceSignatureScreenState
                                 audioPlayer.play(_recording.path);
                               } else {
                                 audioPlayer.pause();
+
                               }
                               issongplaying
                                   ? _animationIconController1.reverse()
