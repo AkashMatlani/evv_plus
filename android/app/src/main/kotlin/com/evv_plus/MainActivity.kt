@@ -1,11 +1,10 @@
 package com.app.EVVPLUS
 
-import android.annotation.SuppressLint
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -40,34 +39,30 @@ class MainActivity: FlutterActivity() {
     private val NOTIFICATION_CHANNEL_NAME = "EVVPLUS"
     private val NOTIFICATION_CHANNEL_ID = "com.app.EVVPLUS"
     fun setNotificationSetting(contentTitle: String, contentBody: String) {
-        val pendingIntent = PendingIntent.getActivity(this, 0,
+        val pendingIntent = PendingIntent.getActivity(context, 0,
                 Intent(this, MainActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK), PendingIntent.FLAG_ONE_SHOT)
-        val largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_default_notification)
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(this)
+        val notificationBuilder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+                .setChannelId(NOTIFICATION_CHANNEL_ID)
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setContentTitle(contentTitle)
                 .setContentText(contentBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent)
-
-        notificationBuilder.setSmallIcon(R.drawable.ic_default_notification)
-        notificationBuilder.setLargeIcon(largeIcon)
-        notificationBuilder.color = ContextCompat.getColor(context, R.color.colorAccent)
+                .setSmallIcon(R.drawable.ic_default_notification)
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_HIGH
             val notificationChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
             notificationChannel.enableLights(true)
             notificationChannel.enableVibration(true)
             notificationChannel.vibrationPattern = longArrayOf(100, 100, 100)
-            notificationBuilder.setChannelId(NOTIFICATION_CHANNEL_ID)
-            notificationBuilder.setAutoCancel(true)
+            notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             notificationManager.createNotificationChannel(notificationChannel)
         }
-        notificationManager.notify(System.currentTimeMillis().toInt(), notificationBuilder.build())
+        notificationManager.notify(1, notificationBuilder.build())
     }
 }

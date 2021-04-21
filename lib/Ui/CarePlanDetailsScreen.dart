@@ -8,6 +8,7 @@ import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
+import 'package:evv_plus/Models/NurseVisitViewModel.dart';
 import 'package:evv_plus/Models/ScheduleInfoResponse.dart';
 import 'package:evv_plus/Models/ScheduleViewModel.dart';
 import 'package:evv_plus/Ui/CarePlanPdfScreen.dart';
@@ -92,7 +93,11 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
         if(widget.fromScreen.compareTo("VisitComplete") == 0){
           Utils.navigateWithClearState(context, ScheduleScreen());
         } else {
-          Navigator.of(context).pop();
+          if(isVisitStarted){
+            _cancelVisitDialog(context);
+          } else{
+            Navigator.of(context).pop();
+          }
         }
       },
       child: Scaffold(
@@ -131,7 +136,11 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                   if(widget.fromScreen.compareTo("VisitComplete") == 0){
                                     Utils.navigateWithClearState(context, ScheduleScreen());
                                   } else {
-                                    Navigator.of(context).pop();
+                                    if(isVisitStarted){
+                                      _cancelVisitDialog(context);
+                                    } else{
+                                      Navigator.of(context).pop();
+                                    }
                                   }
                                 },
                                 child: Container(
@@ -303,7 +312,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                       } else {
                                         checkConnection().then((isConnected) {
                                           if (isConnected) {
-                                            _showDialog(context);
+                                            _startVisitDialog(context);
                                           } else {
                                             ToastUtils.showToast(context,
                                                 LabelStr.connectionError, Colors.red);
@@ -387,7 +396,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
     );
   }
 
-  _showDialog(BuildContext context){
+  _startVisitDialog(BuildContext context){
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -470,6 +479,102 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
         });
   }
 
+  _cancelVisitDialog(BuildContext context){
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(20.0)), //this right here
+            child: Container(
+                height:blockSizeVertical*20,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      alignment: Alignment.center,
+                      child: Text(LabelStr.lbCancelVisit, style: AppTheme.headerTextStyle().copyWith(fontSize: 20)),
+                    ),
+                    Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 20, right: 10, bottom: 0, top: 10),
+                          child: Text(
+                            LabelStr.lblAskForCancel,
+                            style: AppTheme.mediumSFTextStyle().copyWith(color: HexColor("#3d3d3d")),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                    ),
+                    Container(
+                      height: 1,
+                      width: MediaQuery.of(context).size.width,
+                      color: HexColor("#f5f5f5"),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 51,
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 51,
+                              alignment: Alignment.center,
+                              width: MediaQuery.of(context).size.width*0.4,
+                              child: TextButton(
+                                  child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                            ),
+                            SizedBox(width: 1),
+                            Container(
+                              width: 1,
+                              height: 51,
+                              color: HexColor("#f5f5f5"),
+                            ),
+                            Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 51,
+                                  alignment: Alignment.center,
+                                  width: MediaQuery.of(context).size.width*0.4,
+                                  child: TextButton(
+                                      child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
+                                      onPressed: () {
+                                        cancelVisit(context);
+                                      }),
+                                )),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                )
+            ),
+          );
+        });
+  }
+
+  cancelVisit(BuildContext context) async {
+    var visitId = await PrefUtils.getValueFor(PrefUtils.visitId);
+    NurseVisitViewModel _nurseVisitViewModel = NurseVisitViewModel();
+
+    Utils.showLoader(true, context);
+    _nurseVisitViewModel.cancelRunningVisitApiCall(visitId.toString(), (isSuccess, message){
+      Utils.showLoader(false, context);
+      if(isSuccess){
+        Navigator.of(context).pop();
+        PrefUtils.setIntValue(PrefUtils.visitId, 0);
+        Utils.navigateWithClearState(context, ScheduleScreen());
+      } else {
+        ToastUtils.showToast(context, message, Colors.red);
+      }
+    });
+  }
+
   _selectTime(BuildContext context, TextEditingController controller) async {
     final TimeOfDay picked = await showTimePicker(
       context: context,
@@ -542,7 +647,6 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
       _goToTheLake();
     });
   }
-
 
   Future<void> _goToTheLake() async {
     _GetDeviceLocation();

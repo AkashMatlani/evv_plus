@@ -108,23 +108,20 @@ class FirebaseNotificationHandler {
                       ),
                     ),
                     SizedBox(height: 30),
-                    InkWell(
-                      onTap: (){
-                        Navigator.of(context, rootNavigator: true).pop('dialog');
-                      },
-                      child: Container(
-                        width: 100,
-                        height: 45,
-                        decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
-                        child: TextButton(
-                          onPressed: (){print('OK pressed');},
-                          child: Text("OK", style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 20, color: Colors.white),
+                    Container(
+                      width: 100,
+                      height: 45,
+                      decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      child: TextButton(
+                        onPressed: (){
+                          Navigator.of(context, rootNavigator: true).pop('dialog');
+                        },
+                        child: Text("OK", style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 16, color: Colors.white),
                         ),
                       ),
-                      ),
-                    ),
+                    )
                   ],
                 ),
               );
@@ -142,7 +139,6 @@ class FirebaseNotificationHandler {
         'your channel description',
         importance: Importance.Max,
         priority: Priority.High,
-        icon: 'ic_default_notification',
         ticker: 'ticker');
 
     var iOSPlatformChannelSpecifics = IOSNotificationDetails(presentAlert: true);

@@ -130,7 +130,6 @@ class _CompletedScheduleScreenState extends State<CompletedScheduleScreen> {
           ),
           SizedBox(height: 10),
           _filterList.length != 0 ? ListView.builder(
-            physics: AlwaysScrollableScrollPhysics(),
             primary: false,
             shrinkWrap: true,
             itemCount: _filterList.length,
