@@ -76,11 +76,14 @@ class Utils {
     return result;
   }
 
+  static bool isValidQuestion(String question) {
+    bool result = RegExp(r"^[a-zA-Z ]{5,}").hasMatch(question);
+    return result;
+  }
+
   //r"(?=.*[A-Za-z])(?=.*\d)(?=.*[!@£$%^&*()#€])[A-Za-z\d!@£$%^&*()#€]{6,}$")
   static bool isValidPassword(String password) {
-    bool result = RegExp(
-            r"(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$")
-        .hasMatch(password);
+    bool result = RegExp(r"(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$").hasMatch(password);
     return result;
   }
 

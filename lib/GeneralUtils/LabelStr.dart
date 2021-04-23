@@ -29,6 +29,8 @@ class LabelStr {
   static const lblCheckout = "Check Out";
   static const lblAge = "Age:";
   static const lbNurse = "Nurse:";
+  static const lbNewQue = "New Question";
+  static const lbNewQueHint = "Enter your question";
   static const lbPatientAddress = "Patient Address:";
   static const lbStartVisit = "Start Visit";
   static const lbCancelVisit = "Cancel Visit";
@@ -36,6 +38,8 @@ class LabelStr {
   static const lblViewDocument = "View Document";
   static const lblAskStartVisit = "Would you like to start visit?";
   static const lblAskForCancel = "Would you like to cancel visit permanently?";
+  static const lblBackAlert = "If you backpress from this screen then all question would be erased. Would you like to continue?";
+  static const lblAlert = "Alert!";
   static const lblYes = "Yes";
   static const lblNo = "No";
   static const lblHome = "Home";
@@ -55,10 +59,12 @@ class LabelStr {
   //static const enterValidPwd = "Passwords must contain at least six characters including letters, numbers and special characters";
   static const enterValidPwd = "Passwords must contain at least six characters including letters, numbers";
   static const invalidPassword = "Passwords must contain at least six characters";
+  static const enterQuestion = "Please enter your question";
+  static const invalidQuestion = "Question must contain at least six characters including only letters and ? symbole";
   static const lblAddressLineOne = "Address line 1";
   static const lblAddressLineTwo = "Address line 2";
   static const lblCity = "City";
-  static const lblZip= "Zip 123";
+  static const lblZip= "12345";
   static const lblPhone= "Phone";
   static const lblUpdate= "Update";
   static const lblSubmit= "Submit";
