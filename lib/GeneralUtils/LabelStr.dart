@@ -38,7 +38,7 @@ class LabelStr {
   static const lblViewDocument = "View Document";
   static const lblAskStartVisit = "Would you like to start visit?";
   static const lblAskForCancel = "Would you like to cancel visit permanently?";
-  static const lblBackAlert = "If you backpress from this screen then all question would be erased. Would you like to continue?";
+  static const lblBackAlert = "If you backpress from this screen then your question would be erased. Would you like to continue?";
   static const lblAlert = "Alert!";
   static const lblYes = "Yes";
   static const lblNo = "No";
@@ -60,7 +60,7 @@ class LabelStr {
   static const enterValidPwd = "Passwords must contain at least six characters including letters, numbers";
   static const invalidPassword = "Passwords must contain at least six characters";
   static const enterQuestion = "Please enter your question";
-  static const invalidQuestion = "Question must contain at least six characters including only letters and ? symbole";
+  static const invalidQuestion = "Question must contain at least six letters including ? sign";
   static const lblAddressLineOne = "Address line 1";
   static const lblAddressLineTwo = "Address line 2";
   static const lblCity = "City";

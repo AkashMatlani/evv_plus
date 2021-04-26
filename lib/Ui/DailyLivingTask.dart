@@ -32,10 +32,10 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
   String nurseId="", visitId="";
   int expanedBtnClick=0, prevPos=0;
   bool isRowExpaned = true;
+  bool isAnyQueSubmitted = false;
   List<TextEditingController> _commentController = [];
   List<String> questionList = [];
   var questionController = TextEditingController();
-
 
 
   @override
@@ -57,7 +57,11 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: (){
-        _showAlertDialog(context);
+        if(!isAnyQueSubmitted){
+          _showAlertDialog(context);
+        } else {
+          Navigator.of(context).pop();
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -72,7 +76,11 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              _showAlertDialog(context);
+              if(!isAnyQueSubmitted){
+                _showAlertDialog(context);
+              } else {
+                Navigator.of(context).pop();
+              }
             },
           ),
           actions: [
@@ -254,34 +262,57 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
                       alignment: Alignment.topLeft,
                       child: textFieldFor(LabelStr.lbNewQueHint, questionController),
                     ),
-                    SizedBox(height: 30),
-                    Container(
-                      width: 100,
-                      height: 45,
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                      child: TextButton(
-                        onPressed: (){
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          String question = questionController.text.trim().toString();
-                          if(question.isEmpty){
-                            ToastUtils.showToast(context, LabelStr.enterQuestion, Colors.red);
-                          } else {
-                            if(Utils.isValidQuestion(question) && question.substring(question.length-1)[0].compareTo("?") == 0){
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 45,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(5)), border: Border.all(color: Colors.blue, width: 1)),
+                          child: TextButton(
+                            onPressed: (){
+                              FocusScope.of(context).requestFocus(FocusNode());
                               setState(() {
                                 questionController.text = "";
-                                questionList.add(question);
                               });
                               Navigator.of(context, rootNavigator: true).pop('dialog');
-                            } else {
-                              ToastUtils.showToast(context, LabelStr.invalidQuestion, Colors.red);
-                            }
-                          }
-                        },
-                        child: Text(LabelStr.lblSubmit, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 16, color: Colors.white),
+                            },
+                            child: Text(LabelStr.lblCancel, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 16, color: Colors.blue),
+                            ),
+                          ),
                         ),
-                      ),
+                        SizedBox(width: 10),
+                        Container(
+                          width: 100,
+                          height: 45,
+                          decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.all(Radius.circular(5))),
+                          child: TextButton(
+                            onPressed: (){
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              String question = questionController.text.trim().toString();
+                              if(question.isEmpty){
+                                ToastUtils.showToast(context, LabelStr.enterQuestion, Colors.red);
+                              } else {
+                                if(Utils.isValidQuestion(question) && question.substring(question.length-1)[0].compareTo("?") == 0){
+                                  setState(() {
+                                    questionController.text = "";
+                                    questionList.add(question);
+                                  });
+                                  Navigator.of(context, rootNavigator: true).pop('dialog');
+                                } else {
+                                  ToastUtils.showToast(context, LabelStr.invalidQuestion, Colors.red);
+                                }
+                              }
+                            },
+                            child: Text(LabelStr.lblSubmit, style: AppTheme.semiBoldSFTextStyle().copyWith(fontSize: 16, color: Colors.white),
+                            ),
+                          ),
+                        )
+                      ],
                     )
                   ],
                 ),
@@ -301,7 +332,7 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
                 borderRadius:
                 BorderRadius.circular(20.0)), //this right here
             child: Container(
-                height:(MediaQuery.of(context).size.height / 100)*22,
+                height:(MediaQuery.of(context).size.height / 100)*23,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -312,7 +343,7 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
                     ),
                     Expanded(
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20, right: 10, bottom: 5, top: 5),
+                          padding: EdgeInsets.only(left: 15, right: 15, bottom: 5, top: 5),
                           child: Text(
                             LabelStr.lblBackAlert,
                             style: AppTheme.mediumSFTextStyle().copyWith(color: HexColor("#3d3d3d")),
@@ -325,43 +356,40 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
                       width: MediaQuery.of(context).size.width,
                       color: HexColor("#f5f5f5"),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 51,
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 51,
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width*0.4,
-                              child: TextButton(
-                                  child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
-                                  onPressed: () {
-                                    Navigator.of(context, rootNavigator: true).pop('dialog');
-                                  }),
-                            ),
-                            SizedBox(width: 1),
-                            Container(
-                              width: 1,
-                              height: 51,
-                              color: HexColor("#f5f5f5"),
-                            ),
-                            Expanded(
-                                flex: 1,
-                                child: Container(
-                                  height: 51,
-                                  alignment: Alignment.center,
-                                  width: MediaQuery.of(context).size.width*0.4,
-                                  child: TextButton(
-                                      child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
-                                      onPressed: () {
-                                        Utils.navigateReplaceToScreen(context, CustomVisitMenuScreen(widget._scheduleDetailInfo));
-                                      }),
-                                )),
-                          ],
-                        ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 55,
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 51,
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width*0.4,
+                            child: TextButton(
+                                child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
+                                onPressed: () {
+                                  Navigator.of(context, rootNavigator: true).pop('dialog');
+                                }),
+                          ),
+                          SizedBox(width: 1),
+                          Container(
+                            width: 1,
+                            height: 51,
+                            color: HexColor("#f5f5f5"),
+                          ),
+                          Expanded(
+                              flex: 1,
+                              child: Container(
+                                height: 51,
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width*0.4,
+                                child: TextButton(
+                                    child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
+                                    onPressed: () {
+                                      Utils.navigateReplaceToScreen(context, CustomVisitMenuScreen(widget._scheduleDetailInfo));
+                                    }),
+                              )),
+                        ],
                       ),
                     )
                   ],
@@ -378,9 +406,11 @@ class _DailyLivingTaskState extends State<DailyLivingTask> {
         question, answer, comment, date, nurseId, visitId, (isSuccess, message) {
       Utils.showLoader(false, context);
       if(isSuccess){
+        isAnyQueSubmitted = true;
         ToastUtils.showToast(context, message, Colors.green);
       } else {
         ToastUtils.showToast(context, message, Colors.red);
+        isAnyQueSubmitted = false;
       }
     });
   }

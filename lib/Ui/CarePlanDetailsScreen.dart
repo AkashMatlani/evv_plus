@@ -416,7 +416,7 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                     ),
                     Expanded(
                         child: Padding(
-                          padding: EdgeInsets.only(left: 20, right: 10, bottom: 0, top: 10),
+                          padding: EdgeInsets.only(left: 15, right: 15, bottom: 0, top: 10),
                           child: Text(
                             LabelStr.lblAskStartVisit,
                             style: AppTheme.mediumSFTextStyle().copyWith(color: HexColor("#3d3d3d")),
@@ -429,47 +429,44 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                       width: MediaQuery.of(context).size.width,
                       color: HexColor("#f5f5f5"),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 51,
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 51,
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width*0.4,
-                              child: TextButton(
-                                  child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
-                                  onPressed: () {
-                                    if(widget.fromScreen.compareTo("VisitComplete") == 0){
-                                      Utils.navigateWithClearState(context, ScheduleScreen());
-                                    } else {
-                                      Navigator.of(context).pop();
-                                    }
-                                  }),
-                            ),
-                            SizedBox(width: 1),
-                            Container(
-                              width: 1,
-                              height: 51,
-                              color: HexColor("#f5f5f5"),
-                            ),
-                            Expanded(
-                                flex: 1,
-                                child: Container(
-                                  height: 51,
-                                  alignment: Alignment.center,
-                                  width: MediaQuery.of(context).size.width*0.4,
-                                  child: TextButton(
-                                      child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
-                                      onPressed: () {
-                                        _nurseChexckInRequest(context, _nurseId, widget._scheduleDetailInfo.patientId);
-                                      }),
-                                )),
-                          ],
-                        ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 55,
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 51,
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width*0.4,
+                            child: TextButton(
+                                child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
+                                onPressed: () {
+                                  if(widget.fromScreen.compareTo("VisitComplete") == 0){
+                                    Utils.navigateWithClearState(context, ScheduleScreen());
+                                  } else {
+                                    Navigator.of(context).pop();
+                                  }
+                                }),
+                          ),
+                          SizedBox(width: 1),
+                          Container(
+                            width: 1,
+                            height: 51,
+                            color: HexColor("#f5f5f5"),
+                          ),
+                          Expanded(
+                              flex: 1,
+                              child: Container(
+                                height: 51,
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width*0.4,
+                                child: TextButton(
+                                    child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
+                                    onPressed: () {
+                                      _nurseChexckInRequest(context, _nurseId, widget._scheduleDetailInfo.patientId);
+                                    }),
+                              )),
+                        ],
                       ),
                     )
                   ],
@@ -512,43 +509,40 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                       width: MediaQuery.of(context).size.width,
                       color: HexColor("#f5f5f5"),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 51,
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 51,
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width*0.4,
-                              child: TextButton(
-                                  child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  }),
-                            ),
-                            SizedBox(width: 1),
-                            Container(
-                              width: 1,
-                              height: 51,
-                              color: HexColor("#f5f5f5"),
-                            ),
-                            Expanded(
-                                flex: 1,
-                                child: Container(
-                                  height: 51,
-                                  alignment: Alignment.center,
-                                  width: MediaQuery.of(context).size.width*0.4,
-                                  child: TextButton(
-                                      child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
-                                      onPressed: () {
-                                        cancelVisit(context);
-                                      }),
-                                )),
-                          ],
-                        ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 55,
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 51,
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width*0.4,
+                            child: TextButton(
+                                child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                }),
+                          ),
+                          SizedBox(width: 1),
+                          Container(
+                            width: 1,
+                            height: 51,
+                            color: HexColor("#f5f5f5"),
+                          ),
+                          Expanded(
+                              flex: 1,
+                              child: Container(
+                                height: 51,
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width*0.4,
+                                child: TextButton(
+                                    child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
+                                    onPressed: () {
+                                      cancelVisit(context);
+                                    }),
+                              )),
+                        ],
                       ),
                     )
                   ],

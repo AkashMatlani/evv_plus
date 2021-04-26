@@ -165,53 +165,6 @@ class _ForgotPwdScreen extends State<ForgotPwdScreen> {
     );
   }
 
-  /*_showDialog(BuildContext context){
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius:
-                BorderRadius.circular(20.0)), //this right here
-            child: Container(
-                height: blockSizeVertical * 18,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: blockSizeVertical*1,right: blockSizeVertical*1,top: blockSizeVertical*1),
-                      child: Text(
-                          LabelStr.checkMailLink,
-                          style: AppTheme.mediumSFTextStyle().copyWith(color: Colors.black, fontSize: blockSizeVertical*2.5),
-                          textAlign: TextAlign.center,
-                          maxLines:2,
-                        ),
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      height: 1,
-                      width: MediaQuery.of(context).size.width,
-                      color: HexColor("#f5f5f5"),
-                    ),
-                    Expanded(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: TextButton(
-                            child: Text(LabelStr.lblOk, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20)),
-                            onPressed: () {
-                             // Navigator.of(context).pop();
-                              Utils.navigateReplaceToScreen(context, LoginScreen());
-                            }),
-                      ),
-                    )
-                  ],
-                )
-            ),
-          );
-        });
-  }*/
-
   @override
   void dispose() {
   _emailController.dispose();

@@ -329,43 +329,40 @@ class _TaskWithDateDetailsScreenState extends State<TaskWithDateDetailsScreen> {
                       width: MediaQuery.of(context).size.width,
                       color: HexColor("#f5f5f5"),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 51,
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 51,
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width*0.4,
-                              child: TextButton(
-                                  child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  }),
-                            ),
-                            SizedBox(width: 1),
-                            Container(
-                              width: 1,
-                              height: 51,
-                              color: HexColor("#f5f5f5"),
-                            ),
-                            Expanded(
-                                flex: 1,
-                                child: Container(
-                                  height: 51,
-                                  alignment: Alignment.center,
-                                  width: MediaQuery.of(context).size.width*0.4,
-                                  child: TextButton(
-                                      child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
-                                      onPressed: () {
-                                        cancelVisit(true);
-                                      }),
-                                )),
-                          ],
-                        ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 55,
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 51,
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width*0.4,
+                            child: TextButton(
+                                child: Text(LabelStr.lblNo, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20,color: HexColor("#878787"))),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                }),
+                          ),
+                          SizedBox(width: 1),
+                          Container(
+                            width: 1,
+                            height: 51,
+                            color: HexColor("#f5f5f5"),
+                          ),
+                          Expanded(
+                              flex: 1,
+                              child: Container(
+                                height: 51,
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width*0.4,
+                                child: TextButton(
+                                    child: Text(LabelStr.lblYes, style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 20, color: HexColor("#1a87e9"))),
+                                    onPressed: () {
+                                      cancelVisit(true);
+                                    }),
+                              )),
+                        ],
                       ),
                     )
                   ],

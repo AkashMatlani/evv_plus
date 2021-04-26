@@ -205,54 +205,6 @@ class _VerificationMenuScreenState extends State<VerificationMenuScreen> {
     );
   }
 
-  /* _showDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)), //this right here
-            child: Container(
-                height: MediaQuery.of(context).size.height * 0.30,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      alignment: Alignment.center,
-                      child: SvgPicture.asset(MyImage.ic_thumbUp),
-                    ),
-                    SizedBox(height: 10),
-                    Text("Success",
-                        style: AppTheme.mediumSFTextStyle().copyWith(
-                            color: HexColor("#3d3d3d"), fontSize: 20)),
-                    Text("Complete EVV",
-                        style: AppTheme.regularSFTextStyle()
-                            .copyWith(color: HexColor("#3d3d3d"))),
-                    SizedBox(height: 20),
-                    Container(
-                      height: 1,
-                      width: MediaQuery.of(context).size.width,
-                      color: HexColor("#f5f5f5"),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: TextButton(
-                          child: Text(LabelStr.lblOk,
-                              style: AppTheme.mediumSFTextStyle()
-                                  .copyWith(fontSize: 20)),
-                          onPressed: () {
-                            //Navigator.of(context).pop();
-                            Utils.navigateReplaceToScreen(context, ScheduleScreen());
-                          }),
-                    )
-                  ],
-                )),
-          );
-        });
-  }*/
-
   _showDialog(BuildContext context) {
     CupertinoAlertDialog alert = CupertinoAlertDialog(
       content: Container(
