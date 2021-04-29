@@ -49,9 +49,11 @@ class MainActivity: FlutterActivity() {
                 .setContentTitle(contentTitle)
                 .setContentText(contentBody)
                 .setAutoCancel(true)
+                .setColorized(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_default_notification)
+                .setColor(ContextCompat.getColor(context, R.color.colorAccent))
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -59,6 +61,7 @@ class MainActivity: FlutterActivity() {
             val notificationChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance)
             notificationChannel.enableLights(true)
             notificationChannel.enableVibration(true)
+            notificationChannel.setShowBadge(true)
             notificationChannel.vibrationPattern = longArrayOf(100, 100, 100)
             notificationChannel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
             notificationManager.createNotificationChannel(notificationChannel)

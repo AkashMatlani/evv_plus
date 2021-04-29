@@ -97,7 +97,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 Container(
                                     padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                                     child: Text(
-                                      Utils.convertDate(_notificationList[index].visitDate, DateFormat("MM/dd/yy")),
+                                      Utils.convertDate(_notificationList[index].currentDate, DateFormat("MM/dd/yy")),
                                       style: AppTheme.mediumSFTextStyle()
                                           .copyWith(
                                           fontSize: 12,
@@ -112,7 +112,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 Container(
                                     padding: EdgeInsets.fromLTRB(5, 15, 0, 0),
                                     child: Text(
-                                      Utils.convertTime(_notificationList[index].fromTime.substring(0, 5)),
+                                      Utils.convertTime(_notificationList[index].currentDate.split("T")[1]),
                                       style: AppTheme.mediumSFTextStyle()
                                           .copyWith(
                                           fontSize: 12,

@@ -230,7 +230,7 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
     );
   }
 
-  void _getFilterItemList(BuildContext context, String searchStr) {
+  _getFilterItemList(BuildContext context, String searchStr) {
     Utils.showLoader(true, context);
     _nurseVisitViewModel.getFilterListAPICall("1", searchStr, "", (isSuccess, message){
       Utils.showLoader(false, context);
@@ -246,7 +246,8 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
 
   _searchListView() {
     return Container(
-      margin: EdgeInsets.only(right: 50, bottom: 5),
+      margin: EdgeInsets.only(right: 50, bottom: 10),
+      height: MediaQuery.of(context).size.height*0.75,
       color: HexColor("#eaeff2"),
       child: ListView.builder(
         shrinkWrap: true,
@@ -280,7 +281,7 @@ class _IncidentFormScreenState extends State<IncidentFormScreen> {
     );
   }
 
-  void uploadPDFFromStorage() async {
+  uploadPDFFromStorage() async {
     var status = await Permission.storage.status;
     if(status.isGranted){
       filePath = await FlutterDocumentPicker.openDocument();

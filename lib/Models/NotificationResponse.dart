@@ -1,47 +1,59 @@
-/// id : 1
-/// deviceId : null
-/// nurseId : 7
-/// patientId : 1
-/// notificationMessage : "Dear, Khushbu Soni your visit has been schedule on 26-03-2021 from: 12:00:00 to: 01:00:00 with Krishna Agola"
-/// visitDate : "2021-03-26T00:00:00"
-/// fromTime : "11:00:00"
-/// toTime : "14:30:00"
-/// nurse : null
+/// id : 346
+/// deviceId : "eMayLIiBRpevbrEjA19U1r:APA91bGAopqp0aGv_ECQz5IPET5QfJcKs7JppTsYsv7ceE-LgilfqxkCu5KisoDnKFHP0armOOpxehvs_9llxzUhCD0zQJXBkzaWL7nrACGCl3zq5lj3avU0nWOg6-jgNWeUHUxzuf2P"
+/// nurseId : 58
+/// patientId : 239
+/// notificationMessage : "Dear Sadanand Moris, This is friendly reminder of your upcoming visit with Aneri Bhatt on 04/28/21"
+/// visitDate : "2021-04-28T14:00:00.397"
+/// currentDate : "2021-04-28T18:46:57.67"
+/// fromTime : "14:00:00.3980826"
+/// toTime : "14:00:00.3980826"
+/// currentTime : "18:55:00.1141797"
+/// isRead : false
+/// isSchedule : false
 /// patient : null
 
 class NotificationResponse {
   int _id;
-  dynamic _deviceId;
+  String _deviceId;
   int _nurseId;
   int _patientId;
   String _notificationMessage;
   String _visitDate;
+  String _currentDate;
   String _fromTime;
   String _toTime;
-  dynamic _nurse;
+  String _currentTime;
+  bool _isRead;
+  bool _isSchedule;
   dynamic _patient;
 
   int get id => _id;
-  dynamic get deviceId => _deviceId;
+  String get deviceId => _deviceId;
   int get nurseId => _nurseId;
   int get patientId => _patientId;
   String get notificationMessage => _notificationMessage;
   String get visitDate => _visitDate;
+  String get currentDate => _currentDate;
   String get fromTime => _fromTime;
   String get toTime => _toTime;
-  dynamic get nurse => _nurse;
+  String get currentTime => _currentTime;
+  bool get isRead => _isRead;
+  bool get isSchedule => _isSchedule;
   dynamic get patient => _patient;
 
   NotificationResponse({
       int id, 
-      dynamic deviceId, 
+      String deviceId, 
       int nurseId, 
       int patientId, 
       String notificationMessage, 
       String visitDate, 
+      String currentDate, 
       String fromTime, 
       String toTime, 
-      dynamic nurse, 
+      String currentTime, 
+      bool isRead, 
+      bool isSchedule, 
       dynamic patient}){
     _id = id;
     _deviceId = deviceId;
@@ -49,9 +61,12 @@ class NotificationResponse {
     _patientId = patientId;
     _notificationMessage = notificationMessage;
     _visitDate = visitDate;
+    _currentDate = currentDate;
     _fromTime = fromTime;
     _toTime = toTime;
-    _nurse = nurse;
+    _currentTime = currentTime;
+    _isRead = isRead;
+    _isSchedule = isSchedule;
     _patient = patient;
 }
 
@@ -62,9 +77,12 @@ class NotificationResponse {
     _patientId = json["patientId"];
     _notificationMessage = json["notificationMessage"];
     _visitDate = json["visitDate"];
+    _currentDate = json["currentDate"];
     _fromTime = json["fromTime"];
     _toTime = json["toTime"];
-    _nurse = json["nurse"];
+    _currentTime = json["currentTime"];
+    _isRead = json["isRead"];
+    _isSchedule = json["isSchedule"];
     _patient = json["patient"];
   }
 
@@ -76,9 +94,12 @@ class NotificationResponse {
     map["patientId"] = _patientId;
     map["notificationMessage"] = _notificationMessage;
     map["visitDate"] = _visitDate;
+    map["currentDate"] = _currentDate;
     map["fromTime"] = _fromTime;
     map["toTime"] = _toTime;
-    map["nurse"] = _nurse;
+    map["currentTime"] = _currentTime;
+    map["isRead"] = _isRead;
+    map["isSchedule"] = _isSchedule;
     map["patient"] = _patient;
     return map;
   }
