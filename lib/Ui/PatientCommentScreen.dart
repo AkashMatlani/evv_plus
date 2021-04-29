@@ -99,6 +99,9 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
                                       ToastUtils.showToast(context, LabelStr.connectionError, Colors.red);
                                     }
                                   });
+                                  setState(() {
+                                    patientName = "";
+                                  });
                                 }
                               },
                               child: Container(
@@ -230,7 +233,8 @@ class _PatientCommentScreenState extends State<PatientCommentScreen> {
 
   _searchListView() {
     return Container(
-      margin: EdgeInsets.only(right: 50, bottom: 5),
+      margin: EdgeInsets.only(right: 50, bottom: 10),
+      height: _filterList.length > 10 ? MediaQuery.of(context).size.height*0.75 : _filterList.length*57.0,
       color: HexColor("#eaeff2"),
       child: ListView.builder(
         shrinkWrap: true,
