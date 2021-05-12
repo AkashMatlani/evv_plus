@@ -1,5 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.app.EVVPLUS">
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -23,7 +23,7 @@
 
 
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAzmRety96ZiIPw_iQyzpKqrAsk95l0fNg"/>
+            android:value="AIzaSyBprJaLdHXBMMVlG37ShgId_EQ_-Bzo9qE"/>
 
         <activity
             android:name=".MainActivity"
@@ -57,6 +57,10 @@
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"
                 android:resource="@drawable/ic_default_notification"/>
+
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_color"
+                android:resource="@color/colorAccent" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
