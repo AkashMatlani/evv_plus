@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:evv_plus/GeneralUtils/AddressSearch.dart';
+import 'package:evv_plus/GeneralUtils/GooglePlaceService.dart';
 import 'package:evv_plus/GeneralUtils/HelperWidgets.dart';
 import 'package:evv_plus/GeneralUtils/PrefsUtils.dart';
 import 'package:evv_plus/GeneralUtils/ToastUtils.dart';
 import 'package:evv_plus/GeneralUtils/Utils.dart';
 import 'package:evv_plus/Models/AuthViewModel.dart';
-import 'package:evv_plus/Models/CityListResponse.dart';
-import 'package:evv_plus/Models/StateListResponse.dart';
 import 'package:evv_plus/Ui/ScheduleScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +17,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 import '../GeneralUtils/ColorExtension.dart';
 import '../GeneralUtils/Constant.dart';
@@ -29,8 +30,11 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
   var _addressLineOneController = TextEditingController();
   var _addressLineTwoController = TextEditingController();
+  var _stateController = TextEditingController();
+  var _cityController = TextEditingController();
   var _zipController = TextEditingController();
   var _phoneController = TextEditingController();
   final Widget svg = new SvgPicture.asset(MyImage.profileHeaderBgImage);
@@ -42,26 +46,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   AuthViewModel _nurseViewModel = AuthViewModel();
 
   final int maxLength = 5;
-  var email,
-      addressLineOne,
-      addressLineTwo,
-      zipCode,
-      phoneNumber,
-      firstName,
-      middleName,
-      lastName,
-      dateOfBirth;
   bool isLoading = true;
-  String nurseId;
-  List<StateData> stateList = [];
-  List<CityData> cityList = [];
-  String stateId;
-  String cityId;
-  String gender;
-  String formattedStr;
-  String apiDateString;
-  File _image;
+  String nurseId, email, firstName, middleName, lastName, phoneNumber, gender;
+  String addressLineOne, addressLineTwo, zipCode;
+  String formattedStr, apiDateString;
   String stateName = "", cityName = "";
+  File _image;
+
 
   @override
   void initState() {
@@ -100,17 +91,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
         child: Scaffold(
           body: SingleChildScrollView(
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  child: Column(
+            child: Container(
+              child: Column(
+                children: [
+                  Stack(
                     children: [
-                      Stack(
-                        children: [
-                          SvgPicture.asset(MyImage.profileHeaderBgImage,
-                              fit: BoxFit.fill),
-                          Container(
-                              child: Column(
+                      SvgPicture.asset(MyImage.profileHeaderBgImage,
+                          fit: BoxFit.fill),
+                      Container(
+                          child: Column(
                             children: [
                               SizedBox(height: 50),
                               Row(
@@ -127,14 +116,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   Expanded(
                                       child: Container(
-                                    alignment: Alignment.center,
-                                    margin: EdgeInsets.only(right: 20),
-                                    child: Text(LabelStr.lblMyProfile,
-                                        style: AppTheme.boldSFTextStyle()
-                                            .copyWith(
+                                        alignment: Alignment.center,
+                                        margin: EdgeInsets.only(right: 20),
+                                        child: Text(LabelStr.lblMyProfile,
+                                            style: AppTheme.boldSFTextStyle()
+                                                .copyWith(
                                                 fontSize: 24,
                                                 color: Colors.white)),
-                                  ))
+                                      ))
                                 ],
                               ),
                               SizedBox(height: 20),
@@ -147,39 +136,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   },
                                   child: _image == null
                                       ? (Utils.nurseProfile.isEmpty
-                                          ? defaultUserProfile()
-                                          : ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: Image.network(
-                                                Utils.nurseProfile,
-                                                fit: BoxFit.cover,
-                                                loadingBuilder:
-                                                    (BuildContext context,
-                                                        Widget child,
-                                                        ImageChunkEvent
-                                                            loadingProgress) {
-                                                  if (loadingProgress == null)
-                                                    return child;
-                                                  return Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      alignment: Alignment.center,
-                                                      child: CircularProgressIndicator(
-                                                          valueColor:
-                                                              new AlwaysStoppedAnimation<
-                                                                      Color>(
-                                                                  Colors.white)));
-                                                },
-                                              )))
+                                      ? defaultUserProfile()
                                       : ClipRRect(
-                                          borderRadius: BorderRadius.circular(10),
-                                          child: Image.file(
-                                            _image,
-                                            width: 100,
-                                            height: 100,
-                                            fit: BoxFit.cover,
-                                          )),
+                                      borderRadius:
+                                      BorderRadius.circular(10),
+                                      child: Image.network(
+                                        Utils.nurseProfile,
+                                        fit: BoxFit.cover,
+                                        loadingBuilder:
+                                            (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent
+                                            loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Container(
+                                              height: 40,
+                                              width: 40,
+                                              alignment: Alignment.center,
+                                              child: CircularProgressIndicator(
+                                                  valueColor:
+                                                  new AlwaysStoppedAnimation<
+                                                      Color>(
+                                                      Colors.white)));
+                                        },
+                                      )))
+                                      : ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.file(
+                                        _image,
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                      )),
                                 ),
                               ),
                               SizedBox(height: 10),
@@ -196,346 +185,255 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: Text("${stateName + ", " + cityName}",
                                       style: AppTheme.regularSFTextStyle()
                                           .copyWith(
-                                              fontSize: 14,
-                                              color: Colors.white))),
+                                          fontSize: 14,
+                                          color: Colors.white))),
                             ],
                           ))
-                        ],
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      IntrinsicHeight(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  IntrinsicHeight(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  LabelStr.lblSsn.toUpperCase(),
-                                  style: AppTheme.semiBoldSFTextStyle()
-                                      .copyWith(fontSize: 14),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "xxx-xx-xxxx".toUpperCase(),
-                                  style: AppTheme.regularSFTextStyle().copyWith(
-                                      fontSize: 16, color: Color(0xff868686)),
-                                )
-                              ],
+                            Text(
+                              LabelStr.lblSsn.toUpperCase(),
+                              style: AppTheme.semiBoldSFTextStyle()
+                                  .copyWith(fontSize: 14),
                             ),
-                            VerticalDivider(color: Color(0xff979797)),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  LabelStr.lblDob.toUpperCase(),
-                                  style: AppTheme.semiBoldSFTextStyle()
-                                      .copyWith(fontSize: 14),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  formattedStr,
-                                  style: AppTheme.regularSFTextStyle().copyWith(
-                                      fontSize: 16, color: Color(0xff868686)),
-                                )
-                              ],
+                            SizedBox(
+                              height: 5,
                             ),
-                            VerticalDivider(
-                              color: Color(0xff979797),
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  LabelStr.lblGender.toUpperCase(),
-                                  style: AppTheme.semiBoldSFTextStyle()
-                                      .copyWith(fontSize: 14),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  gender.toUpperCase(),
-                                  style: AppTheme.regularSFTextStyle().copyWith(
-                                      fontSize: 16, color: Color(0xff868686)),
-                                )
-                              ],
-                            ),
+                            Text(
+                              "xxx-xx-xxxx".toUpperCase(),
+                              style: AppTheme.regularSFTextStyle().copyWith(
+                                  fontSize: 16, color: Color(0xff868686)),
+                            )
                           ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        VerticalDivider(color: Color(0xff979797)),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              LabelStr.lblDob.toUpperCase(),
+                              style: AppTheme.semiBoldSFTextStyle()
+                                  .copyWith(fontSize: 14),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              formattedStr,
+                              style: AppTheme.regularSFTextStyle().copyWith(
+                                  fontSize: 16, color: Color(0xff868686)),
+                            )
+                          ],
+                        ),
+                        VerticalDivider(
+                          color: Color(0xff979797),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              LabelStr.lblGender.toUpperCase(),
+                              style: AppTheme.semiBoldSFTextStyle()
+                                  .copyWith(fontSize: 14),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              gender.toUpperCase(),
+                              style: AppTheme.regularSFTextStyle().copyWith(
+                                  fontSize: 16, color: Color(0xff868686)),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                LabelStr.lblEmail.toUpperCase(),
-                                style: AppTheme.semiBoldSFTextStyle()
-                                    .copyWith(fontSize: 14),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                email,
-                                style: AppTheme.regularSFTextStyle().copyWith(
-                                    fontSize: 16, color: Color(0xff868686)),
-                              )
-                            ],
+                          Text(
+                            LabelStr.lblEmail.toUpperCase(),
+                            style: AppTheme.semiBoldSFTextStyle()
+                                .copyWith(fontSize: 14),
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                LabelStr.lblPhone.toUpperCase(),
-                                style: AppTheme.semiBoldSFTextStyle()
-                                    .copyWith(fontSize: 14),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                phoneNumber.toString().contains("-")?phoneNumber:formatNumbersAsCode(phoneNumber),
-                                style: AppTheme.regularSFTextStyle().copyWith(
-                                    fontSize: 16, color: Color(0xff868686)),
-                              )
-                            ],
+                          SizedBox(
+                            height: 5,
                           ),
+                          Text(
+                            email,
+                            style: AppTheme.regularSFTextStyle().copyWith(
+                                fontSize: 16, color: Color(0xff868686)),
+                          )
                         ],
                       ),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                        child: Divider(color: Color(0xff979797)),
-                      ),
-                      Container(
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                          width: MediaQuery.of(context).size.width,
-                          height: 65,
-                          child: textFieldFor(
-                              addressLineOne, _addressLineOneController,
-                              autocorrect: false,
-                              textCapitalization: TextCapitalization.none,
-                              keyboardType: TextInputType.streetAddress)),
-                      Container(
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                          width: MediaQuery.of(context).size.width,
-                          height: 65,
-                          child: textFieldFor(
-                              addressLineTwo, _addressLineTwoController,
-                              autocorrect: false,
-                              textCapitalization: TextCapitalization.none,
-                              keyboardType: TextInputType.streetAddress)),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
-                        child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Container(
-                              child: Text(
-                                "State",
-                                style: AppTheme.semiBoldSFTextStyle()
-                                    .copyWith(fontSize: 14),
-                              ),
-                            )),
-                      ),
-                      Container(
-                        color: Colors.white,
-                        child: Center(
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
-                            margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                            decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    width: 1.0,
-                                    color: HexColor("#D2D2D2"),
-                                    style: BorderStyle.solid),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5.0)),
-                              ),
-                            ),
-                            width: MediaQuery.of(context).size.width,
-                            height: 45,
-                            child: stateList != null && stateList.length > 0
-                                ? DropdownButton(
-                                    underline: SizedBox(),
-                                    isExpanded: true,
-                                    items: stateList.map((item) {
-                                      return DropdownMenuItem(
-                                        child: Text(item.stateName),
-                                        value: item.stateId.toString(),
-                                      );
-                                    }).toList(),
-                                    onChanged: (newVal) {
-                                      setState(() {
-                                        stateId = newVal;
-                                        for (var i = 0;
-                                            i < stateList.length;
-                                            i++) {
-                                          if (stateId.compareTo(stateList[i]
-                                                  .stateId
-                                                  .toString()) ==
-                                              0) {
-                                            stateName = stateList[i].stateName;
-                                          }
-                                        }
-                                        cityList.clear();
-                                        cityId = "0";
-                                      });
-                                      _getCityList(stateId);
-                                    },
-                                    value: stateId,
-                                  )
-                                : Container(),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                        child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Container(
-                              child: Text(
-                                "City",
-                                style: AppTheme.semiBoldSFTextStyle()
-                                    .copyWith(fontSize: 14),
-                              ),
-                            )),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            color: Colors.white,
-                            child: Center(
-                              child: Container(
-                                padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
-                                margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                                decoration: ShapeDecoration(
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                        width: 1.0,
-                                        color: HexColor("#D2D2D2"),
-                                        style: BorderStyle.solid),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
-                                  ),
-                                ),
-                                width: MediaQuery.of(context).size.width * 0.42,
-                                height: 45,
-                                child: cityList != null && cityList.length > 0
-                                    ? DropdownButton(
-                                        underline: SizedBox(),
-                                        isExpanded: true,
-                                        items: cityList.map((item) {
-                                          return new DropdownMenuItem(
-                                            child: Text(item.cityName),
-                                            value: item.cityId.toString(),
-                                          );
-                                        }).toList(),
-                                        onChanged: (newVal) {
-                                          setState(() {
-                                            cityId = newVal;
-                                            for (var i = 0;
-                                                i < cityList.length;
-                                                i++) {
-                                              if (cityId.compareTo(cityList[i]
-                                                      .cityId
-                                                      .toString()) ==
-                                                  0) {
-                                                cityName = cityList[i].cityName;
-                                              }
-                                            }
-                                          });
-                                        },
-                                        value: cityId.compareTo("0") == 0
-                                            ? "Select City"
-                                            : cityId,
-                                      )
-                                    : Center(
-                                        child: Container(
-                                        child: Text("Select city"),
-                                      )),
-                              ),
-                            ),
+                          Text(
+                            LabelStr.lblPhone.toUpperCase(),
+                            style: AppTheme.semiBoldSFTextStyle()
+                                .copyWith(fontSize: 14),
                           ),
-                          Expanded(
-                            child: Container(
-                                margin: EdgeInsets.fromLTRB(0, 5, 2, 0),
-                                height: 65,
-                                padding: EdgeInsets.fromLTRB(10, 5, 20, 0),
-                                child: textFieldFor(
-                                  zipCode,
-                                  _zipController,
-                                  inputFormatter: [
-                                    LengthLimitingTextInputFormatter(maxLength)
-                                  ],
-                                  keyboardType: TextInputType.number,
-                                  maxLength: 5,
-                                )),
+                          SizedBox(
+                            height: 5,
                           ),
+                          Text(
+                            phoneNumber.toString().contains("-")?phoneNumber:formatNumbersAsCode(phoneNumber),
+                            style: AppTheme.regularSFTextStyle().copyWith(
+                                fontSize: 16, color: Color(0xff868686)),
+                          )
                         ],
-                      ),
-                      Container(
-                          padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
-                          width: MediaQuery.of(context).size.width,
-                          height: 65,
-                          child: textFieldFor(
-                              "123-456-7890", _phoneController,
-                              keyboardType: TextInputType.number,
-                              maxLength: 12,
-                              inputFormatter: [
-                                MaskTextInputFormatter(
-                                    mask: '###-###-####',
-                                    filter: {"#": RegExp(r'[0-9]')})
-                              ])),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [
-                              HexColor("#1785e9"),
-                              HexColor("#83cff2")
-                            ]),
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
-                        child: TextButton(
-                          child: Text(LabelStr.lblUpdate,
-                              style: AppTheme.mediumSFTextStyle()
-                                  .copyWith(fontSize: 18, color: Colors.white)),
-                          onPressed: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
-                            checkConnection().then((isConnected) {
-                              validationForCollectClientSignature();
-                            });
-                          },
-                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  Container(
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    child: Divider(color: Color(0xff979797)),
+                  ),
+                  Container(
+                      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      width: MediaQuery.of(context).size.width,
+                      height: 65,
+                      child: textFieldFor(
+                          addressLineOne, _addressLineOneController,
+                          autocorrect: false,
+                          readOnly: true,
+                          onTap: () async{
+                            final sessionToken = Uuid().v4();
+                            final Suggestion result = await showSearch(
+                              context: context,
+                              delegate: AddressSearch(sessionToken),
+                            );
+                            // This will change the text displayed in the TextField
+                            if (result != null) {
+                              setState(() {
+                                _addressLineOneController.text = result.description;
+                              });
+                            }
+                          },
+                          textCapitalization: TextCapitalization.none,
+                          keyboardType: TextInputType.streetAddress)),
+                  Container(
+                      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      width: MediaQuery.of(context).size.width,
+                      height: 65,
+                      child: textFieldFor(
+                          addressLineTwo, _addressLineTwoController,
+                          autocorrect: false,
+                          textCapitalization: TextCapitalization.none,
+                          keyboardType: TextInputType.streetAddress)),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      width: MediaQuery.of(context).size.width,
+                      height: 65,
+                      child: textFieldFor(
+                          stateName, _stateController,
+                          autocorrect: false,
+                          textCapitalization: TextCapitalization.none,
+                          keyboardType: TextInputType.streetAddress)),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                            margin: EdgeInsets.only(left: 10),
+                            height: 65,
+                            padding: EdgeInsets.fromLTRB(10, 5, 5, 0),
+                            child: textFieldFor(
+                              cityName,
+                              _cityController,
+                              keyboardType: TextInputType.text,
+                              readOnly: true
+                            )),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                            height: 65,
+                            margin: EdgeInsets.only(right: 15),
+                            padding: EdgeInsets.fromLTRB(10, 5, 5, 0),
+                            child: textFieldFor(
+                              zipCode,
+                              _zipController,
+                              inputFormatter: [
+                                LengthLimitingTextInputFormatter(maxLength)
+                              ],
+                              keyboardType: TextInputType.number,
+                              maxLength: 5,
+                              readOnly: true
+                            )),
+                      ),
+                    ],
+                  ),
+                  Container(
+                      padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
+                      width: MediaQuery.of(context).size.width,
+                      height: 65,
+                      child: textFieldFor(
+                          "123-456-7890", _phoneController,
+                          keyboardType: TextInputType.number,
+                          maxLength: 12,
+                          inputFormatter: [
+                            MaskTextInputFormatter(
+                                mask: '###-###-####',
+                                filter: {"#": RegExp(r'[0-9]')})
+                          ])),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                          HexColor("#1785e9"),
+                          HexColor("#83cff2")
+                        ]),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: TextButton(
+                      child: Text(LabelStr.lblUpdate,
+                          style: AppTheme.mediumSFTextStyle()
+                              .copyWith(fontSize: 18, color: Colors.white)),
+                      onPressed: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        checkConnection().then((isConnected) {
+                          validationForCollectClientSignature();
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -565,11 +463,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (_addressLineOneController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterAddressLineOne, Colors.red);
     }
-    else if (stateId == null || stateList.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterState, Colors.red);
-    } else if (cityId == null || cityList.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterCity, Colors.red);
-    } else if (_zipController.text.isEmpty) {
+    else if (_zipController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterZip, Colors.red);
     } else if (_zipController.text.isNotEmpty && _zipController.text.length != 5) {
       ToastUtils.showToast(context, LabelStr.enterValidZip, Colors.red);
@@ -584,9 +478,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _addressLineOneController.text,
           _addressLineTwoController.text,
           _zipController.text,
-          cityId,
-          stateId,
           _phoneController.text,
+          cityName,
+          stateName,
           firstName,
           middleName,
           lastName,
@@ -612,7 +506,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Utils.showLoader(true, context);
     _nurseViewModel.getProfileAPICall(nurseId, (isSuccess, message) {
       if (isSuccess) {
-        getNurseDetails(true);
+        getNurseDetails();
       } else {
         Utils.showLoader(false, context);
         ToastUtils.showToast(context, message, Colors.red);
@@ -620,7 +514,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  void getNurseDetails(bool isLoaderShow) {
+  void getNurseDetails() {
     SharedPreferences.getInstance().then((prefs) async {
       PrefUtils.getNurseDataFromPref();
       setState(() {
@@ -635,17 +529,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         lastName = prefs.getString(PrefUtils.lastName);
         gender = prefs.getString(PrefUtils.Gender);
         Utils.nurseProfile = prefs.getString(PrefUtils.NurseImage);
-        dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
-        formattedStr = Utils.convertDate(dateOfBirth.toString(), DateFormat("MM/dd/yy"));
-        apiDateString = Utils.convertDate(dateOfBirth.toString(), DateFormat("yyyy-MM-dd"));
+        String dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
+        formattedStr = Utils.convertDate(dateOfBirth, DateFormat("MM/dd/yy"));
+        apiDateString = Utils.convertDate(dateOfBirth, DateFormat("yyyy-MM-dd"));
         print("formattedStr" + apiDateString);
-        stateId = prefs.getInt(PrefUtils.stateId).toString();
-        cityId = prefs.getInt(PrefUtils.cityId).toString();
         stateName = prefs.getString(PrefUtils.stateName);
         cityName = prefs.getString(PrefUtils.cityName);
 
         _addressLineOneController.text = addressLineOne;
         _addressLineTwoController.text = addressLineTwo;
+        _cityController.text = cityName;
+        _stateController.text = stateName;
         _zipController.text = zipCode;
         if (phoneNumber.toString().contains("-")) {
           _phoneController.text = phoneNumber;
@@ -653,53 +547,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _phoneController.text = formatNumbersAsCode(phoneNumber);
         }
       });
-      _getSateLIst(isLoaderShow, stateId);
-    });
-  }
-
-  void _getSateLIst(bool isLoaderShow, String stateId) {
-    if(!isLoaderShow) {
-      Utils.showLoader(true, context);
-    }
-    _nurseViewModel.getStateList((isSuccess, response) {
+      isLoading = false;
       Utils.showLoader(false, context);
-      if (isSuccess) {
-        setState(() {
-          isLoading = false;
-          stateList = [];
-          stateList = _nurseViewModel.stateList;
-          cityList = [];
-        });
-        _getCityList(stateId);
-      } else {
-        setState(() {
-          stateList = [];
-          cityList = [];
-        });
-      }
-    });
-  }
-
-  void _getCityList(String stateId) {
-    Utils.showLoader(true, context);
-    _nurseViewModel.getCityList(stateId, (isSuccess, response) {
-      Utils.showLoader(false, context);
-      if (isSuccess) {
-        setState(() {
-          cityList = [];
-          cityList = _nurseViewModel.cityDataList;
-          if(cityId.compareTo("0") == 0){
-            if(cityList.length > 0) {
-              cityId = cityList[0].cityId.toString();
-            }
-          }
-        });
-      } else {
-        setState(() {
-          cityList = [];
-          cityId = "0";
-        });
-      }
     });
   }
 
@@ -709,8 +558,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     setState(() {
       _image = image;
-      //final bytes = _image.readAsBytesSync();
-      //_img64 = base64Encode(bytes);
     });
   }
 
@@ -720,8 +567,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     setState(() {
       _image = image;
-      //final bytes = _image.readAsBytesSync();
-      //_img64 = base64Encode(bytes);
     });
   }
 

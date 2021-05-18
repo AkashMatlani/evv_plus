@@ -13,14 +13,11 @@ class PrefUtils {
   static const String NurseImage = "com.evv_plus.nusrseImage";
   static const String Gender = "com.evv_plus.gender";
   static const String DateOfBirth = "com.evv_plus.dateOfBirth";
+  static const String displayAddress = "com.evv_plus.displayAddress";
   static const String addressLineOne = "com.evv_plus.addressLineOne";
   static const String addressLineTwo = "com.evv_plus.addressLineTwo";
   static const String phoneNumber = "com.evv_plus.phoneNumber";
   static const String zipCode = "com.evv_plus.zipCode";
-  static const String state="com.evv_plus.state";
-  static const String city="com.evv_plus.city";
-  static const String stateId="com.evv_plus.stateId";
-  static const String cityId="com.evv_plus.cityId";
   static const String cityName="com.evv_plus.cityName";
   static const String stateName="com.evv_plus.stateName";
   static const String isFirstTimeLogin = "com.evv_plus.isFirstTimeLogin";
@@ -70,12 +67,11 @@ class PrefUtils {
 
     PrefUtils.setStringValue(PrefUtils.Gender, nurseDetails.gender);
     PrefUtils.setStringValue(PrefUtils.DateOfBirth, nurseDetails.dateOfBirth);
+    PrefUtils.setStringValue(PrefUtils.displayAddress, nurseDetails.displayAddress);
     PrefUtils.setStringValue(PrefUtils.addressLineOne, nurseDetails.address1);
     PrefUtils.setStringValue(PrefUtils.addressLineTwo, nurseDetails.address2);
     PrefUtils.setStringValue(PrefUtils.phoneNumber, nurseDetails.phoneNumber);
     PrefUtils.setStringValue(PrefUtils.zipCode, nurseDetails.zipCode);
-    PrefUtils.setIntValue(PrefUtils.stateId, nurseDetails.stateId);
-    PrefUtils.setIntValue(PrefUtils.cityId, nurseDetails.cityId);
     PrefUtils.setStringValue(PrefUtils.cityName, nurseDetails.cityName);
     PrefUtils.setStringValue(PrefUtils.stateName, nurseDetails.stateName);
     if(from.compareTo("FromLogin") == 0){
@@ -86,22 +82,22 @@ class PrefUtils {
   }
 
   static void getNurseDataFromPref() async {
-    var _nurseId = await getValueFor(PrefUtils.nurseId);
-    var _isLoggedIn = await getValueFor(PrefUtils.isLoggedIn);
-    var _isFirstTimeLogin = await getValueFor(PrefUtils.isFirstTimeLogin);
-    var _isEmail = await getValueFor(PrefUtils.email);
-    var _isFirstName = await getValueFor(PrefUtils.firstName);
-    var _isLastName = await getValueFor(PrefUtils.lastName);
-    var addressLineOne = await getValueFor(PrefUtils.addressLineOne);
-    var addressLineTwo = await getValueFor(PrefUtils.addressLineTwo);
-    var phoneNumber = await getValueFor(PrefUtils.phoneNumber);
-    var zipCode = await getValueFor(PrefUtils.zipCode);
-    var middleName = await getValueFor(PrefUtils.MiddleName);
-    var gender = await getValueFor(PrefUtils.Gender);
-    var dateOfBirth = await getValueFor(PrefUtils.DateOfBirth);
-    var nurseImage = await getValueFor(PrefUtils.NurseImage);
-    var stateName = await getValueFor(PrefUtils.stateName);
-    var cityName = await getValueFor(PrefUtils.cityName);
+    await getValueFor(PrefUtils.nurseId);
+    await getValueFor(PrefUtils.isLoggedIn);
+    await getValueFor(PrefUtils.isFirstTimeLogin);
+    await getValueFor(PrefUtils.email);
+    await getValueFor(PrefUtils.firstName);
+    await getValueFor(PrefUtils.lastName);
+    await getValueFor(PrefUtils.MiddleName);
+    await getValueFor(PrefUtils.addressLineOne);
+    await getValueFor(PrefUtils.addressLineTwo);
+    await getValueFor(PrefUtils.zipCode);
+    await getValueFor(PrefUtils.Gender);
+    await getValueFor(PrefUtils.phoneNumber);
+    await getValueFor(PrefUtils.DateOfBirth);
+    await getValueFor(PrefUtils.NurseImage);
+    await getValueFor(PrefUtils.stateName);
+    await getValueFor(PrefUtils.cityName);
   }
 
   static Future getValueFor(String key) async {

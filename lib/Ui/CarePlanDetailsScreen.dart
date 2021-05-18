@@ -20,9 +20,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 
 class CarePlanDetailsScreen extends StatefulWidget {
 
@@ -42,12 +42,6 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
   double blockSizeHorizontal;
   double blockSizeVertical;
 
-  Completer<GoogleMapController> _controller = Completer();
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(23.012429, 72.510775),
-    zoom: 14.4746,
-  );
-
   TimeOfDay _selectedTime = TimeOfDay(hour: 00, minute: 00);
 
   String _nurseId="", _nurseName="";
@@ -55,17 +49,12 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
   bool isVisitStarted = false;
   String checkInTime = "00:00:00";
   String checkOutTime = "00:00:00";
-  static double latitude_current = 31.9414246;
-  static double longitude_current = 35.8880857;
   Map<PolylineId, Polyline> _mapPolylines = {};
   int _polylineIdCounter = 1;
+  Completer<GoogleMapController> _controller = Completer();
+  CameraPosition _kGooglePlex;
+  List<Marker> _markers = <Marker>[];
 
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 60.8334901395799,
-      target: LatLng(latitude_current, longitude_current),
-      tilt: 80.440717697143555,
-      zoom: 18.151926040649414);
   @override
   void initState() {
     super.initState();
@@ -78,6 +67,20 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
         checkOutTime = Utils.convertTime(widget._scheduleDetailInfo.checkOutTime.substring(0, 5));
       });
     });
+    _kGooglePlex = CameraPosition(
+      target: LatLng(widget._scheduleDetailInfo.latitude, widget._scheduleDetailInfo.longitude),
+      zoom: 14.4746,
+    );
+
+    _markers.add(
+        Marker(
+            markerId: MarkerId('SomeId'),
+            position: LatLng(widget._scheduleDetailInfo.latitude, widget._scheduleDetailInfo.longitude),
+            infoWindow: InfoWindow(
+                title: 'Patient Location'
+            )
+        )
+    );
   }
 
   @override
@@ -251,15 +254,6 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                           Text(widget._scheduleDetailInfo.addressLine1+", "+widget._scheduleDetailInfo.addressLine2,
                               style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
                           SizedBox(height: 10),
-                          /*Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(width: 1, color: Colors.black12)
-                          ),
-                          height: blockSizeVertical*30,
-                          alignment: Alignment.center,
-                          child: Text("Map view"),
-                        ),*/
                           Container(
                             height: 240,
                             child: GoogleMap(
@@ -267,26 +261,11 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                               initialCameraPosition: _kGooglePlex,
                               onMapCreated: (GoogleMapController controller) {
                                 _controller.complete(controller);
-
-                              //  _GetDeviceLocation();
-                               // _controller.complete(controller);
                               },
+                              markers: Set<Marker>.of(_markers)
                               //myLocationEnabled: true,
                               //polylines: Set<Polyline>.of(_mapPolylines.values),
                             ),
-                         /*   GoogleMap(
-                              mapType: MapType.normal,
-                              initialCameraPosition: CameraPosition(
-                                target: LatLng(latitude_current, longitude_current),
-                                zoom: 14.4746,
-                              ),
-                              onMapCreated: (GoogleMapController controller) async {
-                                _GetDeviceLocation();
-                                _controller.complete(controller);
-                              },
-                              myLocationEnabled: true,
-                              polylines: Set<Polyline>.of(_mapPolylines.values),
-                            ),*/
                           ),
                           SizedBox(height: 20),
                           widget.isUpcommingVisit ? Expanded(
@@ -626,26 +605,5 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
         ToastUtils.showToast(context, message, Colors.red);
       }
     });
-  }
-
-  void _GetDeviceLocation() async {
-    var location = new Location();
-    location.changeSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 0,
-      interval: 100,
-    );
-    location.onLocationChanged.listen((LocationData currentLocation) {
-      latitude_current = currentLocation.latitude;
-      longitude_current = currentLocation.longitude;
-      _goToTheLake();
-    });
-  }
-
-  Future<void> _goToTheLake() async {
-    _GetDeviceLocation();
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-
   }
 }

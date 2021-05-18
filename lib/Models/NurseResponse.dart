@@ -1,20 +1,19 @@
-/// nurseid : 7
-/// firstName : "Sadananad"
-/// middleName : "rrrr"
+/// nurseid : 58
+/// firstName : "Sadanand"
+/// middleName : "M"
 /// lastName : "Moris"
 /// email : "sadanand.r@dashtechinc.com"
-/// gender : "Male"
+/// gender : "male"
 /// role : "nurse"
-/// address1 : "36 West 5th Street"
-/// address2 : "10th Floor"
-/// phoneNumber : "1234567895"
-/// zipCode : "10019"
-/// dateOfBirth : "1991-12-22T00:00:00"
-/// nurseImage : ""
-/// cityId : 1
-/// stateId : 1
-/// cityName : "Moody\r\n"
-/// stateName : "Alabama"
+/// address1 : "26 Harbor Road"
+/// address2 : "5th floor"
+/// phoneNumber : "977-979-7979"
+/// displayAddress : "26 Harbor Park Drive, Port Washington, NY, USA"
+/// zipCode : "97494"
+/// dateOfBirth : "2021-03-11T00:00:00"
+/// nurseImage : "http://35.231.45.54:70/AndroidNurseimg/scaled_c4c8c178-d57e-461d-80c8-1074fc932049228747073324945682720210413165725924.jpg"
+/// cityName : "Port Washington"
+/// stateName : "New York"
 /// isFirstTimeLogin : true
 
 class NurseResponse {
@@ -28,11 +27,10 @@ class NurseResponse {
   String _address1;
   String _address2;
   String _phoneNumber;
+  String _displayAddress;
   String _zipCode;
   String _dateOfBirth;
   String _nurseImage;
-  int _cityId;
-  int _stateId;
   String _cityName;
   String _stateName;
   bool _isFirstTimeLogin;
@@ -47,11 +45,10 @@ class NurseResponse {
   String get address1 => _address1;
   String get address2 => _address2;
   String get phoneNumber => _phoneNumber;
+  String get displayAddress => _displayAddress;
   String get zipCode => _zipCode;
   String get dateOfBirth => _dateOfBirth;
   String get nurseImage => _nurseImage;
-  int get cityId => _cityId;
-  int get stateId => _stateId;
   String get cityName => _cityName;
   String get stateName => _stateName;
   bool get isFirstTimeLogin => _isFirstTimeLogin;
@@ -67,11 +64,10 @@ class NurseResponse {
       String address1, 
       String address2, 
       String phoneNumber, 
+      String displayAddress, 
       String zipCode, 
       String dateOfBirth, 
       String nurseImage, 
-      int cityId, 
-      int stateId, 
       String cityName, 
       String stateName, 
       bool isFirstTimeLogin}){
@@ -85,11 +81,10 @@ class NurseResponse {
     _address1 = address1;
     _address2 = address2;
     _phoneNumber = phoneNumber;
+    _displayAddress = displayAddress;
     _zipCode = zipCode;
     _dateOfBirth = dateOfBirth;
     _nurseImage = nurseImage;
-    _cityId = cityId;
-    _stateId = stateId;
     _cityName = cityName;
     _stateName = stateName;
     _isFirstTimeLogin = isFirstTimeLogin;
@@ -106,11 +101,10 @@ class NurseResponse {
     _address1 = json["address1"];
     _address2 = json["address2"];
     _phoneNumber = json["phoneNumber"];
+    _displayAddress = json["displayAddress"];
     _zipCode = json["zipCode"];
     _dateOfBirth = json["dateOfBirth"];
     _nurseImage = json["nurseImage"];
-    _cityId = json["cityId"];
-    _stateId = json["stateId"];
     _cityName = json["cityName"];
     _stateName = json["stateName"];
     _isFirstTimeLogin = json["isFirstTimeLogin"];
@@ -128,11 +122,10 @@ class NurseResponse {
     map["address1"] = _address1;
     map["address2"] = _address2;
     map["phoneNumber"] = _phoneNumber;
+    map["displayAddress"] = _displayAddress;
     map["zipCode"] = _zipCode;
     map["dateOfBirth"] = _dateOfBirth;
     map["nurseImage"] = _nurseImage;
-    map["cityId"] = _cityId;
-    map["stateId"] = _stateId;
     map["cityName"] = _cityName;
     map["stateName"] = _stateName;
     map["isFirstTimeLogin"] = _isFirstTimeLogin;

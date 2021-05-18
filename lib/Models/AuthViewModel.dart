@@ -7,9 +7,6 @@ import 'package:evv_plus/Models/SIgnatureResponse.dart';
 import 'package:evv_plus/Models/SigninVisitVerificationModel.dart';
 import 'package:evv_plus/WebService/WebService.dart';
 
-import 'CityListResponse.dart';
-import 'StateListResponse.dart';
-
 
 class AuthViewModel {
   ValidationResult validateLogIn(String email, String password) {
@@ -198,45 +195,8 @@ class AuthViewModel {
     });
   }
 
-  List<StateData> stateList = [];
-
-  void getStateList(ResponseCallback callback) {
-    WebService.getAPICallWithoutParmas(WebService.getState).then((response) {
-      if (response.statusCode == 1) {
-        for (var data in response.body) {
-          stateList.add(StateData.fromJson(data));
-        }
-        callback(true, "");
-      } else {
-        callback(false, response.message);
-      }
-    }).catchError((error) {
-      print(error);
-      callback(false, LabelStr.serverError);
-    });
-  }
-
-  List<CityData> cityDataList = [];
-
-  void getCityList(String stateId, ResponseCallback callback) {
-    var params = {"StateId": stateId};
-    WebService.getAPICall(WebService.getCity, params).then((response) {
-      if (response.statusCode == 1) {
-        for (var data in response.body) {
-          cityDataList.add(CityData.fromJson(data));
-        }
-        callback(true, "");
-      } else {
-        callback(false, response.message);
-      }
-    }).catchError((error) {
-      print(error);
-      callback(false, LabelStr.serverError);
-    });
-  }
 
   SignatureResponseModel signatureResponseModel;
-
   void getPatientSignature(
       String flag,
       String PatientSignature,
