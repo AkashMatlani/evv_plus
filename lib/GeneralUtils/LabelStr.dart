@@ -129,4 +129,11 @@ class LabelStr {
   static const lblCancelVerification = "Cancel Task Verification";
   static const lblNoData = "No Data Found";
   static const lblNoFile = "File not found";
+
+  static const lblSearchAddress = "Search Address";
+  static const lblApartment = "Apartment, unit, suite, or floor #";
+  static const lblAddress = "Address";
+  static const lblState = "State";
+  static const lblZipcode = "Zipcode";
+  static const lblContactNo = "Contact No.";
 }

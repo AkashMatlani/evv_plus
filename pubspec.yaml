@@ -38,6 +38,7 @@ dependencies:
   flutter_calendar_carousel: ^1.5.3
   google_maps_flutter: ^1.0.3
   google_places_flutter: ^2.0.3
+  geocoder: ^0.2.1
   uuid: ^2.0.4
   url_launcher: ^6.0.2
   esys_flutter_share: ^1.0.2

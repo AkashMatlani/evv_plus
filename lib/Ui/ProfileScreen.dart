@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -31,6 +32,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
 
+  var _searchAddressController = TextEditingController();
   var _addressLineOneController = TextEditingController();
   var _addressLineTwoController = TextEditingController();
   var _stateController = TextEditingController();
@@ -48,9 +50,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final int maxLength = 5;
   bool isLoading = true;
   String nurseId, email, firstName, middleName, lastName, phoneNumber, gender;
-  String addressLineOne, addressLineTwo, zipCode;
-  String formattedStr, apiDateString;
+  String addressLineOne, addressLineTwo, zipCode, displayAddress;
   String stateName = "", cityName = "";
+  String formattedStr, apiDateString;
   File _image;
 
 
@@ -311,15 +313,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                     child: Divider(color: Color(0xff979797)),
                   ),
                   Container(
-                      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    width: MediaQuery.of(context).size.width,
+                    child: Text(LabelStr.lblSearchAddress, style: AppTheme.mediumSFTextStyle()),
+                  ),
+                  Container(
+                      padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
                       width: MediaQuery.of(context).size.width,
                       height: 65,
                       child: textFieldFor(
-                          addressLineOne, _addressLineOneController,
+                          displayAddress, _searchAddressController,
                           autocorrect: false,
                           readOnly: true,
                           onTap: () async{
@@ -331,14 +338,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             // This will change the text displayed in the TextField
                             if (result != null) {
                               setState(() {
-                                _addressLineOneController.text = result.description;
+                                displayAddress = result.description;
+                                _searchAddressController.text = result.description;
+                                addressLineOne = result.description.split(",")[0];
+                                _addressLineOneController.text = result.description.split(",")[0];
+                              });
+
+                              var apiClient = PlaceApiProvider(sessionToken);
+                              Utils.showLoader(true, context);
+                              apiClient.getPlaceDetailFromId(result.placeId).then((place) async {
+                                final coordinates = Coordinates(place.latitude, place.longitude);
+                                var mLocation = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+
+                                setState(() {
+                                  cityName = mLocation.first.locality;
+                                  stateName = mLocation.first.adminArea;
+                                  zipCode = mLocation.first.postalCode;
+
+                                  _cityController.text = cityName;
+                                  _stateController.text = stateName;
+                                  _zipController.text = zipCode;
+                                });
+                                Utils.showLoader(false, context);
                               });
                             }
                           },
                           textCapitalization: TextCapitalization.none,
                           keyboardType: TextInputType.streetAddress)),
                   Container(
-                      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    width: MediaQuery.of(context).size.width,
+                    child: Text(LabelStr.lblApartment, style: AppTheme.mediumSFTextStyle()),
+                  ),
+                  Container(
+                      padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
                       width: MediaQuery.of(context).size.width,
                       height: 65,
                       child: textFieldFor(
@@ -346,56 +379,94 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           autocorrect: false,
                           textCapitalization: TextCapitalization.none,
                           keyboardType: TextInputType.streetAddress)),
-                  SizedBox(
-                    height: 5,
+                  Container(
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    width: MediaQuery.of(context).size.width,
+                    child: Text(LabelStr.lblAddress, style: AppTheme.mediumSFTextStyle()),
                   ),
                   Container(
-                      padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
+                      width: MediaQuery.of(context).size.width,
+                      height: 65,
+                      child: textFieldFor(
+                          addressLineOne, _addressLineOneController,
+                          autocorrect: false,
+                          readOnly: true,
+                          textCapitalization: TextCapitalization.none,
+                          keyboardType: TextInputType.streetAddress)),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    width: MediaQuery.of(context).size.width,
+                    child: Text(LabelStr.lblState, style: AppTheme.mediumSFTextStyle()),
+                  ),
+                  Container(
+                      padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
                       width: MediaQuery.of(context).size.width,
                       height: 65,
                       child: textFieldFor(
                           stateName, _stateController,
                           autocorrect: false,
+                          readOnly: true,
                           textCapitalization: TextCapitalization.none,
                           keyboardType: TextInputType.streetAddress)),
-                  SizedBox(
-                    height: 5,
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         flex: 2,
-                        child: Container(
-                            margin: EdgeInsets.only(left: 10),
-                            height: 65,
-                            padding: EdgeInsets.fromLTRB(10, 5, 5, 0),
-                            child: textFieldFor(
-                              cityName,
-                              _cityController,
-                              keyboardType: TextInputType.text,
-                              readOnly: true
-                            )),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                              width: MediaQuery.of(context).size.width,
+                              child: Text(LabelStr.lblCity, style: AppTheme.mediumSFTextStyle()),
+                            ),
+                            Container(
+                                margin: EdgeInsets.only(left: 10),
+                                height: 65,
+                                padding: EdgeInsets.fromLTRB(10, 5, 5, 0),
+                                child: textFieldFor(
+                                    cityName,
+                                    _cityController,
+                                    keyboardType: TextInputType.text,
+                                    readOnly: true
+                                ))
+                          ],
+                        ),
                       ),
                       Expanded(
                         flex: 1,
-                        child: Container(
-                            height: 65,
-                            margin: EdgeInsets.only(right: 15),
-                            padding: EdgeInsets.fromLTRB(10, 5, 5, 0),
-                            child: textFieldFor(
-                              zipCode,
-                              _zipController,
-                              inputFormatter: [
-                                LengthLimitingTextInputFormatter(maxLength)
-                              ],
-                              keyboardType: TextInputType.number,
-                              maxLength: 5,
-                              readOnly: true
-                            )),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.fromLTRB(10, 10, 20, 0),
+                              width: MediaQuery.of(context).size.width,
+                              child: Text(LabelStr.lblZipcode, style: AppTheme.mediumSFTextStyle()),
+                            ),
+                            Container(
+                                height: 65,
+                                margin: EdgeInsets.only(right: 15),
+                                padding: EdgeInsets.fromLTRB(10, 5, 5, 0),
+                                child: textFieldFor(
+                                    zipCode,
+                                    _zipController,
+                                    inputFormatter: [
+                                      LengthLimitingTextInputFormatter(maxLength)
+                                    ],
+                                    keyboardType: TextInputType.number,
+                                    maxLength: 5,
+                                    readOnly: true
+                                ))
+                          ],
+                        ),
                       ),
                     ],
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+                    width: MediaQuery.of(context).size.width,
+                    child: Text(LabelStr.lblContactNo, style: AppTheme.mediumSFTextStyle()),
                   ),
                   Container(
                       padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
@@ -487,6 +558,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           gender,
           apiDateString,
           email,
+          displayAddress,
           _image != null ? _image.path : null, (isSuccess, message) {
         Utils.showLoader(false, context);
         if (isSuccess) {
@@ -532,10 +604,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         String dateOfBirth = prefs.getString(PrefUtils.DateOfBirth);
         formattedStr = Utils.convertDate(dateOfBirth, DateFormat("MM/dd/yy"));
         apiDateString = Utils.convertDate(dateOfBirth, DateFormat("yyyy-MM-dd"));
-        print("formattedStr" + apiDateString);
         stateName = prefs.getString(PrefUtils.stateName);
         cityName = prefs.getString(PrefUtils.cityName);
+        displayAddress = prefs.getString(PrefUtils.displayAddress);
 
+        _searchAddressController.text = displayAddress;
         _addressLineOneController.text = addressLineOne;
         _addressLineTwoController.text = addressLineTwo;
         _cityController.text = cityName;
