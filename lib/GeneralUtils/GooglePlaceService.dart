@@ -7,18 +7,26 @@ class Place {
   String streetNumber;
   String street;
   String city;
+  String state;
+  String country;
   String zipCode;
+  double latitude;
+  double longitude;
 
   Place({
     this.streetNumber,
     this.street,
     this.city,
+    this.state,
+    this.country,
     this.zipCode,
+    this.latitude,
+    this.longitude
   });
 
   @override
   String toString() {
-    return 'Place(streetNumber: $streetNumber, street: $street, city: $city, zipCode: $zipCode)';
+    return 'Place(streetNumber: $streetNumber, street: $street, city: $city, state:$state, country: $country, zipCode: $zipCode, latitude:$latitude, longitude:$longitude)';
   }
 }
 
@@ -46,16 +54,13 @@ class PlaceApiProvider {
   final apiKey = Platform.isAndroid ? androidKey : iosKey;
 
   Future<List<Suggestion>> fetchSuggestions(String input, String lang) async {
-    final request =
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&types=address&language=$lang&components=country:us&key=$apiKey&sessiontoken=$sessionToken';
+    final request = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&types=address&language=$lang&components=country:us&key=$apiKey&sessiontoken=$sessionToken';
     final response = await client.get(request);
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
-
-      print("result is-"+result.toString());
       if (result['status'] == 'OK') {
-        // compose suggestions in a listF
+        // compose suggestions in a list
         return result['predictions']
             .map<Suggestion>((p) => Suggestion(p['place_id'], p['description']))
             .toList();
@@ -69,16 +74,17 @@ class PlaceApiProvider {
     }
   }
 
-  /*Future<Place> getPlaceDetailFromId(String placeId) async {
-    final request =
-        'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=address_component&key=$apiKey&sessiontoken=$sessionToken';
+  Future<Place> getPlaceDetailFromId(String placeId) async {
+    final request = 'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=address_component,geometry&key=$apiKey&sessiontoken=$sessionToken';
     final response = await client.get(request);
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
+      print("*********************************");
+      print(result);
+      print("*********************************");
       if (result['status'] == 'OK') {
-        final components =
-            result['result']['address_components'] as List<dynamic>;
+        final components = result['result']['address_components'] as List<dynamic>;
         // build result
         final place = Place();
         components.forEach((c) {
@@ -92,9 +98,17 @@ class PlaceApiProvider {
           if (type.contains('locality')) {
             place.city = c['long_name'];
           }
+          if (type.contains('administrative_area_level_1')) {
+            place.city = c['long_name'];
+          }
+          if (type.contains('country')) {
+            place.country = c['long_name'];
+          }
           if (type.contains('postal_code')) {
             place.zipCode = c['long_name'];
           }
+          place.latitude = result['result']['geometry']['location']['lat'];
+          place.longitude = result['result']['geometry']['location']['lng'];
         });
         return place;
       }
@@ -102,5 +116,5 @@ class PlaceApiProvider {
     } else {
       throw Exception('Failed to fetch suggestion');
     }
-  }*/
+  }
 }

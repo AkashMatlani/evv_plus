@@ -7,7 +7,6 @@ import 'package:evv_plus/Models/SIgnatureResponse.dart';
 import 'package:evv_plus/Models/SigninVisitVerificationModel.dart';
 import 'package:evv_plus/WebService/WebService.dart';
 
-
 class AuthViewModel {
   ValidationResult validateLogIn(String email, String password) {
     if (email.isEmpty) {
@@ -36,7 +35,8 @@ class AuthViewModel {
         if (response.statusCode == 1) {
           if (response.body != null) {
             PrefUtils.setStringValue(PrefUtils.password, password);
-            PrefUtils.saveNurseDataToPref(NurseResponse.fromJson(response.body), "FromLogin");
+            PrefUtils.saveNurseDataToPref(
+                NurseResponse.fromJson(response.body), "FromLogin");
             callback(true, "");
           }
         } else {
@@ -134,7 +134,8 @@ class AuthViewModel {
     WebService.getAPICall(WebService.nurseDetail, params).then((response) {
       if (response.statusCode == 1) {
         if (response.body != null) {
-          PrefUtils.saveNurseDataToPref(NurseResponse.fromJson(response.body), "FromProfile");
+          PrefUtils.saveNurseDataToPref(
+              NurseResponse.fromJson(response.body), "FromProfile");
         }
         callback(true, "");
       } else {
@@ -151,33 +152,35 @@ class AuthViewModel {
       String addressOne,
       String addressTwo,
       String zipCode,
-      String cityId,
-      String stateId,
       String phoneNumber,
+      String cityName,
+      String stateName,
       String firstName,
       String middleName,
       String lastName,
       String gender,
       String dateOfBirth,
       String email,
+      String displayAddress,
       String nurseImage,
       ResponseCallback callback) {
     var params = {
       "NurseId": nurseId,
       "Address1": addressOne,
       if(addressTwo!=null && addressTwo.isNotEmpty)
-      "Address2": addressTwo,
+        "Address2": addressTwo,
       "ZipCode": zipCode,
-      "FKcityID": cityId,
-      "FKstateID": stateId,
+      "cityName": cityName,
+      "stateName": stateName,
       "PhoneNumber": phoneNumber,
       "FirstName": firstName,
       if(middleName!=null && middleName.isNotEmpty)
-      "MiddleName": middleName,
+        "MiddleName": middleName,
       "LastName": lastName,
       "Gender": gender,
       "DateOfBirth": dateOfBirth,
-      "Email": email
+      "Email": email,
+      "displayAddress":displayAddress
     };
 
     WebService.multiPartAPI(WebService.nurseUpdateProfile, params, "nurseImage", nurseImage).then((response) {
@@ -195,8 +198,8 @@ class AuthViewModel {
     });
   }
 
-
   SignatureResponseModel signatureResponseModel;
+
   void getPatientSignature(
       String flag,
       String PatientSignature,

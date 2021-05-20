@@ -57,6 +57,8 @@ class AddressSearch extends SearchDelegate<Suggestion> {
                     title:
                         Text((snapshot.data[index] as Suggestion).description),
                     onTap: () {
+                      var selectedItem = snapshot.data[index] as Suggestion;
+                      apiClient.getPlaceDetailFromId(selectedItem.placeId);
                       close(context, snapshot.data[index] as Suggestion);
                     },
                   ),
