@@ -42,7 +42,7 @@ class PlaceApiProvider {
   final sessionToken;
 
   static final String androidKey = 'AIzaSyBprJaLdHXBMMVlG37ShgId_EQ_-Bzo9qE';
-  static final String iosKey = 'YOUR_API_KEY_HERE';
+  static final String iosKey = 'AIzaSyDZAQUd8vts_TmuXngtyYut_m88ZxR6X7k';
   final apiKey = Platform.isAndroid ? androidKey : iosKey;
 
   Future<List<Suggestion>> fetchSuggestions(String input, String lang) async {
@@ -52,8 +52,10 @@ class PlaceApiProvider {
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
+
+      print("result is-"+result.toString());
       if (result['status'] == 'OK') {
-        // compose suggestions in a list
+        // compose suggestions in a listF
         return result['predictions']
             .map<Suggestion>((p) => Suggestion(p['place_id'], p['description']))
             .toList();
