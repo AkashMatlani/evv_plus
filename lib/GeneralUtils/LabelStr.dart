@@ -101,7 +101,7 @@ class LabelStr {
   static const enterClientName = "Please enter client name";
   static const enterClinicianName = "Please enter clinician name";
   static const enterAddressLineOne = "Please enter addressline 1";
-  static const enterAddressLineTwo = "Please enter addressline 2 ";
+  static const enterAddressLineTwo = "Please enter Apartment, unit, suite, or floor";
   static const enterCity= "Please enter city";
   static const enterState= "Please enter state";
   static const enterZip = "Please enter zip code";

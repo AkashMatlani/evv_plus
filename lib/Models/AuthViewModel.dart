@@ -167,8 +167,7 @@ class AuthViewModel {
     var params = {
       "NurseId": nurseId,
       "Address1": addressOne,
-      if(addressTwo!=null && addressTwo.isNotEmpty)
-        "Address2": addressTwo,
+      "Address2": addressTwo,
       "ZipCode": zipCode,
       "cityName": cityName,
       "stateName": stateName,
