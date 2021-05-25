@@ -341,26 +341,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 displayAddress = result.description;
                                 _searchAddressController.text = result.description;
                                 addressLineOne = result.description.split(",")[0];
-                                _addressLineOneController.text = result.description.split(",")[0];
+                                _addressLineOneController.text = addressLineOne;
+
+                                cityName = result.description.split(",")[1];
+                                stateCode = result.description.split(",")[2];
                               });
 
                               var apiClient = PlaceApiProvider(sessionToken);
                               Utils.showLoader(true, context);
                               apiClient.getPlaceDetailFromId(result.placeId).then((place) async {
-                                if(place.stateCode.isNotEmpty) {
-                                  stateCode = place.stateCode;
-                                }
                                 final coordinates = Coordinates(place.latitude, place.longitude);
                                 var mLocation = await Geocoder.local.findAddressesFromCoordinates(coordinates);
 
                                 setState(() {
-                                  cityName = mLocation.first.locality;
                                   stateName = mLocation.first.adminArea;
                                   zipCode = mLocation.first.postalCode;
 
-                                  _cityController.text = cityName;
                                   _stateController.text = stateName;
                                   _zipController.text = zipCode;
+                                  _cityController.text = cityName;
                                 });
                                 Utils.showLoader(false, context);
                               });
@@ -534,14 +533,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void validationForCollectClientSignature() {
-    if (_addressLineOneController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterAddressLineOne, Colors.red);
-    } else if (_addressLineTwoController.text.isEmpty) {
+    if (_addressLineTwoController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterAddressLineTwo, Colors.red);
-    } else if (_zipController.text.isEmpty) {
-      ToastUtils.showToast(context, LabelStr.enterZip, Colors.red);
-    } else if (_zipController.text.isNotEmpty && _zipController.text.length != 5) {
-      ToastUtils.showToast(context, LabelStr.enterValidZip, Colors.red);
     } else if (_phoneController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterPhoneNumber, Colors.red);
     } else if (_phoneController.text.length !=12) {

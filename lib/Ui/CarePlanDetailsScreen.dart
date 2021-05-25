@@ -215,25 +215,24 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                     Container(
                       height: blockSizeVertical*80,
                       alignment: Alignment.topLeft,
-                      margin: EdgeInsets.only(left: 25, top: 50, right: 25),
+                      margin: EdgeInsets.only(left: 25, top:35, right: 25),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 40,),
+                          SizedBox(height: 35),
                           Container(
                             child: Text(widget._scheduleDetailInfo.firstName+" " +
                                 widget._scheduleDetailInfo.lastName,
                                 style: AppTheme.mediumSFTextStyle().copyWith(fontSize: 34)),
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: 5),
                           Row(
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(LabelStr.lblAge, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                                  SizedBox(height: 5),
                                   Text(_getAgeOfPatient(widget._scheduleDetailInfo.birthdate), style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
                                 ],
                               ),
@@ -242,7 +241,6 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(LabelStr.lbNurse, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                                  SizedBox(height: 5),
                                   Text(_nurseName, style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
                                 ],
                               )
@@ -250,7 +248,6 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                           ),
                           SizedBox(height: 10),
                           Text(LabelStr.lbPatientAddress, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                          SizedBox(height: 5),
                           Text(widget._scheduleDetailInfo.displayAddress,
                               style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
                           widget._scheduleDetailInfo.addressLine2.isNotEmpty ? Container(
@@ -259,7 +256,6 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                               children: [
                                 SizedBox(height: 10),
                                 Text(LabelStr.lblApartment, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
-                                SizedBox(height: 5),
                                 Text(widget._scheduleDetailInfo.addressLine2,
                                     style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
                               ],
@@ -279,13 +275,12 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                               //polylines: Set<Polyline>.of(_mapPolylines.values),
                             ),
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 15),
                           widget.isUpcommingVisit ? Expanded(
                             flex: 0,
                             child: Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
-                                  margin: EdgeInsets.only(bottom: blockSizeVertical*10),
                                   width: MediaQuery.of(context).size.width,
                                   decoration: BoxDecoration(
                                       gradient: LinearGradient(colors: [
@@ -352,9 +347,9 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          height: 120,
-                          width: 120,
-                          margin: EdgeInsets.only(top: blockSizeVertical*3),
+                          height: 100,
+                          width: 100,
+                          margin: EdgeInsets.only(top: blockSizeVertical*4.5),
                           child: widget._scheduleDetailInfo.profilePhotoPath.isNotEmpty ? ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: CachedNetworkImage(
@@ -371,8 +366,8 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                             _makingPhoneCall(widget._scheduleDetailInfo.phoneNumber);
                           },
                           child: Container(
-                            margin: EdgeInsets.only(left: blockSizeVertical*10, top: blockSizeVertical*1),
-                            child: SvgPicture.asset(MyImage.ic_call_icons, height: 150, width: 150),
+                            margin: EdgeInsets.only(left: blockSizeVertical*14, top: blockSizeVertical*2.5),
+                            child: SvgPicture.asset(MyImage.ic_call_icons, height: 130, width: 130),
                           ),
                         )
                       ],
