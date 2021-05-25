@@ -351,8 +351,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Utils.showLoader(true, context);
                               apiClient.getPlaceDetailFromId(result.placeId).then((place) async {
                                 final coordinates = Coordinates(place.latitude, place.longitude);
-                                var mLocation = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-
+                                print("cordinates"+coordinates.toString());
+                                var mLocation;
+                                if(Platform.isIOS)
+                                  {
+                                    mLocation=  await Geocoder.google("AIzaSyDZAQUd8vts_TmuXngtyYut_m88ZxR6X7k").findAddressesFromCoordinates(coordinates);
+                                  }
+                                else
+                                  {
+                                     mLocation= await Geocoder.local.findAddressesFromCoordinates(coordinates);
+                                  }
                                 setState(() {
                                   stateName = mLocation.first.adminArea;
                                   zipCode = mLocation.first.postalCode;
