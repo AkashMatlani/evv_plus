@@ -1,3 +1,5 @@
+import 'package:evv_plus/GeneralUtils/Constant.dart';
+import 'package:evv_plus/GeneralUtils/LabelStr.dart';
 import 'package:flutter/material.dart';
 
 import 'GooglePlaceService.dart';
@@ -36,7 +38,7 @@ class AddressSearch extends SearchDelegate<Suggestion> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return null;
+    return Container();
   }
 
   @override

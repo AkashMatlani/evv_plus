@@ -251,8 +251,20 @@ class _CarePlanDetailsScreenState extends State<CarePlanDetailsScreen> {
                           SizedBox(height: 10),
                           Text(LabelStr.lbPatientAddress, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
                           SizedBox(height: 5),
-                          Text(widget._scheduleDetailInfo.addressLine1+", "+widget._scheduleDetailInfo.addressLine2,
+                          Text(widget._scheduleDetailInfo.displayAddress,
                               style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                          widget._scheduleDetailInfo.addressLine2.isNotEmpty ? Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 10),
+                                Text(LabelStr.lblApartment, style: AppTheme.semiBoldSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                                SizedBox(height: 5),
+                                Text(widget._scheduleDetailInfo.addressLine2,
+                                    style: AppTheme.regularSFTextStyle().copyWith(color: HexColor("#3d3d3d"))),
+                              ],
+                            ),
+                          ) : Container(),
                           SizedBox(height: 10),
                           Container(
                             height: 240,

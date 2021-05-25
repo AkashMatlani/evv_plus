@@ -51,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isLoading = true;
   String nurseId, email, firstName, middleName, lastName, phoneNumber, gender;
   String addressLineOne, addressLineTwo, zipCode, displayAddress;
-  String stateName = "", cityName = "";
+  String cityName = "", stateName = "", stateCode = "";
   String formattedStr, apiDateString;
   File _image;
 
@@ -347,6 +347,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               var apiClient = PlaceApiProvider(sessionToken);
                               Utils.showLoader(true, context);
                               apiClient.getPlaceDetailFromId(result.placeId).then((place) async {
+                                if(place.stateCode.isNotEmpty) {
+                                  stateCode = place.stateCode;
+                                }
                                 final coordinates = Coordinates(place.latitude, place.longitude);
                                 print("cordinates"+coordinates.toString());
                                 var mLocation;
@@ -541,8 +544,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void validationForCollectClientSignature() {
     if (_addressLineOneController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterAddressLineOne, Colors.red);
-    }
-    else if (_zipController.text.isEmpty) {
+    } else if (_addressLineTwoController.text.isEmpty) {
+      ToastUtils.showToast(context, LabelStr.enterAddressLineTwo, Colors.red);
+    } else if (_zipController.text.isEmpty) {
       ToastUtils.showToast(context, LabelStr.enterZip, Colors.red);
     } else if (_zipController.text.isNotEmpty && _zipController.text.length != 5) {
       ToastUtils.showToast(context, LabelStr.enterValidZip, Colors.red);

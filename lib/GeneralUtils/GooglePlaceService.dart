@@ -8,6 +8,7 @@ class Place {
   String street;
   String city;
   String state;
+  String stateCode;
   String country;
   String zipCode;
   double latitude;
@@ -18,6 +19,7 @@ class Place {
     this.street,
     this.city,
     this.state,
+    this.stateCode,
     this.country,
     this.zipCode,
     this.latitude,
@@ -26,7 +28,7 @@ class Place {
 
   @override
   String toString() {
-    return 'Place(streetNumber: $streetNumber, street: $street, city: $city, state:$state, country: $country, zipCode: $zipCode, latitude:$latitude, longitude:$longitude)';
+    return 'Place(streetNumber: $streetNumber, street: $street, city: $city, state:$state, stateCode:$stateCode, country: $country, zipCode: $zipCode, latitude:$latitude, longitude:$longitude)';
   }
 }
 
@@ -99,7 +101,8 @@ class PlaceApiProvider {
             place.city = c['long_name'];
           }
           if (type.contains('administrative_area_level_1')) {
-            place.city = c['long_name'];
+            place.state = c['long_name'];
+            place.stateCode = c['short_name'];
           }
           if (type.contains('country')) {
             place.country = c['long_name'];
